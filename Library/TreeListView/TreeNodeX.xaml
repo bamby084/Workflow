@@ -1,0 +1,131 @@
+﻿<UserControl
+    x:Class="JdSuite.Common.TreeListView.TreeNodeX"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:JdSuite.Common.TreeListView"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    HorizontalAlignment="Stretch"
+    HorizontalContentAlignment="Stretch"
+    d:DataContext="{d:DesignInstance local:DataItem,
+                                     IsDesignTimeCreatable=True}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Border
+        x:Name="nodeBorder"
+        Margin="2"
+        BorderBrush="Green"
+        BorderThickness="1,0,0,0">
+
+        <Grid
+            x:Name="grid"
+            MouseLeftButtonDown="Grid_MouseLeftButtonDown"
+            ScrollViewer.VerticalScrollBarVisibility="Visible"
+            ShowGridLines="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="col1" MinWidth="200" />
+                <ColumnDefinition
+                    x:Name="col2"
+                    MinWidth="40"
+                    MaxWidth="80"
+                    SharedSizeGroup="col2group" />
+                <ColumnDefinition
+                    x:Name="col3"
+                    MinWidth="60"
+                    SharedSizeGroup="col3group" />
+            </Grid.ColumnDefinitions>
+            <DockPanel
+                x:Name="toggleDockPanel"
+                Grid.Row="0"
+                Grid.Column="0"
+                Height="26"
+                HorizontalAlignment="Left">
+                <ToggleButton
+                    x:Name="btnToggle"
+                    MinWidth="18"
+                    MinHeight="14"
+                    HorizontalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    Click="BtnToggle_Click"
+                    Content="-"
+                    DockPanel.Dock="Left"
+                    IsChecked="True"
+                    IsThreeState="False" />
+                <TextBlock
+                    x:Name="textNodeHeader"
+                    Margin="5,1,5,1"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center" />
+
+                <Button
+                    Name="btnLeft"
+                    MinWidth="20"
+                    
+                    VerticalContentAlignment="Center"
+                    Margin="2,1,1,1"
+                    Click="BtnPage_Click"
+                    Content="&lt;&lt;" />
+                <TextBox
+                    Name="textRecordNo"
+                    MinWidth="30"
+                    Margin="1"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    KeyDown="TextRecordNo_KeyDown"
+                    Text="1"
+                    TextChanged="TextBoxInteger_TextChanged" />
+                <TextBox
+                    Name="textTotalChildCount"
+                    MinWidth="30"
+                    Margin="1"
+                    VerticalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    IsReadOnly="True"
+                    Text="{Binding Path=ChildCount, Mode=OneWay}"
+                    TextChanged="TextBoxInteger_TextChanged" />
+
+                <Button
+                    Name="btnRight"
+                    MinWidth="20"
+                    Margin="2,1,1,1"
+                    Click="BtnPage_Click"
+                    Content="&gt;&gt;" />
+                <!--<Button
+                    Margin="2,1,1,1"
+                    Name="btnShowAll"
+                    VerticalAlignment="Center"
+                    Click="BtnShowAll_Click">
+                    Show All
+                </Button>-->
+            </DockPanel>
+            <TextBlock
+                x:Name="textBlockType"
+                Grid.Column="1"
+                Text="{Binding Type}" />
+            <TextBlock
+                x:Name="textBlockValue"
+                Grid.Column="2"
+                Text="{Binding Value}" />
+            <!--<Line
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                VerticalAlignment="Top"
+                Stretch="Uniform"
+                Stroke="Red"
+                StrokeThickness="0.5"
+                X1="0"
+                X2="1"
+                Y1="0"
+                Y2="0" />-->
+        </Grid>
+
+    </Border>
+</UserControl>

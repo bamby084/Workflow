@@ -1,0 +1,92 @@
+﻿<Window
+    x:Class="AppWorkflow.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:AppWorkflow.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="AppWorkflow"
+    Width="800"
+    Height="1020"
+    Left="10"
+    Top="10"
+    WindowState="Normal"
+    mc:Ignorable="d">
+
+    <!--
+        WindowState="Maximized"
+        Title="AppWorkflow" Height="1080" Width="1920">
+    -->
+
+    <!--  A Canvas at root is needed for drag and drop functionality  -->
+    <local:DragCanvas x:Name="RootCanvas" Background="#FFEEF5FD">
+        <Grid Width="{Binding ActualWidth, ElementName=RootCanvas}" Height="{Binding ActualHeight, ElementName=RootCanvas}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <ToolBar
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Stretch">
+                <Menu Background="#FFEEF5FD">
+                    <MenuItem Header="File">
+                        <MenuItem Click="NewWorkflow_Click" Header="New Workflow" />
+                        <MenuItem Click="OpenWorkflow_Click" Header="Open Workflow" />
+                        <MenuItem Click="SaveWorkflow_Click" Header="Save Workflow" />
+                    </MenuItem>
+                </Menu>
+                <Menu Background="#FFEEF5FD">
+                    <MenuItem Header="Edit" />
+                </Menu>
+                <Menu Background="#FFEEF5FD">
+                    <MenuItem Header="View" />
+                </Menu>
+                <Menu Background="#FFEEF5FD">
+                    <MenuItem Header="Workflow" />
+                </Menu>
+                <Menu Background="#FFEEF5FD">
+                    <MenuItem Header="Help" />
+                </Menu>
+            </ToolBar>
+            <Border
+                Grid.Row="1"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                Width="auto"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                BorderBrush="LightGray"
+                BorderThickness="1">
+                <StackPanel Background="#FFEEF5FD">
+                    <Label Padding="10" Content="Modules" />
+                    <Border BorderBrush="LightGray" BorderThickness="1">
+                        <StackPanel>
+                            <Expander
+                                Name="ExpanderDataInputs"
+                                Header="Data Inputs"
+                                IsExpanded="True" />
+                            <Expander Name="ExpanderDataManipulation" Header="Data Manipulation" />
+                            <Expander Name="ExpanderDesigns" Header="Designs" />
+                            <Expander Name="ExpanderOutputs" Header="Outputs" />
+                            <Expander Name="ExpanderImposition" Header="Imposition" />
+                            <Expander Name="ExpanderMisc" Header="Misc" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+            <TabControl
+                Name="TabControl"
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="0,0,0,10"
+                Background="#FFEEF5FD"
+                TabStripPlacement="Top" />
+        </Grid>
+    </local:DragCanvas>
+</Window>

@@ -1,0 +1,176 @@
+﻿<Window x:Class="DataFilter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Data Filter - FilterSets" Height="450" Width="520.88">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <DockPanel Margin="5,5,5,0">
+                <Grid Grid.IsSharedSizeScope="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Column headers -->
+                    <TreeViewItem Grid.Row="0">
+                        <TreeViewItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="Name"/>
+                                    <!-- Placeholders for two columns of ToggleButton -->
+                                    <ColumnDefinition SharedSizeGroup="Toggle"/>
+                                    <ColumnDefinition SharedSizeGroup="Toggle"/>
+                                    <ColumnDefinition SharedSizeGroup="Type"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Structure"/>
+                                <!-- Empty TreeViewItem to measure the size of its ToggleButton into the "Toggle" group-->
+                                <TreeViewItem Grid.Column="1" Padding="0"/>
+                                <TextBlock Grid.Column="3" Text="Type"/>
+                            </Grid>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+
+                    <!-- Data rows -->
+                    <TreeView Name="treeView" Grid.Row="1" SelectedItemChanged="TreeView_SelectedItemChanged">
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <Style.Setters>
+                                    <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}"/>
+                                    <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}"/>
+                                </Style.Setters>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsFiltered}" Value="True">
+                                        <Setter Property="Foreground" Value="Blue" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+
+                        </TreeView.ItemContainerStyle>
+                        <TreeView.ItemTemplate>
+
+                            <!-- Level 0 template leaves space for 2 child "Toggle" levels -->
+                            <HierarchicalDataTemplate ItemsSource="{Binding SubFields}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition SharedSizeGroup="Name"/>
+                                        <ColumnDefinition SharedSizeGroup="Toggle"/>
+                                        <ColumnDefinition SharedSizeGroup="Toggle"/>
+                                        <ColumnDefinition SharedSizeGroup="Type"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding Name}"/>
+                                    <TextBlock Grid.Column="3" Text="{Binding Type}"/>
+                                </Grid>
+
+                                <!-- Level 1 template leaves space for 1 child "Toggle" level -->
+                                <HierarchicalDataTemplate.ItemTemplate>
+                                    <HierarchicalDataTemplate ItemsSource="{Binding SubFields}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition SharedSizeGroup="Name"/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition SharedSizeGroup="Toggle"/>
+                                                <ColumnDefinition SharedSizeGroup="Type"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{Binding Name}"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding Type}"/>
+                                        </Grid>
+
+                                        <!-- Level 2 template has no children -->
+                                        <HierarchicalDataTemplate.ItemTemplate>
+                                            <HierarchicalDataTemplate ItemsSource="{Binding SubFields}">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition SharedSizeGroup="Name"/>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition SharedSizeGroup="Type"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" Text="{Binding Name}"/>
+                                                    <TextBlock Grid.Column="3" Text="{Binding Type}"/>
+                                                </Grid>
+                                            </HierarchicalDataTemplate>
+                                        </HierarchicalDataTemplate.ItemTemplate>
+                                    </HierarchicalDataTemplate>
+                                </HierarchicalDataTemplate.ItemTemplate>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                    <DockPanel Margin="0,5,0,0" Grid.Row="2" HorizontalAlignment="Right" >
+                        <Button VerticalAlignment="Bottom" Click="AddGroupingFieldButton_Click" IsEnabled="{Binding IsAddFieldButtonEnabled}" >
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsAddFieldButtonEnabled}" Value="True">
+                                            <Setter Property="Background" Value="LightGreen"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Image Width="15" Source="Resources/new.png" />
+                        </Button>
+                        <Button VerticalAlignment="Bottom" Click="DeleteGroupingFieldButton_Click" IsEnabled="{Binding IsDeleteFieldButtonEnabled}">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsDeleteFieldButtonEnabled}" Value="True">
+                                            <Setter Property="Background" Value="LightCoral"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Image Width="15" Source="Resources/if_x-circle_2561211.png"  />
+                        </Button>
+                    </DockPanel >
+                </Grid>
+            </DockPanel>
+            <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Center" Width="8">
+                <GridSplitter.Template>
+                    <ControlTemplate TargetType="{x:Type GridSplitter}">
+                        <Grid>
+                            <Button Content="⁞" />
+                            <Rectangle Fill="#00FFFFFF" />
+                        </Grid>
+                    </ControlTemplate>
+                </GridSplitter.Template>
+            </GridSplitter>
+            <StackPanel Grid.Column="2">
+                <GroupBox Name="filterGroupBox" Header="Filter" HorizontalAlignment="Stretch" Margin="5,5,5,5" VerticalAlignment="Stretch" >
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <DockPanel Grid.Row="0" Margin="0,0,10,0">
+                            <Label Content="Condition:"/>
+                            <ComboBox VerticalAlignment="Center" HorizontalAlignment="Stretch" Name="conditionComboBox" SelectionChanged="ConditionComboBox_SelectionChanged" IsEnabled="False"/>
+                        </DockPanel>
+                        <DockPanel Name="valueDockPanel" Grid.Row="1" Margin="0,5,10,0" Visibility="Collapsed">
+                            <Label Content="Value:"/>
+                            <TextBox VerticalAlignment="Center" HorizontalAlignment="Stretch" Name="valueTextBox" Margin="23,0,0,0" TextChanged="ValueTextBox_TextChanged" />
+                        </DockPanel>
+                    </Grid>
+                </GroupBox>
+                <CheckBox Name="normalizationModeCheckBox" Grid.Row="6" Content="Create else output" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Center" >
+            <Button Content="OK" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="75" />
+            <Button Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

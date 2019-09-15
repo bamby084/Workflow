@@ -1,0 +1,98 @@
+﻿<Window
+    x:Class="DataOutput.MainWindowClass"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Controls="clr-namespace:JdSuite.Common.Controls;assembly=JdSuite.Common"
+    xmlns:LocalControl="clr-namespace:DataOutput.Controls"
+    xmlns:Tree="clr-namespace:JdSuite.Common.TreeListView;assembly=TreeListView"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:DataOutput"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:DataOutput.ViewModel"
+    Title=""
+    Width="600"
+    Height="600"
+    MinWidth="1024"
+    MinHeight="600"
+    Padding="10,5,10,5"
+    Loaded="Window_Loaded"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <Style TargetType="{x:Type LocalControl:DockPanelSplitter}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type LocalControl:DockPanelSplitter}">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <DockPanel x:Name="dockPanelParent">
+        <TextBlock
+            x:Name="TextBlockModuleTitle"
+            Grid.Row="0"
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            DockPanel.Dock="Top"
+            FontWeight="Bold">
+            Output Module
+        </TextBlock>
+
+        <Controls:LoggingControl
+            Name="loggerControl"
+            MinHeight="80"
+            MaxHeight="400"
+            DockPanel.Dock="Bottom" />
+
+
+        <LocalControl:DockPanelSplitter
+            MinHeight="2"
+            Background="Red"
+            DockPanel.Dock="Bottom" />
+        
+        <Tree:TreeGrid x:Name="treeGrid"
+                       MinHeight="120"
+                       
+                       />
+
+    </DockPanel>
+
+
+
+    <!--<Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+
+        </Grid.ColumnDefinitions>
+
+
+        <TextBlock
+            Grid.Row="0"
+            Grid.Column="0"
+            FontWeight="Bold">
+            Output Module
+        </TextBlock>
+
+        <WindowsFormsHost Grid.Row="1" Grid.Column="0">
+            <WindowsFormsHost.Child>
+                <LocalControl:SchemaControl x:Name="DataView" />
+            </WindowsFormsHost.Child>
+        </WindowsFormsHost>
+
+        <Controls:LoggingControl
+            Name="loggerControl"
+            Grid.Row="2"
+            Grid.Column="0"
+            MinHeight="300" />
+    </Grid>-->
+</Window>

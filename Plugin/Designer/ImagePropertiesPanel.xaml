@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="Designer.ImagePropertiesPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Designer"
+             xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="500" x:Name="ImagePanel">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="AppBgColor" Color="#FFEEF5FD"/>
+    </UserControl.Resources>
+    <Grid Background="{StaticResource AppBgColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Name="lblImageName" Content="IMG X - Images" Grid.Row="0" Height="26"/>
+        <TabControl Grid.Row="1" SelectedIndex="0" Background="{StaticResource AppBgColor}">
+            <TabItem Header="Image" Name="TabImage">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Label Content="File:" />
+                    <Label Name="lblFile" Grid.Column="1" Content="" />
+
+                    <Label Content="Format:" Grid.Row="1"/>
+                    <Label Name="lblFormat" Content="" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5"/>
+
+                    <Label Content="Width:" Grid.Row="2"/>
+                    <Label Name="lblWidth" Content="" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5"/>
+
+                    <Label Content="Height:" Grid.Row="3"/>
+                    <Label Name="lblHeight" Content="" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5"/>
+
+                    <Label Content="Pages:" Grid.Row="4"/>
+                    <Label Name="lblPages" Content="" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="5"/>
+
+                    <Label Content="Type:" Grid.Row="5"/>
+                    <Label Name="lblType" Content=" " Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="5"/>
+
+                    <Label Content="ImageDPI:" Grid.Row="6"/>
+                    <Label Name="lblImageDPI" Content="" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="5"/>
+
+                    <Label Content="Preview:" Grid.Row="7"/>
+                    <Grid Grid.Row="7" Grid.Column="1" HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Name="Navigate" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
+                            <Button Name="btnPrev" Content="&lt;&lt;" Click="btnPrev_Click" Width="40"/>
+                            <TextBox Name="txtPos" Text="1" Width="80" HorizontalContentAlignment="Center"/>
+                            <Button Name="btnNext" Content="&gt;&gt;" Grid.Column="2" Click="btnNext_Click" Width="40"/>
+                        </StackPanel>
+                        <Image Name="imgPreview" Grid.Row="0" HorizontalAlignment="Center"/>
+
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Page" Name="tabPage">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="48"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Page:" Grid.Row="0"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownPage" Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="1" UpdateValueOnEnterKey="True" Increment="1" Value="1"/>
+                    <CheckBox Name="chkVariablePageSelection" Margin="10, 10, 0, 0" Content="Variable page selection(zero based)" Grid.Row="1" Grid.ColumnSpan="2"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Transparency" Name="tabTransparency">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <CheckBox Name="chkMakeTransparency" Margin="10, 10, 0, 0" Content="Make transparency" Grid.Row="0" Checked="chkMakeTransparency_Checked" Unchecked="chkMakeTransparency_Unchecked" Grid.ColumnSpan="2"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Preview" Name="tabPreview">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100*"/>
+                    </Grid.RowDefinitions>
+                    <Image Name="imgPreview_3" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Margin="0,10,0,10"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>
+

@@ -1,0 +1,298 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Designer"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:Designer="clr-namespace:Designer" x:Class="Designer.Production"
+             mc:Ignorable="d"
+             d:DesignHeight="1080" d:DesignWidth="1920">
+	<UserControl.Resources>
+		<Style TargetType="{x:Type Button}" x:Key="DefaultButton">
+			<Setter Property="Margin" Value="5" />
+		</Style>
+		<Style TargetType="{x:Type ComboBox}" x:Key="DefaultComboBox">
+			<Setter Property="Width" Value="250" />
+			<Setter Property="Margin" Value="5" />
+		</Style>
+		<Thickness x:Key="DefaultMargin" Left="5" Top="5" Right="5" Bottom="5" />
+		<Style TargetType="{x:Type Border}" x:Key="DefaultBorder">
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
+		</Style>
+	</UserControl.Resources>
+	<Grid Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Designer:MainWindow}}}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="auto" />
+		</Grid.ColumnDefinitions>
+		<Border Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Style="{StaticResource DefaultBorder}">
+			<ToolBar HorizontalAlignment="Stretch">
+				<Menu Background="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Designer:MainWindow}}}">
+					<MenuItem Header="Production" />
+					<MenuItem Header="Window" />
+					<MenuItem Header="Help" />
+				</Menu>
+			</ToolBar>
+		</Border>
+		<Grid Grid.Row="1" HorizontalAlignment="Stretch">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="auto" />
+			</Grid.ColumnDefinitions>
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<Border HorizontalAlignment="Center" Style="{StaticResource DefaultBorder}">
+					<Grid Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="auto" />
+							<ColumnDefinition Width="auto" />
+							<ColumnDefinition Width="*" />
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="auto" />
+							<RowDefinition Height="auto" />
+							<RowDefinition Height="auto" />
+							<RowDefinition Height="auto" />
+							<RowDefinition Height="auto" />
+							<RowDefinition Height="auto" />
+							<RowDefinition Height="auto" />
+							<RowDefinition Height="auto" />
+							<RowDefinition Height="auto" />
+						</Grid.RowDefinitions>
+						<Label Content="Workflow:" Grid.Row="0" VerticalAlignment="Center" />
+						<StackPanel Orientation="Horizontal" Grid.Column="1">
+							<ComboBox Style="{StaticResource DefaultComboBox}" SelectedIndex="0">
+								<ComboBoxItem x:Name="CurWorkflowComboBoxItem" Content="" />
+							</ComboBox>
+							<Button Content="Unload" Style="{StaticResource DefaultButton}" />
+							<Button Content="Open..." Style="{StaticResource DefaultButton}" />
+							<Label Content="Module:" VerticalAlignment="Center" />
+							<ComboBox Style="{StaticResource DefaultComboBox}" />
+						</StackPanel>
+
+						<Label Content="Job Config:" Grid.Row="1" />
+						<Grid Grid.Row="1" Grid.Column="1">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition Width="100" />
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition Width="100" />
+								<ColumnDefinition Width="auto" />
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition />
+								<RowDefinition />
+								<RowDefinition />
+								<RowDefinition />
+								<RowDefinition />
+							</Grid.RowDefinitions>
+
+							<!-- Row 0 -->
+							<Label Content="Begin:" />
+							<xctk:IntegerUpDown Grid.Column="1" Margin="{StaticResource DefaultMargin}" Value="0" />
+							<Button Content="Preprocess" Grid.Column="2" Style="{StaticResource DefaultButton}" IsEnabled="False" />
+							<CheckBox VerticalAlignment="Center" Grid.Column="3" />
+							<Label Content="Print group 1" Grid.Column="4" />
+							<Label Content="Offset X:" Grid.Column="5" />
+							<xctk:DecimalUpDown Grid.Column="6" Margin="{StaticResource DefaultMargin}"  Value="0.00" />
+							<Label Content="mm" Grid.Column="7" />
+
+							<!-- Row 1 -->
+							<Label Content="End:" Grid.Row="1" />
+							<xctk:IntegerUpDown Grid.Row="1" Grid.Column="1" Margin="{StaticResource DefaultMargin}" Value="0" />
+							<Grid Grid.Row="1" Grid.Column="2">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+								</Grid.ColumnDefinitions>
+								<CheckBox VerticalAlignment="Center" Margin="{StaticResource DefaultMargin}" />
+								<Label Content="Print to end" Grid.Column="1" />
+							</Grid>
+							<CheckBox VerticalAlignment="Center" Grid.Row="1"  Grid.Column="3" />
+							<Label Content="Print group 2" Grid.Row="1" Grid.Column="4" />
+							<Label Content="Offset Y:" Grid.Row="1" Grid.Column="5" />
+							<xctk:DecimalUpDown Grid.Row="1" Grid.Column="6" Margin="{StaticResource DefaultMargin}" Value="0.00" />
+							<Label Content="mm" Grid.Row="1" Grid.Column="7" />
+
+							<!-- Row 2 -->
+							<Label Content="Copies:" Grid.Row="2" />
+							<xctk:IntegerUpDown Grid.Row="2"  Grid.Column="1" Margin="{StaticResource DefaultMargin}" Value="0" />
+							<Grid Grid.Row="2" Grid.Column="2">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+								</Grid.ColumnDefinitions>
+								<CheckBox VerticalAlignment="Center" Margin="{StaticResource DefaultMargin}" />
+								<Label Content="Change # of copies" Grid.Column="1" />
+								<CheckBox VerticalAlignment="Center" Grid.Column="2" Margin="{StaticResource DefaultMargin}" />
+								<Label Content="Collate" Grid.Column="3" />
+							</Grid>
+							<CheckBox VerticalAlignment="Center" Grid.Row="2"  Grid.Column="3" />
+							<Label Content="Print group 3" Grid.Row="2" Grid.Column="4" />
+							<Label Content="Scale X:" Grid.Row="2" Grid.Column="5" />
+							<xctk:DecimalUpDown Grid.Row="2" Grid.Column="6" Margin="{StaticResource DefaultMargin}" Value="0.00" />
+
+							<!-- Row 3 -->
+							<Label Content="Debug:" Grid.Row="3" />
+							<ComboBox Grid.Row="3" Grid.Column="1" SelectedIndex="0"  Margin="{StaticResource DefaultMargin}">
+								<ComboBoxItem Content="No Debug" />
+							</ComboBox>
+							<Grid Grid.Row="3" Grid.Column="2">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+								</Grid.ColumnDefinitions>
+								<CheckBox VerticalAlignment="Center" Margin="{StaticResource DefaultMargin}" />
+								<Label Content="Run by record" Grid.Column="1" />
+							</Grid>
+							<CheckBox VerticalAlignment="Center" Grid.Row="3"  Grid.Column="3" />
+							<Label Content="Print group 4" Grid.Row="3" Grid.Column="4" />
+							<Label Content="Scale Y:" Grid.Row="3" Grid.Column="5" />
+							<xctk:DecimalUpDown Grid.Row="3" Grid.Column="6" Margin="{StaticResource DefaultMargin}" Value="0.00" />
+
+							<!-- Row 4 -->
+							<Grid Grid.Row="4" Grid.ColumnSpan="2">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+								</Grid.ColumnDefinitions>
+								<CheckBox VerticalAlignment="Center" />
+								<Label Content="Keep data confidential" Grid.Column="1" />
+							</Grid>
+							<StackPanel Orientation="Horizontal"  Grid.Row="4" Grid.Column="2">
+								<Button Content="Warnings..."  Style="{StaticResource DefaultButton}" IsEnabled="False" />
+								<Button Content="Report File..." Style="{StaticResource DefaultButton}" IsEnabled="False" />
+							</StackPanel>
+						</Grid>
+
+						<Label Content="Engine:" Grid.Row="2" />
+						<ComboBox x:Name="ComboBoxEngine" SelectedIndex="0" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource DefaultComboBox}" SelectionChanged="Engine_Selected">
+							<ComboBoxItem Content="PDF" />
+						</ComboBox>
+
+						<Label Content="Engine Config" HorizontalAlignment="Center" Grid.Row="3" Grid.ColumnSpan="2" />
+
+						<Label Content="Profile:" Grid.Row="4" />
+						<StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+							<ComboBox SelectedIndex="0" Style="{StaticResource DefaultComboBox}">
+								<ComboBoxItem Content="Default" />
+							</ComboBox>
+							<Grid  Grid.Row="4" Grid.Column="1">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+								</Grid.ColumnDefinitions>
+
+								<Button Content="Edit" Style="{StaticResource DefaultButton}" Grid.Column="0" IsEnabled="False" />
+								<Button Content="View" Style="{StaticResource DefaultButton}" Grid.Column="1" IsEnabled="False" />
+								<Button Content="Save" Style="{StaticResource DefaultButton}" Grid.Column="2" IsEnabled="False" />
+								<Button Content="Save As" Style="{StaticResource DefaultButton}" Grid.Column="3" IsEnabled="False" />
+								<Button Content="New" Style="{StaticResource DefaultButton}" Grid.Column="4" IsEnabled="False" />
+								<Button Content="Remove" Style="{StaticResource DefaultButton}" Grid.Column="5" IsEnabled="False" />
+							</Grid>
+						</StackPanel>
+
+						<Label Content="Driver Config" HorizontalAlignment="Center" Grid.Row="5" Grid.ColumnSpan="2" />
+
+						<Label Content="Profile:" Grid.Row="6" />
+						<StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal">
+							<ComboBox SelectedIndex="0" Style="{StaticResource DefaultComboBox}">
+								<ComboBoxItem Content="Default" />
+							</ComboBox>
+							<Grid  Grid.Row="4" Grid.Column="1">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+									<ColumnDefinition Width="auto" />
+								</Grid.ColumnDefinitions>
+
+								<Button Content="Edit" Style="{StaticResource DefaultButton}" Grid.Column="0" IsEnabled="False" />
+								<Button Content="View" Style="{StaticResource DefaultButton}" Grid.Column="1" IsEnabled="False" />
+								<Button Content="Save" Style="{StaticResource DefaultButton}" Grid.Column="2" IsEnabled="False" />
+								<Button Content="Save As" Style="{StaticResource DefaultButton}" Grid.Column="3" IsEnabled="False" />
+								<Button Content="New" Style="{StaticResource DefaultButton}" Grid.Column="4" IsEnabled="False" />
+								<Button Content="Remove" Style="{StaticResource DefaultButton}" Grid.Column="5" IsEnabled="False" />
+							</Grid>
+						</StackPanel>
+
+						<Grid Grid.Row="7" Grid.Column="1">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition />
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition Width="auto" />
+								<ColumnDefinition />
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition />
+								<RowDefinition />
+							</Grid.RowDefinitions>
+							<Label Content="File name:" />
+							<TextBox x:Name="TextBoxFileName" Grid.Column="1" VerticalAlignment="Center" IsReadOnly="True" />
+							<Button Name="ButtonOutBrowse" Click="ButtonOutBrowse_Click" Content="..." Grid.Column="2" Margin="0,0,5,0" Height="{Binding ActualHeight, ElementName=TextBoxFileName}" />
+							<CheckBox Grid.Column="3" VerticalAlignment="Center" />
+							<Label Content="Split by group" Grid.Column="4" />
+							<CheckBox Grid.Column="3" Grid.Row="1" VerticalAlignment="Center" />
+							<Label Content="Split by size" Grid.Column="4" Grid.Row="1" />
+						</Grid>
+
+						<Label Content="Diver Status: not implemented" Grid.Row="8" Grid.ColumnSpan="2" />
+						<StackPanel Grid.Row="8" Grid.ColumnSpan="2"  Orientation="Horizontal" HorizontalAlignment="Center">
+							<Button Content="Connect" Style="{StaticResource DefaultButton}" IsEnabled="False" />
+							<Button x:Name="ButtonStart" Content="Start" Style="{StaticResource DefaultButton}" Click="Start_Click" />
+							<Button Content="Proof Job" Style="{StaticResource DefaultButton}" IsEnabled="False" />
+						</StackPanel>
+					</Grid>
+				</Border>
+				<Grid Grid.Row="1">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+						<CheckBox />
+						<Label Content="Run on remote server" />
+					</StackPanel>
+					<DataGrid x:Name="LogView" Grid.Row="1" AutoGenerateColumns="True" ItemsSource="{Binding LogEntries}" CanUserAddRows="False" CanUserDeleteRows="False" />
+				</Grid>
+			</Grid>
+		</Grid>
+		<Border Grid.Row="1" Grid.Column="1" Style="{StaticResource DefaultBorder}">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<Label Content="Workflow Parameters" HorizontalAlignment="Left" />
+				<DataGrid AutoGenerateColumns="False" Grid.Row="2">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="Parameter" />
+						<DataGridTextColumn Header="Value" />
+					</DataGrid.Columns>
+				</DataGrid>
+			</Grid>
+		</Border>
+	</Grid>
+</UserControl>

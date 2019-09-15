@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="Designer.PagesPropertiesPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Designer"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Background="#FFEEF5FD" x:Name="Panel">
+	<UserControl.Resources>
+		<SolidColorBrush x:Key="AppBgColor" Color="#FFEEF5FD" />
+	</UserControl.Resources>
+	<TabControl SelectedIndex="0" Background="{StaticResource AppBgColor}">
+		<TabItem Header="General">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+				<Grid Name="GridSimple" Grid.Row="1" Visibility="Visible">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="25*"/>
+						<ColumnDefinition Width="75*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"/>
+					</Grid.RowDefinitions>
+				</Grid>
+
+				<Grid Name="GridVariable" Grid.Row="1">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="25*"/>
+						<ColumnDefinition Width="75*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+
+					<Label Content="Repeated by:"/>
+					<ComboBox Grid.Column="1" SelectedIndex="0">
+						<ComboBoxItem Content="Empty"/>
+					</ComboBox>
+
+					<local:VariableDataGrid x:Name="VariableDataGrid" Grid.Row="3" Grid.ColumnSpan="2"/>
+
+					<Label Content="Type:" Grid.Row="2"/>
+					<ComboBox Name="CbTypeSelector" Grid.Row="2" Grid.Column="1" SelectedIndex="0">
+						<ComboBoxItem Name="CbTypeInteger" Content="Select by Integer" Selected="CbTypeInteger_Selected"/>
+						<ComboBoxItem Name="CbTypeText" Content="Select by Text" Selected="CbTypeText_Selected"/>
+					</ComboBox>
+				</Grid>
+
+				<Grid Grid.Row="0" Grid.Column="0" Background="#FFEEF5FD">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="25*"/>
+						<ColumnDefinition Width="75*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"/>
+					</Grid.RowDefinitions>
+
+					<Label Grid.Row="0" Grid.Column="0" Content="Page order:" Background="#FFEEF5FD"/>
+					<ComboBox Name="CbPageOrder" Grid.Row="0" Grid.Column="1" SelectedIndex="0" MinWidth="121.5">
+						<ComboBoxItem Name="PageOrderSimple" Content="Simple" Selected="PageOrderSimple_Selected"/>
+						<ComboBoxItem Name="PageOrderVariable" Content="Variable Selection" Selected="PageOrderVariable_Selected"/>
+					</ComboBox>
+				</Grid>
+			</Grid>
+		</TabItem>
+		<TabItem Header="Viewing Sequence" IsEnabled="False">
+		</TabItem>
+		<TabItem Header="Sheet Names" IsEnabled="False">
+		</TabItem>
+		<TabItem Header="Postage Prices" IsEnabled="False">
+		</TabItem>
+	</TabControl>
+</UserControl>

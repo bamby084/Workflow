@@ -1,0 +1,513 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1BAB1B2E-0C3E-41CD-A98D-2A74D767482E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Designer</RootNamespace>
+    <AssemblyName>Designer</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.8.1.3\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="ColorPicker, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Executable File\plugins\modules\Designer\ColorPicker.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.3.4.1\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.Core.3.4.1\lib\net40\Common.Logging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ExpandableGridView, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Executable File\plugins\modules\Designer\ExpandableGridView.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.barcodes, Version=7.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itext7.7.1.2\lib\net40\itext.barcodes.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.forms, Version=7.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itext7.7.1.2\lib\net40\itext.forms.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.io, Version=7.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itext7.7.1.2\lib\net40\itext.io.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.kernel, Version=7.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itext7.7.1.2\lib\net40\itext.kernel.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.layout, Version=7.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itext7.7.1.2\lib\net40\itext.layout.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.pdfa, Version=7.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itext7.7.1.2\lib\net40\itext.pdfa.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.sign, Version=7.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itext7.7.1.2\lib\net40\itext.sign.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.styledxmlparser, Version=7.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itext7.7.1.2\lib\net40\itext.styledxmlparser.dll</HintPath>
+    </Reference>
+    <Reference Include="itext.svg, Version=7.1.2.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itext7.7.1.2\lib\net40\itext.svg.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="JdSuiteCommon, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Executable File\JdSuiteCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="TypographicFonts">
+      <HintPath>..\..\Executables\AppWorkflow\plugins\modules\Designer\TypographicFonts.dll</HintPath>
+    </Reference>
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BlockStyle.cs" />
+    <Compile Include="BlockStylePropertiesPanel.xaml.cs">
+      <DependentUpon>BlockStylePropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BorderStyle.cs" />
+    <Compile Include="BorderStylePropertiesPanel.xaml.cs">
+		<DependentUpon>BorderStylePropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ColorPickerWindow.xaml.cs">
+      <DependentUpon>ColorPickerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ColorsPropertiesPanel.xaml.cs">
+		<DependentUpon>ColorsPropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ColorStyle.cs" />
+    <Compile Include="Container.cs" />
+    <Compile Include="ContainerPropertiesPanel.xaml.cs">
+      <DependentUpon>ContainerPropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomColorPicker.xaml.cs">
+		<DependentUpon>CustomColorPicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomSpinner.xaml.cs" />
+    <Compile Include="ElementPropertiesPanel.xaml.cs">
+		<DependentUpon>ElementPropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExtendedRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FlowControl.xaml.cs">
+      <DependentUpon>FlowControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FlowPropertiesPanel.xaml.cs">
+      <DependentUpon>FlowPropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FlowStyle.cs" />
+    <Compile Include="FontPropertiesPanel.xaml.cs">
+		<DependentUpon>FontPropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FontStyle.cs" />
+    <Compile Include="ImagePropertiesPanel.xaml.cs">
+		<DependentUpon>ImagePropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ImageStyle.cs" />
+    <Compile Include="InsertTableWindow.xaml.cs">
+		<DependentUpon>InsertTableWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LineStyle.cs" />
+    <Compile Include="LineStylePropertiesPanel.xaml.cs">
+		<DependentUpon>LineStylePropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ParagraphStyle.cs" />
+    <Compile Include="ParagraphStylesPropertiesPanel.xaml.cs">
+		<DependentUpon>ParagraphStylesPropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Processing.cs" />
+    <Compile Include="SheetNameDataGrid.xaml.cs">
+      <DependentUpon>SheetNameDataGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TablePropertiesPanel.xaml.cs">
+      <DependentUpon>TablePropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TableStyle.cs" />
+    <Compile Include="TextRuler.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TextStyle.cs" />
+    <Compile Include="TextStylePropertiesPanel.xaml.cs">
+		<DependentUpon>TextStylePropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TreeItemLibrary.xaml.cs">
+      <DependentUpon>TreeItemLibrary.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="VariableDataGrid.xaml.cs">
+      <DependentUpon>VariableDataGrid.xaml</DependentUpon>
+    </Compile>
+    <Page Include="BlockStylePropertiesPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BorderStylePropertiesPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CheckerBoardBrush.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ColorPickerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ColorsPropertiesPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ContainerPropertiesPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CustomColorPicker.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CustomSpinner.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DesignerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Development.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ElementPropertiesPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="FlowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FlowPropertiesPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FontPropertiesPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ImagePropertiesPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="InsertTableWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="LineStylePropertiesPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="CanvasControl.cs" />
+    <Compile Include="DesignerPage.xaml.cs">
+      <DependentUpon>DesignerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Development.xaml.cs">
+      <DependentUpon>Development.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ITextExtensions.cs" />
+    <Compile Include="PagePropertiesPanel.xaml.cs">
+      <DependentUpon>PagePropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PageRuler.xaml.cs">
+      <DependentUpon>PageRuler.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Module.cs" />
+    <Compile Include="PagesPropertiesPanel.xaml.cs">
+      <DependentUpon>PagesPropertiesPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PPP_NewSelector.xaml.cs">
+      <DependentUpon>PPP_NewSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SchemaControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SchemaControl.Designer.cs">
+      <DependentUpon>SchemaControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="PagePropertiesPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PageRuler.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PagesPropertiesPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ParagraphStylesPropertiesPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="PPP_NewSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Production.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SheetNameDataGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SliderResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TablePropertiesPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TextStylePropertiesPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TreeItemLibrary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="VariableDataGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Page.cs" />
+    <Compile Include="Production.xaml.cs">
+      <DependentUpon>Production.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SchemaControl.resx">
+      <DependentUpon>SchemaControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="config.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\icons\linkicon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\icons\Border.png" />
+    <Resource Include="res\icons\Container.png" />
+    <Resource Include="res\icons\Fill.png" />
+    <Resource Include="res\icons\line.png" />
+    <Resource Include="res\icons\Paragraph.png" />
+    <Resource Include="res\icons\Text.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\icons\remove.png" />
+    <Resource Include="res\icons\removeall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\icons\align-center-24.png" />
+    <Resource Include="res\icons\align-justify-24.png" />
+    <Resource Include="res\icons\align-left-24.png" />
+    <Resource Include="res\icons\align-right-24.png" />
+    <Resource Include="res\icons\bold-24.png" />
+    <Resource Include="res\icons\forward-24.png" />
+    <Resource Include="res\icons\indent-24.png" />
+    <Resource Include="res\icons\index-24.png" />
+    <Resource Include="res\icons\italic-24.png" />
+    <Resource Include="res\icons\list-24.png" />
+    <Resource Include="res\icons\lowercase-24.png" />
+    <Resource Include="res\icons\multiply-24.png" />
+    <Resource Include="res\icons\paragraph-24.png" />
+    <Resource Include="res\icons\rect-24.png" />
+    <Resource Include="res\icons\strikethrough-24.png" />
+    <Resource Include="res\icons\subscript-24.png" />
+    <Resource Include="res\icons\superscript-24.png" />
+    <Resource Include="res\icons\under-24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\icons\align-text-bottom-24.png" />
+    <Resource Include="res\icons\align-text-center-24.png" />
+    <Resource Include="res\icons\align-text-strech-24.png" />
+    <Resource Include="res\icons\align-text-top-24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\icons\dash-style-1.png" />
+    <Resource Include="res\icons\dash-style-5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\icons\delete.png" />
+    <Resource Include="res\icons\library.png" />
+    <Resource Include="res\icons\plussign.png" />
+    <Resource Include="res\icons\settingsMenu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\icons\color.png" />
+    <Resource Include="res\icons\flow.png" />
+    <Resource Include="res\icons\font.png" />
+    <Resource Include="res\icons\image.png" />
+    <Resource Include="res\icons\page.png" />
+    <Resource Include="res\icons\table.png" />
+    <Resource Include="res\icons\variable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\icons\border_style.png" />
+    <Resource Include="res\icons\cap_butt.png" />
+    <Resource Include="res\icons\cap_round.png" />
+    <Resource Include="res\icons\cap_square.png" />
+    <Resource Include="res\icons\corner_left_bottom.png" />
+    <Resource Include="res\icons\corner_left_top.png" />
+    <Resource Include="res\icons\corner_right_bottom.png" />
+    <Resource Include="res\icons\corner_right_top.png" />
+    <Resource Include="res\icons\diagonal.png" />
+    <Resource Include="res\icons\diagonal_2.png" />
+    <Resource Include="res\icons\icons8-border-bottom-48.png" />
+    <Resource Include="res\icons\icons8-border-left-48.png" />
+    <Resource Include="res\icons\icons8-border-right-48.png" />
+    <Resource Include="res\icons\icons8-border-top-48.png" />
+    <Resource Include="res\icons\join_bevel.png" />
+    <Resource Include="res\icons\join_miter.png" />
+    <Resource Include="res\icons\join_round.png" />
+    <Resource Include="res\icons\line_style.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\l_indent_pos_lower.png" />
+    <Resource Include="res\l_indet_pos_upper.png" />
+    <Resource Include="res\r_indent_pos.png" />
+    <Resource Include="res\tab_pos.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\l_indent_pos_lower.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\l_indet_pos_upper.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\r_indent_pos.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tab_pos.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>robocopy "$(ProjectDir)res\\" "$(TargetDir)res\\" /MIR
+robocopy "$(TargetDir)\" "$(SolutionDir)AppWorkflow\$(OutDir)plugins\modules\$(ProjectName)\\" /E
+robocopy "$(ProjectDir)\" "$(SolutionDir)AppWorkflow\$(OutDir)plugins\modules\$(ProjectName)\\" config.xml
+IF %25ERRORLEVEL%25 GEQ 8 exit 1
+exit 0</PostBuildEvent>
+  </PropertyGroup>
+</Project>

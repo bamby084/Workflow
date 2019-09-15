@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <AppWorkflow Guid="00000000-0000-0000-0000-000000000000">
+    <WorkflowScrollViewer Title="NewXMLSchema" ScrollH="0" ScrollV="0">
+      <WorkflowCanvas Zoom="1">
+        <CanvasModules Count="2">
+          <CanvasModule Name="XML Input1" Left="117.79" Top="123.08">
+            <BaseModule Type="XML_Converter.XmlInput, XML Converter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Guid="e64013f5-6062-4cd4-a570-1808f6944917" StateCount="1" InputCount="0" OutputCount="1">
+              <OutputNodes>
+                <OutputNode Identifier="eb961e9a-a01b-4a91-b8ee-534f560abe0d" />
+              </OutputNodes>
+              <dictionary>
+                <item>
+                  <key>
+                    <guid>eb961e9a-a01b-4a91-b8ee-534f560abe0d</guid>
+                  </key>
+                  <value>
+                    <ModuleState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" InputPath="C:\Application_Testing\XML's\2_Customer_data_XML.xml" InputIsSchema="false" TextEncoding="Unicode">
+                      <Schema Type="Element" Name="Invoices" DataType="String" Use="One" Change="Flatten" Alias="Invoices">
+                        <Field Type="Element" Name="Invoice" DataType="String" Use="One" Change="Flatten" Alias="Invoice">
+                          <Field Type="Element" Name="ID" DataType="String" Use="One" Change="Flatten" Alias="ID" />
+                          <Field Type="Element" Name="LOBS" DataType="String" Use="One" Change="Flatten" Alias="LOBS">
+                            <Field Type="Element" Name="LOB" DataType="String" Use="One" Change="Flatten" Alias="LOB">
+                              <Field Type="Element" Name="Product" DataType="String" Use="One" Change="Flatten" Alias="Product">
+                                <Field Type="Element" Name="Type" DataType="String" Use="One" Change="Flatten" Alias="Type" />
+                              </Field>
+                            </Field>
+                          </Field>
+                          <Field Type="Element" Name="TransactionDate" DataType="String" Use="One" Change="Flatten" Alias="TransactionDate" />
+                          <Field Type="Element" Name="Company" DataType="String" Use="One" Change="Flatten" Alias="Company" />
+                          <Field Type="Element" Name="add1" DataType="String" Use="One" Change="Flatten" Alias="add1" />
+                          <Field Type="Element" Name="City" DataType="String" Use="One" Change="Flatten" Alias="City" />
+                          <Field Type="Element" Name="State" DataType="String" Use="One" Change="Flatten" Alias="State" />
+                          <Field Type="Element" Name="ZIP" DataType="String" Use="One" Change="Flatten" Alias="ZIP" />
+                          <Field Type="Element" Name="BilltoCompany" DataType="String" Use="One" Change="Flatten" Alias="BilltoCompany" />
+                          <Field Type="Element" Name="Billtoadd1" DataType="String" Use="One" Change="Flatten" Alias="Billtoadd1" />
+                          <Field Type="Element" Name="BilltoCity" DataType="String" Use="One" Change="Flatten" Alias="BilltoCity" />
+                          <Field Type="Element" Name="BilltoState" DataType="String" Use="One" Change="Flatten" Alias="BilltoState" />
+                          <Field Type="Element" Name="BilltoZIP" DataType="String" Use="One" Change="Flatten" Alias="BilltoZIP" />
+                          <Field Type="Element" Name="ShiptoCompany" DataType="String" Use="One" Change="Flatten" Alias="ShiptoCompany" />
+                          <Field Type="Element" Name="Shiptoadd1" DataType="String" Use="One" Change="Flatten" Alias="Shiptoadd1" />
+                          <Field Type="Element" Name="ShiptoCity" DataType="String" Use="One" Change="Flatten" Alias="ShiptoCity" />
+                          <Field Type="Element" Name="ShiptoState" DataType="String" Use="One" Change="Flatten" Alias="ShiptoState" />
+                          <Field Type="Element" Name="ShiptoZIP" DataType="String" Use="One" Change="Flatten" Alias="ShiptoZIP" />
+                          <Field Type="Element" Name="SM" DataType="String" Use="One" Change="Flatten" Alias="SM" />
+                          <Field Type="Element" Name="items" DataType="String" Use="One" Change="Flatten" Alias="items">
+                            <Field Type="Element" Name="item" DataType="String" Use="One" Change="Flatten" Alias="item">
+                              <Field Type="Element" Name="QTY" DataType="String" Use="One" Change="Flatten" Alias="QTY" />
+                              <Field Type="Element" Name="ItemNumber" DataType="String" Use="One" Change="Flatten" Alias="ItemNumber" />
+                              <Field Type="Element" Name="Description" DataType="String" Use="One" Change="Flatten" Alias="Description" />
+                              <Field Type="Element" Name="UnitPrice" DataType="String" Use="One" Change="Flatten" Alias="UnitPrice" />
+                              <Field Type="Element" Name="Total" DataType="String" Use="One" Change="Flatten" Alias="Total" />
+                            </Field>
+                          </Field>
+                          <Field Type="Element" Name="GST" DataType="String" Use="One" Change="Flatten" Alias="GST" />
+                          <Field Type="Element" Name="Total" DataType="String" Use="One" Change="Flatten" Alias="Total" />
+                        </Field>
+                      </Schema>
+                    </ModuleState>
+                  </value>
+                </item>
+              </dictionary>
+            </BaseModule>
+          </CanvasModule>
+          <CanvasModule Name="Designer1" Left="308.79" Top="208.08">
+            <BaseModule Type="Designer.Module, Designer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" Guid="c94ad98e-1e61-4a17-b0b9-89da3d602024" StateCount="0" InputCount="1" OutputCount="0">
+              <InputNodes>
+                <InputNode Identifier="d9925be0-9261-4d63-ab98-48e2781e382c" />
+              </InputNodes>
+            </BaseModule>
+          </CanvasModule>
+        </CanvasModules>
+        <Connections Count="1">
+          <Connection>
+            <OutputNode ModuleName="XML Input1" Index="0" Identity="eb961e9a-a01b-4a91-b8ee-534f560abe0d" />
+            <InputNode ModuleName="Designer1" Index="0" Identity="d9925be0-9261-4d63-ab98-48e2781e382c" />
+          </Connection>
+        </Connections>
+      </WorkflowCanvas>
+    </WorkflowScrollViewer>
+  </AppWorkflow>
+</Root>

@@ -1,0 +1,2029 @@
+﻿<UserControl x:Class="Designer.DesignerPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Designer"
+			 xmlns:Designer="clr-namespace:Designer"
+             mc:Ignorable="d"
+             d:DesignHeight="1080" d:DesignWidth="1920">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <RotateTransform x:Key="LeftToolBarTransform" Angle="-90" />
+            <Style TargetType="Button" x:Key="LeftToolBarItem">
+                <Setter Property="LayoutTransform" Value="{StaticResource LeftToolBarTransform}" />
+            </Style>
+            <DrawingBrush x:Key="CanvasBorderBrush" Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile">
+                <DrawingBrush.Drawing>
+                    <DrawingGroup>
+                        <GeometryDrawing Brush="Black">
+                            <GeometryDrawing.Geometry>
+                                <GeometryGroup>
+                                    <RectangleGeometry Rect="0,0,50,50" />
+                                    <RectangleGeometry Rect="50,50,50,50" />
+                                </GeometryGroup>
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingBrush.Drawing>
+            </DrawingBrush>
+            <Style TargetType="Border" x:Key="CanvasElementBorder">
+                <Setter Property="BorderBrush" Value="{StaticResource CanvasBorderBrush}" />
+                <Setter Property="BorderThickness" Value="2" />
+            </Style>
+
+            <!-- Layout Tree Panel -->
+            <Style TargetType="ListBox" x:Key="LayoutTreeExpanderItem">
+                <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Designer:MainWindow}}}" />
+                <Setter Property="Width" Value="{Binding Width, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Expander}}}" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            </Style>
+
+            <!-- Layout Properties Panel -->
+            <SolidColorBrush x:Key="ErrorInputBrush" Color="Red" />
+
+            <Style TargetType="Label" x:Key="DescriptionBarLabel">
+                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="FontWeight" Value="Light" />
+            </Style>
+
+            <SolidColorBrush x:Key="AppBgColor" Color="#FFEEF5FD" />
+            <Style TargetType="Border" x:Key="DefaultBorder">
+                <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
+                <Setter Property="BorderThickness" Value="1" />
+            </Style>
+
+            <Style x:Key="ButtonStyle10" TargetType="{x:Type Button}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Image x:Name="image" RenderTransformOrigin="0,0" Source="pack://application:,,,/Designer;component/res/icons/plussign.png" Stretch="Fill"/>
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="0,0,0,0"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsFocused" Value="True"/>
+                                <Trigger Property="IsDefaulted" Value="True"/>
+                                <Trigger Property="IsMouseOver" Value="True"/>
+                                <Trigger Property="IsPressed" Value="True"/>
+                                <Trigger Property="IsEnabled" Value="False"/>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="SimpleTreeViewItemToggleButton" d:IsControlPart="True" TargetType="{x:Type ToggleButton}">
+                <Setter Property="Focusable" Value="False"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                            <Grid Width="15" Height="13" Background="Transparent">
+                                <Path Visibility="Collapsed" HorizontalAlignment="Left" Margin="0" x:Name="IsExpandedPath" VerticalAlignment="Center" Fill="#FF0F0F0F" Data="M 0 4 L 8 4 L 4 8 Z"/>
+                                <Path HorizontalAlignment="Left" Margin="0" x:Name="ExpandPath" VerticalAlignment="Center" Data="M 4 0 L 8 4 L 4 8 Z" Fill="#FF0F0F0F"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" TargetName="IsExpandedPath"/>
+                                    <Setter Property="Opacity" TargetName="ExpandPath" Value="0.99"/>
+                                    <Setter Property="Opacity" TargetName="IsExpandedPath" Value="1"/>
+                                    <Setter Property="Fill" TargetName="IsExpandedPath" Value="#FF000000"/>
+                                    <Setter Property="Visibility" TargetName="ExpandPath" Value="Collapsed"/>
+                                    <Setter Property="Fill" TargetName="ExpandPath" Value="#FF050505"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="treeLibraryContainers" d:IsControlPart="True" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="1,0,0,0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="Storyboard1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.06" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.689" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="Storyboard_Copy1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.023"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="-0.694"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoadMouseOver">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.7"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoad_MouseLeave">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button x:Name="btnPeekTreeAdd" Content="" Height="14" Style="{DynamicResource ButtonStyle10}" Width="14" Opacity="0.6" RenderTransformOrigin="0.5,0.5" Focusable="False" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Grid.Column="3" Click="CtxMenuElements_Click" ToolTip="Add Container">
+                                    <Button.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Button.RenderTransform>
+                                </Button>
+                                <Image Source="pack://application:,,,/Designer;component/res/icons/container.png" Width="28" Grid.Column="1"/>
+                                <ToggleButton x:Name="Expander" Style="{DynamicResource SimpleTreeViewItemToggleButton}" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" Background="#FFFF1919" Foreground="#FFFF7535"/>
+                                <Border Margin="6,0,0,0" Grid.Column="2" x:Name="Selection_Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter x:Name="PART_Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" ContentSource="Header"/>
+                                </Border>
+                                <ItemsPresenter Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" x:Name="ItemsHost"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="False"/>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
+                                <Trigger Property="IsMouseOver" Value="True" SourceName="btnPeekTreeAdd">
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard x:Name="Storyboard_Copy1_BeginStoryboard" Storyboard="{StaticResource Storyboard_Copy1}"/>
+                                    </Trigger.ExitActions>
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+                                    </Trigger.EnterActions>
+                                </Trigger>
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" Value="Collapsed" TargetName="ItemsHost"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden" TargetName="Expander"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="treeLibraryFlows" d:IsControlPart="True" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="1,0,0,0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="Storyboard1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.06" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.689" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="Storyboard_Copy1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.023"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="-0.694"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoadMouseOver">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.7"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoad_MouseLeave">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button x:Name="btnPeekTreeAdd" Content="" Height="14" Style="{DynamicResource ButtonStyle10}" Width="14" Opacity="0.6" RenderTransformOrigin="0.5,0.5" Focusable="False" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Grid.Column="3" Click="CtxMenuFlows_Click" ToolTip="Add Flow">
+                                    <Button.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Button.RenderTransform>
+                                </Button>
+                                <Image Source="pack://application:,,,/Designer;component/res/icons/flow.png" Width="28" Grid.Column="1"/>
+                                <ToggleButton x:Name="Expander" Style="{DynamicResource SimpleTreeViewItemToggleButton}" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" Background="#FFFF1919" Foreground="#FFFF7535"/>
+                                <Border Margin="6,0,0,0" Grid.Column="2" x:Name="Selection_Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter x:Name="PART_Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" ContentSource="Header"/>
+                                </Border>
+                                <ItemsPresenter Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" x:Name="ItemsHost"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="False"/>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
+                                <Trigger Property="IsMouseOver" Value="True" SourceName="btnPeekTreeAdd">
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard x:Name="Storyboard_Copy1_BeginStoryboard" Storyboard="{StaticResource Storyboard_Copy1}"/>
+                                    </Trigger.ExitActions>
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+                                    </Trigger.EnterActions>
+                                </Trigger>
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" Value="Collapsed" TargetName="ItemsHost"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden" TargetName="Expander"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="treeLibraryPS" d:IsControlPart="True" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="1,0,0,0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="Storyboard1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.06" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.689" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="Storyboard_Copy1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.023"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="-0.694"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoadMouseOver">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.7"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoad_MouseLeave">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button x:Name="btnPeekTreeAdd" Content="" Height="14" Style="{DynamicResource ButtonStyle10}" Width="14" Opacity="0.6" RenderTransformOrigin="0.5,0.5" Focusable="False" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Grid.Column="3" Click="CtxMenuParagraphStyle_Click" ToolTip="Add Paragraph">
+                                    <Button.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Button.RenderTransform>
+                                </Button>
+                                <Image Source="pack://application:,,,/Designer;component/res/icons/paragraph.png" Width="28" Grid.Column="1"/>
+                                <ToggleButton x:Name="Expander" Style="{DynamicResource SimpleTreeViewItemToggleButton}" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" Background="#FFFF1919" Foreground="#FFFF7535"/>
+                                <Border Margin="6,0,0,0" Grid.Column="2" x:Name="Selection_Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter x:Name="PART_Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" ContentSource="Header"/>
+                                </Border>
+                                <ItemsPresenter Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" x:Name="ItemsHost"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="False"/>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
+                                <Trigger Property="IsMouseOver" Value="True" SourceName="btnPeekTreeAdd">
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard x:Name="Storyboard_Copy1_BeginStoryboard" Storyboard="{StaticResource Storyboard_Copy1}"/>
+                                    </Trigger.ExitActions>
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+                                    </Trigger.EnterActions>
+                                </Trigger>
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" Value="Collapsed" TargetName="ItemsHost"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden" TargetName="Expander"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="treeLibraryPages" d:IsControlPart="True" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="1,0,0,0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="Storyboard1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.06" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.689" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="Storyboard_Copy1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.023"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="-0.694"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoadMouseOver">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.7"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoad_MouseLeave">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button x:Name="btnPeekTreeAdd" Content="" Height="14" Style="{DynamicResource ButtonStyle10}" Width="14" Opacity="0.6" RenderTransformOrigin="0.5,0.5" Focusable="False" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Grid.Column="3" Click="CtxMenuPages_Click" ToolTip="Add Page">
+                                    <Button.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Button.RenderTransform>
+                                </Button>
+                                <Image Source="pack://application:,,,/Designer;component/res/icons/page.png" Width="28" Grid.Column="1"/>
+                                <ToggleButton x:Name="Expander" Style="{DynamicResource SimpleTreeViewItemToggleButton}" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" Background="#FFFF1919" Foreground="#FFFF7535"/>
+                                <Border Margin="6,0,0,0" Grid.Column="2" x:Name="Selection_Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter x:Name="PART_Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" ContentSource="Header" VerticalAlignment="Center"/>
+                                </Border>
+                                <ItemsPresenter Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" x:Name="ItemsHost"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="False"/>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
+                                <Trigger Property="IsMouseOver" Value="True" SourceName="btnPeekTreeAdd">
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard x:Name="Storyboard_Copy1_BeginStoryboard" Storyboard="{StaticResource Storyboard_Copy1}"/>
+                                    </Trigger.ExitActions>
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+                                    </Trigger.EnterActions>
+                                </Trigger>
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" Value="Collapsed" TargetName="ItemsHost"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden" TargetName="Expander"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="treeLibraryTS" d:IsControlPart="True" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="1,0,0,0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="Storyboard1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.06" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.689" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="Storyboard_Copy1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.023"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="-0.694"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoadMouseOver">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.7"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoad_MouseLeave">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button x:Name="btnPeekTreeAdd" Content="" Height="14" Style="{DynamicResource ButtonStyle10}" Width="14" Opacity="0.6" RenderTransformOrigin="0.5,0.5" Focusable="False" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Grid.Column="3" Click="CtxMenuTextStyle_Click" ToolTip="Add Text">
+                                    <Button.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Button.RenderTransform>
+                                </Button>
+                                <Image Source="pack://application:,,,/Designer;component/res/icons/text.png" Width="28" Grid.Column="1"/>
+                                <ToggleButton x:Name="Expander" Style="{DynamicResource SimpleTreeViewItemToggleButton}" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" Background="#FFFF1919" Foreground="#FFFF7535"/>
+                                <Border Margin="6,0,0,0" Grid.Column="2" x:Name="Selection_Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter x:Name="PART_Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" ContentSource="Header"/>
+                                </Border>
+                                <ItemsPresenter Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" x:Name="ItemsHost"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="False"/>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
+                                <Trigger Property="IsMouseOver" Value="True" SourceName="btnPeekTreeAdd">
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard x:Name="Storyboard_Copy1_BeginStoryboard" Storyboard="{StaticResource Storyboard_Copy1}"/>
+                                    </Trigger.ExitActions>
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+                                    </Trigger.EnterActions>
+                                </Trigger>
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" Value="Collapsed" TargetName="ItemsHost"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden" TargetName="Expander"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="treeLibraryFonts" d:IsControlPart="True" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="1,0,0,0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="Storyboard1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.06" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.689" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="Storyboard_Copy1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.023"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="-0.694"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoadMouseOver">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.7"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoad_MouseLeave">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button x:Name="btnPeekTreeAdd" Content="" Height="14" Style="{DynamicResource ButtonStyle10}" Width="14" Opacity="0.6" RenderTransformOrigin="0.5,0.5" Focusable="False" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Grid.Column="3" Click="CtxMenuFont_Click" ToolTip="Add Font">
+                                    <Button.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Button.RenderTransform>
+                                </Button>
+                                <Image Source="pack://application:,,,/Designer;component/res/icons/font.png" Width="28" Grid.Column="1"/>
+                                <ToggleButton x:Name="Expander" Style="{DynamicResource SimpleTreeViewItemToggleButton}" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" Background="#FFFF1919" Foreground="#FFFF7535"/>
+                                <Border Margin="6,0,0,0" Grid.Column="2" x:Name="Selection_Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter x:Name="PART_Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" ContentSource="Header"/>
+                                </Border>
+                                <ItemsPresenter Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" x:Name="ItemsHost"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="False"/>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
+                                <Trigger Property="IsMouseOver" Value="True" SourceName="btnPeekTreeAdd">
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard x:Name="Storyboard_Copy1_BeginStoryboard" Storyboard="{StaticResource Storyboard_Copy1}"/>
+                                    </Trigger.ExitActions>
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+                                    </Trigger.EnterActions>
+                                </Trigger>
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" Value="Collapsed" TargetName="ItemsHost"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden" TargetName="Expander"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="treeLibraryColors" d:IsControlPart="True" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="1,0,0,0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="Storyboard1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.06" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.689" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="Storyboard_Copy1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.023"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="-0.694"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoadMouseOver">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.7"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoad_MouseLeave">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button x:Name="btnPeekTreeAdd" Content="" Height="14" Style="{DynamicResource ButtonStyle10}" Width="14" Opacity="0.6" RenderTransformOrigin="0.5,0.5" Focusable="False" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Grid.Column="3" Click="CtxMenuColors_Click" ToolTip="Add Color">
+                                    <Button.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Button.RenderTransform>
+                                </Button>
+                                <Image Source="pack://application:,,,/Designer;component/res/icons/color.png" Width="28" Grid.Column="1"/>
+                                <ToggleButton x:Name="Expander" Style="{DynamicResource SimpleTreeViewItemToggleButton}" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" Background="#FFFF1919" Foreground="#FFFF7535"/>
+                                <Border Margin="6,0,0,0" Grid.Column="2" x:Name="Selection_Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter x:Name="PART_Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" ContentSource="Header"/>
+                                </Border>
+                                <ItemsPresenter Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" x:Name="ItemsHost"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="False"/>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
+                                <Trigger Property="IsMouseOver" Value="True" SourceName="btnPeekTreeAdd">
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard x:Name="Storyboard_Copy1_BeginStoryboard" Storyboard="{StaticResource Storyboard_Copy1}"/>
+                                    </Trigger.ExitActions>
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+                                    </Trigger.EnterActions>
+                                </Trigger>
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" Value="Collapsed" TargetName="ItemsHost"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden" TargetName="Expander"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="treeLibraryImages" d:IsControlPart="True" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="1,0,0,0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="Storyboard1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.06" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.689" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="Storyboard_Copy1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.023"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="-0.694"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoadMouseOver">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.7"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoad_MouseLeave">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button x:Name="btnPeekTreeAdd" Content="" Height="14" Style="{DynamicResource ButtonStyle10}" Width="14" Opacity="0.6" RenderTransformOrigin="0.5,0.5" Focusable="False" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Grid.Column="3" Click="CtxMenuImages_Click" ToolTip="Add Image">
+                                    <Button.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Button.RenderTransform>
+                                </Button>
+                                <Image Source="pack://application:,,,/Designer;component/res/icons/image.png" Width="28" Grid.Column="1"/>
+                                <ToggleButton x:Name="Expander" Style="{DynamicResource SimpleTreeViewItemToggleButton}" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" Background="#FFFF1919" Foreground="#FFFF7535"/>
+                                <Border Margin="6,0,0,0" Grid.Column="2" x:Name="Selection_Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter x:Name="PART_Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" ContentSource="Header"/>
+                                </Border>
+                                <ItemsPresenter Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" x:Name="ItemsHost"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="False"/>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
+                                <Trigger Property="IsMouseOver" Value="True" SourceName="btnPeekTreeAdd">
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard x:Name="Storyboard_Copy1_BeginStoryboard" Storyboard="{StaticResource Storyboard_Copy1}"/>
+                                    </Trigger.ExitActions>
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+                                    </Trigger.EnterActions>
+                                </Trigger>
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" Value="Collapsed" TargetName="ItemsHost"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden" TargetName="Expander"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="treeLibraryTables" d:IsControlPart="True" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="1,0,0,0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="Storyboard1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.06" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.689" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="Storyboard_Copy1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.023"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="-0.694"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoadMouseOver">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.7"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoad_MouseLeave">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button x:Name="btnPeekTreeAdd" Content="" Height="14" Style="{DynamicResource ButtonStyle10}" Width="14" Opacity="0.6" RenderTransformOrigin="0.5,0.5" Focusable="False" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Grid.Column="3" Click="CtxMenuTable_Click" ToolTip="Add Table">
+                                    <Button.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Button.RenderTransform>
+                                </Button>
+                                <Image Source="pack://application:,,,/Designer;component/res/icons/table.png" Width="28" Grid.Column="1"/>
+                                <ToggleButton x:Name="Expander" Style="{DynamicResource SimpleTreeViewItemToggleButton}" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" Background="#FFFF1919" Foreground="#FFFF7535"/>
+                                <Border Margin="6,0,0,0" Grid.Column="2" x:Name="Selection_Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter x:Name="PART_Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" ContentSource="Header"/>
+                                </Border>
+                                <ItemsPresenter Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" x:Name="ItemsHost"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="False"/>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
+                                <Trigger Property="IsMouseOver" Value="True" SourceName="btnPeekTreeAdd">
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard x:Name="Storyboard_Copy1_BeginStoryboard" Storyboard="{StaticResource Storyboard_Copy1}"/>
+                                    </Trigger.ExitActions>
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+                                    </Trigger.EnterActions>
+                                </Trigger>
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" Value="Collapsed" TargetName="ItemsHost"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden" TargetName="Expander"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="treeLibraryBS" d:IsControlPart="True" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="1,0,0,0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="Storyboard1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.06" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.689" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="Storyboard_Copy1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.023"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="-0.694"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoadMouseOver">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.7"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoad_MouseLeave">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button x:Name="btnPeekTreeAdd" Content="" Height="14" Style="{DynamicResource ButtonStyle10}" Width="14" Opacity="0.6" RenderTransformOrigin="0.5,0.5" Focusable="False" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Grid.Column="3" Click="CtxMenuBorderStyle_Click" ToolTip="Add Border">
+                                    <Button.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Button.RenderTransform>
+                                </Button>
+                                <Image Source="pack://application:,,,/Designer;component/res/icons/border.png" Width="28" Grid.Column="1"/>
+                                <ToggleButton x:Name="Expander" Style="{DynamicResource SimpleTreeViewItemToggleButton}" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" Background="#FFFF1919" Foreground="#FFFF7535"/>
+                                <Border Margin="6,0,0,0" Grid.Column="2" x:Name="Selection_Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter x:Name="PART_Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" ContentSource="Header"/>
+                                </Border>
+                                <ItemsPresenter Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" x:Name="ItemsHost"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="False"/>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
+                                <Trigger Property="IsMouseOver" Value="True" SourceName="btnPeekTreeAdd">
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard x:Name="Storyboard_Copy1_BeginStoryboard" Storyboard="{StaticResource Storyboard_Copy1}"/>
+                                    </Trigger.ExitActions>
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+                                    </Trigger.EnterActions>
+                                </Trigger>
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" Value="Collapsed" TargetName="ItemsHost"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden" TargetName="Expander"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="treeLibraryLS" d:IsControlPart="True" TargetType="{x:Type TreeViewItem}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                <Setter Property="Padding" Value="1,0,0,0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                            <ControlTemplate.Resources>
+                                <Storyboard x:Key="Storyboard1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="1.05" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.06" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0"/>
+                                        <SplineDoubleKeyFrame KeyTime="0:0:0.5" Value="-0.689" KeySpline="0,0.7,0.4,1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="Storyboard_Copy1">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="1.483"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="1"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.023"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="btnPeekTreeAdd">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="-0.694"/>
+                                        <SplineDoubleKeyFrame KeySpline="0,0.62,0.51,1" KeyTime="0:0:0.5" Value="0"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoadMouseOver">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.7"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                                <Storyboard x:Key="imgLoad_MouseLeave">
+                                    <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="btnLibraryLoad">
+                                        <SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+                                    </DoubleAnimationUsingKeyFrames>
+                                </Storyboard>
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19" Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button x:Name="btnPeekTreeAdd" Content="" Height="14" Style="{DynamicResource ButtonStyle10}" Width="14" Opacity="0.6" RenderTransformOrigin="0.5,0.5" Focusable="False" HorizontalAlignment="Left" Margin="20,0,0,0" VerticalAlignment="Center" Grid.Column="3" Click="CtxMenuLineStyle_Click" ToolTip="Add Line">
+                                    <Button.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Button.RenderTransform>
+                                </Button>
+                                <Image Source="pack://application:,,,/Designer;component/res/icons/line.png" Width="28" Grid.Column="1"/>
+                                <ToggleButton x:Name="Expander" Style="{DynamicResource SimpleTreeViewItemToggleButton}" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" Background="#FFFF1919" Foreground="#FFFF7535"/>
+                                <Border Margin="6,0,0,0" Grid.Column="2" x:Name="Selection_Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter x:Name="PART_Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" ContentSource="Header"/>
+                                </Border>
+                                <ItemsPresenter Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" x:Name="ItemsHost"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded" Value="False"/>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded"/>
+                                <Trigger Property="IsMouseOver" Value="True" SourceName="btnPeekTreeAdd">
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard x:Name="Storyboard_Copy1_BeginStoryboard" Storyboard="{StaticResource Storyboard_Copy1}"/>
+                                    </Trigger.ExitActions>
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+                                    </Trigger.EnterActions>
+                                </Trigger>
+                                <Trigger Property="IsExpanded" Value="false">
+                                    <Setter Property="Visibility" Value="Collapsed" TargetName="ItemsHost"/>
+                                </Trigger>
+                                <Trigger Property="HasItems" Value="false">
+                                    <Setter Property="Visibility" Value="Hidden" TargetName="Expander"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsSelected" Value="true"/>
+                                        <Condition Property="IsSelectionActive" Value="false"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Foreground" Value="DarkRed"/>
+                                    <Setter Property="Background" TargetName="Selection_Border" Value="#2F000000"/>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+        
+	</UserControl.Resources>
+
+    <Grid Background="{StaticResource AppBgColor}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="0.25*" />
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+		<Menu Grid.ColumnSpan="3" Background="{StaticResource AppBgColor}">
+			<MenuItem Header="File">
+                <MenuItem Header="Open Workflow" Name="menuFileOpen" Click="menuFileOpen_Click"/>
+                <MenuItem Header="Save Workflow" Name="menuFileSave" Click="menuFileSave_Click"/>
+                <MenuItem Header="Save Workflow as..." Name="menuFileSaveAs" Click="menuFileSaveAs_Click"/>
+                <MenuItem Header="Close Workflow" Name="menuFileClose" Click="menuFileClose_Click"/>
+                <MenuItem Header="Import" Name="menuFileImport" Click="menuFileImport_Click"/>
+                <MenuItem Header="Export" Name="menuFileExport" Click="menuFileExport_Click"/>
+                <MenuItem Header="Options" Name="menuFileOptions" Click="menuFileOptions_Click"/>
+                <MenuItem Header="Close Designer" Click="menuFileClose_Click"/>
+            </MenuItem>
+			<MenuItem Header="Edit" />
+			<MenuItem Header="Page" />
+			<MenuItem Header="View" />
+            <MenuItem Header="Insert">
+                <MenuItem Header="Font" Name="menuInsertFont"  Click="menuInsertFont_Click"/>
+                <MenuItem Header="Image" Name="menuInsertImage"  Click="menuInsertImage_Click"/>
+            </MenuItem>
+			<MenuItem Header="Format" />
+			<MenuItem Header="Table" />
+			<MenuItem Header="Window" />
+			<MenuItem Header="Help" />
+		</Menu>
+        <Border Grid.Row="1" Grid.ColumnSpan="4" Style="{StaticResource DefaultBorder}">
+            <StackPanel Orientation="Horizontal">
+                <ToolBar HorizontalAlignment="left">
+                    <ComboBox SelectedIndex="0" Name="cmbFontName" Width="120" Margin="4,0,0,0" SelectionChanged="cmbFontName_SelectionChanged" KeyUp="cmbFontName_KeyUp">
+                    </ComboBox>
+                    <ComboBox SelectedIndex="0" Name="cmbFontCateg" Width="100" Margin="4,0,0,0">
+                    </ComboBox>
+                    <ComboBox SelectedIndex="0" Name="cmbFontSize" Width="60" HorizontalContentAlignment="Right" Margin="4,0,0,0" KeyDown="cmbFontSize_KeyDown" SelectionChanged="cmbFontSize_SelectionChanged" KeyUp="cmbFontSize_KeyUp">
+                    </ComboBox>
+                    <Label Content="pt"/>
+                    <CheckBox x:Name="btnBold" Style="{DynamicResource CheckBoxStyle}" Click="btnBold_Click">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/bold-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox x:Name="btnItalic" Style="{DynamicResource CheckBoxStyle}" Click="btnItalic_Click">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/italic-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox x:Name="btnUnderline" Style="{DynamicResource CheckBoxStyle}" Click="btnUnderline_Click">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/under-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox x:Name="btnStrikeThrough" Style="{DynamicResource CheckBoxStyle}" Click="btnStrikeThrough_Click">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/strikethrough-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CheckBoxStyle}">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/superscript-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CheckBoxStyle}">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/subscript-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CheckBoxStyle}">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/lowercase-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CheckBoxStyle}">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/paragraph-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <ComboBox SelectedIndex="0" Name="cmbTextStyle" Width="100">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Id}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <CheckBox Style="{DynamicResource CheckBoxStyle}">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/forward-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <ComboBox SelectedIndex="0" Name="cmbColorName" Width="120" Margin="4,0,0,0" SelectionChanged="cmbColorName_SelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Rectangle Width="16" Height="16" Margin="0,2,5,2">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="{Binding Color}"/>
+                                        </Rectangle.Fill>
+                                        <Rectangle.Effect>
+                                            <DropShadowEffect ShadowDepth="0"/>
+                                        </Rectangle.Effect>
+                                    </Rectangle>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <CheckBox Style="{DynamicResource CheckBoxStyle}">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/multiply-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                </ToolBar>
+                <ToolBar HorizontalAlignment="Stretch">
+                    <ComboBox SelectedIndex="0" Name="cmbParagraphStyle" Width="100" SelectionChanged="cmbParagraphStyle_SelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Id}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <ComboBoxItem Content=""/>
+                    </ComboBox>
+                    <CheckBox Style="{DynamicResource CheckBoxStyle}">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/forward-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox x:Name="btnAlignLeft" Style="{DynamicResource CheckBoxStyle}" Click="btnAlignLeft_Click">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/align-left-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox x:Name="btnAlignCenter"  Style="{DynamicResource CheckBoxStyle}" Click="btnAlignCenter_Click">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/align-center-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox x:Name="btnAlignRight" Style="{DynamicResource CheckBoxStyle}" Click="btnAlignRight_Click">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/align-right-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <!--
+                    <CheckBox Style="{DynamicResource CheckBoxStyle}">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/align-left-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CheckBoxStyle}">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/align-center-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CheckBoxStyle}">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/align-right-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    -->
+                    <CheckBox x:Name="btnJustify" Style="{DynamicResource CheckBoxStyle}" Click="btnJustify_Click">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/align-justify-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox x:Name="btnNumberedList" Style="{DynamicResource CheckBoxStyle}" Click="btnNumberedList_Click">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/list-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox x:Name="btnBulletedList" Style="{DynamicResource CheckBoxStyle}" Click="btnBulletedList_Click">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/index-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CheckBoxStyle}">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/indent-24.png" Width="20" Height="20" Opacity="1"/>
+                    </CheckBox>
+                    <CheckBox Style="{DynamicResource CheckBoxStyle}">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/indent-24.png" Width="20" Height="20" Opacity="1" RenderTransformOrigin="0.5,0.5">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="180"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+                    </CheckBox>
+                </ToolBar>
+                <ToolBar>
+                    <Image Source="pack://application:,,,/Designer;component/res/icons/align-text-top-24.png" Width="20" Height="20" Opacity="1"/>
+                    <Image Source="pack://application:,,,/Designer;component/res/icons/align-text-center-24.png" Width="20" Height="20" Opacity="1"/>
+                    <Image Source="pack://application:,,,/Designer;component/res/icons/align-text-bottom-24.png" Width="20" Height="20" Opacity="1"/>
+                    <Image Source="pack://application:,,,/Designer;component/res/icons/align-text-strech-24.png" Width="20" Height="20" Opacity="1"/>
+                </ToolBar>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource DefaultBorder}" BorderThickness="1,0,1,1">
+            <ToolBar>
+                <ToolBar.LayoutTransform>
+                    <RotateTransform Angle="90" />
+                </ToolBar.LayoutTransform>
+                <ToggleButton x:Name="chkNormalArrow" Checked="chkNormalArrow_Checked" Unchecked="chkNormalArrow_Unchecked">
+                    <Image Source="pack://application:,,,/Designer;component/res/icons/bold-24.png" Width="20" Height="20" Opacity="1" RenderTransformOrigin="0.5,0.5">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="-90"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </ToggleButton>
+                <ToggleButton x:Name="chkBlockArrow" Checked="chkBlockArrow_Checked" Unchecked="chkBlockArrow_Unchecked">
+                    <Image Source="pack://application:,,,/Designer;component/res/icons/Italic-24.png" Width="20" Height="20" Opacity="1" RenderTransformOrigin="0.5,0.5">
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="-90"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>
+                </ToggleButton>
+                <Button Style="{StaticResource LeftToolBarItem}" Content="Test" />
+                <Button Style="{StaticResource LeftToolBarItem}" Content="Test" />
+            </ToolBar>
+        </Border>
+        <Grid Grid.Row="2" Grid.Column="1" Grid.RowSpan="2" Background="{StaticResource AppBgColor}" VerticalAlignment="Stretch" Margin="10,10,0,28">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="0.25*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="0.25*" />
+            </Grid.RowDefinitions>
+            <Label Content="Layout Tree" Grid.Row="0" />
+            <Border Grid.Row="1" Style="{StaticResource DefaultBorder}">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Background="{StaticResource AppBgColor}">
+						<TreeView Name="TreeViewRoot" Background="{StaticResource AppBgColor}">
+							<TreeViewItem Name="TreeViewVariables" Margin="0,2">
+								<TreeViewItem.Header>
+									<StackPanel Orientation="Horizontal">
+										<Image Source="pack://application:,,,/Designer;component/res/icons/variable.png" Width="28" Focusable="False"/>
+										<Label Content="Variables" Focusable="False"/>
+									</StackPanel>
+								</TreeViewItem.Header>
+								<TreeViewItem Name="TreeViewSystemVars" Header="System"/>
+								<TreeViewItem Name="TreeViewData" Header="Data"/>
+							</TreeViewItem>
+                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPages_RequestBringIntoView" x:Name="TreeViewPages" Style="{DynamicResource treeLibraryPages}" FontSize="12" Header="Pages" IsExpanded="True" Expanded="TreeViewPages_Expanded" Collapsed="TreeViewPages_Collapsed" KeyUp="TreeViewPages_KeyUp" MouseDoubleClick="TreeViewPages_MouseDoubleClick">
+                            </TreeViewItem>
+                            <!--
+                            <TreeViewItem Name="TreeViewPages" MouseDoubleClick="TreeViewPages_MouseDoubleClick">
+								<TreeViewItem.Header>
+									<StackPanel Orientation="Horizontal">
+										<StackPanel.ContextMenu>
+											<ContextMenu>
+												<MenuItem Name="CtxMenuPages" Header="Add Page" Click="CtxMenuPages_Click"/>
+											</ContextMenu>
+										</StackPanel.ContextMenu>
+										<Image Source="pack://application:,,,/Designer;component/res/icons/pages.png"/>
+										<Label Content="Pages"/>
+									</StackPanel>
+								</TreeViewItem.Header>
+							</TreeViewItem>
+                            -->
+                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewElements" Style="{DynamicResource treeLibraryContainers}" FontSize="12" Header="Containers" IsExpanded="True" Expanded="TreeViewPS_Expanded" Collapsed="TreeViewPS_Collapsed" KeyUp="TreeViewPS_KeyUp">
+                            </TreeViewItem>
+                            <!--
+							<TreeViewItem Name="TreeViewElements" Margin="0,2">
+								<TreeViewItem.Header>
+									<StackPanel Orientation="Horizontal">
+										<Image Source="pack://application:,,,/Designer;component/res/icons/block.png"/>
+										<Label Content="Containers"/>
+									</StackPanel>
+								</TreeViewItem.Header>
+                            </TreeViewItem>
+                            -->
+                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewFlows" Style="{DynamicResource treeLibraryFlows}" FontSize="12" Header="Flows" IsExpanded="True" Expanded="TreeViewPS_Expanded" Collapsed="TreeViewPS_Collapsed" KeyUp="TreeViewPS_KeyUp">
+                            </TreeViewItem>
+							<!--<TreeViewItem Name="TreeViewFlows" Margin="0,2">
+								<TreeViewItem.Header>
+									<StackPanel Orientation="Horizontal">
+                                        <Image Source="pack://application:,,,/Designer;component/res/icons/flow.png" Width="28"/>
+										<Label Content="Flows"/>
+									</StackPanel>
+								</TreeViewItem.Header>
+							</TreeViewItem>
+                            -->
+                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewPS" Style="{DynamicResource treeLibraryPS}" FontSize="12" Header="Paragraph Styles" IsExpanded="True" Expanded="TreeViewPS_Expanded" Collapsed="TreeViewPS_Collapsed" KeyUp="TreeViewPS_KeyUp">
+                            </TreeViewItem>
+                            <!--
+							<TreeViewItem Name="TreeViewPS">
+								<TreeViewItem.Header>
+									<StackPanel Orientation="Horizontal">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Name="CtxMenuParagraphStyle" Header="Add ParagraphStyle" Click="CtxMenuParagraphStyle_Click"/>
+                                                <MenuItem Name="CtxMenuPSDel" Header="Delete" Click="CtxMenuPSDel_Click"/>
+                                                <MenuItem Name="CtxMenuPSRen" Header="Rename" Click="CtxMenuPSRen_Click"/>
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
+                                        <Image Source="pack://application:,,,/Designer;component/res/icons/pages.png"/>
+										<Label Content="Paragraph Styles"/>
+									</StackPanel>
+								</TreeViewItem.Header>
+							</TreeViewItem>
+                            -->
+                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewTS" Style="{DynamicResource treeLibraryTS}" FontSize="12" Header="Text Styles" IsExpanded="True" Expanded="TreeViewPS_Expanded" Collapsed="TreeViewPS_Collapsed" KeyUp="TreeViewPS_KeyUp">
+                            </TreeViewItem>
+                            <!--
+							<TreeViewItem Name="TreeViewTextStyles">
+								<TreeViewItem.Header>
+									<StackPanel Orientation="Horizontal">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Name="CtxMenuTextStyle" Header="Add TextStyle" Click="CtxMenuTextStyle_Click"/>
+                                                <MenuItem Name="CtxMenuTSDel" Header="Delete" Click="CtxMenuTSDel_Click"/>
+                                                <MenuItem Name="CtxMenuTSRen" Header="Rename" Click="CtxMenuTSRen_Click"/>
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
+                                        <Image Source="pack://application:,,,/Designer;component/res/icons/Text.png"/>
+										<Label Content="Text Styles"/>
+									</StackPanel>
+								</TreeViewItem.Header>
+							</TreeViewItem>
+                            -->
+                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewFonts" Style="{DynamicResource treeLibraryFonts}" FontSize="12" Header="Fonts" IsExpanded="True" Expanded="TreeViewPS_Expanded" Collapsed="TreeViewPS_Collapsed" KeyUp="TreeViewPS_KeyUp">
+                            </TreeViewItem>
+                            <!--
+							<TreeViewItem Name="TreeViewFonts">
+								<TreeViewItem.Header>
+									<StackPanel Orientation="Horizontal">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Name="CtxMenuFont" Header="Add Fonts" Click="CtxMenuFont_Click"/>
+                                                <MenuItem Name="CtxMenuFontDel" Header="Delete" Click="CtxMenuFontDel_Click"/>
+                                                <MenuItem Name="CtxMenuFontRen" Header="Rename" Click="CtxMenuFontRen_Click"/>
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
+										<Image Source="pack://application:,,,/Designer;component/res/icons/fonts.png"/>
+										<Label Content="Fonts"/>
+									</StackPanel>
+								</TreeViewItem.Header>
+							</TreeViewItem>
+                            -->
+                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewColors" Style="{DynamicResource treeLibraryColors}" FontSize="12" Header="Colors" IsExpanded="True" Expanded="TreeViewPS_Expanded" Collapsed="TreeViewPS_Collapsed" KeyUp="TreeViewPS_KeyUp">
+                            </TreeViewItem>
+                            <!--
+                            <TreeViewItem Name="TreeViewColors">
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Name="CtxMenuColors" Header="Add Color" Click="CtxMenuColors_Click"/>
+                                                <MenuItem Name="CtxMenuColorsDel" Header="Delete" Click="CtxMenuColorsDel_Click"/>
+                                                <MenuItem Name="CtxMenuColorsRen" Header="Rename" Click="CtxMenuColorsRen_Click"/>
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
+                                        <Image Source="pack://application:,,,/Designer;component/res/icons/Border.png"/>
+                                        <Label Content="Colors"/>
+                                    </StackPanel>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            -->
+                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewImages" Style="{DynamicResource treeLibraryImages}" FontSize="12" Header="Images" IsExpanded="True" Expanded="TreeViewPS_Expanded" Collapsed="TreeViewPS_Collapsed" KeyUp="TreeViewPS_KeyUp">
+                            </TreeViewItem>
+                            <!--
+                            <TreeViewItem Name="TreeViewImages">
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Name="CtxMenuImages" Header="Add Image" Click="CtxMenuImages_Click"/>
+                                                <MenuItem Name="CtxMenuImagesDel" Header="Delete" Click="CtxMenuImagesDel_Click"/>
+                                                <MenuItem Name="CtxMenuImagesRen" Header="Rename" Click="CtxMenuImagesRen_Click"/>
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
+                                        <Image Source="pack://application:,,,/Designer;component/res/icons/Border.png"/>
+                                        <Label Content="Images"/>
+                                    </StackPanel>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            -->
+                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewTables" Style="{DynamicResource treeLibraryTables}" FontSize="12" Header="Tables" IsExpanded="True" Expanded="TreeViewPS_Expanded" Collapsed="TreeViewPS_Collapsed" KeyUp="TreeViewPS_KeyUp">
+                            </TreeViewItem>
+                            <!--
+                            <TreeViewItem Name="TreeViewTables">
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Name="CtxMenuTable" Header="Add Table" Click="CtxMenuTable_Click"/>
+                                                <MenuItem Name="CtxMenuTableDel" Header="Delete" Click="CtxMenuTableDel_Click"/>
+                                                <MenuItem Name="CtxMenuTableRen" Header="Rename" Click="CtxMenuTableRen_Click"/>
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
+                                        <Image Source="pack://application:,,,/Designer;component/res/icons/Border.png"/>
+                                        <Label Content="Tables"/>
+                                    </StackPanel>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            -->
+                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewBS" Style="{DynamicResource treeLibraryBS}" FontSize="12" Header="Border Styles" IsExpanded="True" Expanded="TreeViewPS_Expanded" Collapsed="TreeViewPS_Collapsed" KeyUp="TreeViewPS_KeyUp">
+                            </TreeViewItem>
+                            <!--
+                            <TreeViewItem Name="TreeViewBS">
+								<TreeViewItem.Header>
+									<StackPanel Orientation="Horizontal">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Name="CtxMenuBorderStyle" Header="Add BorderStyle" Click="CtxMenuBorderStyle_Click"/>
+                                                <MenuItem Name="CtxMenuBSDel" Header="Delete" Click="CtxMenuBSDel_Click"/>
+                                                <MenuItem Name="CtxMenuBSRen" Header="Rename" Click="CtxMenuBSRen_Click"/>
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
+                                        <Image Source="pack://application:,,,/Designer;component/res/icons/Border.png"/>
+										<Label Content="Border Styles"/>
+									</StackPanel>
+								</TreeViewItem.Header>
+							</TreeViewItem>
+                            -->
+                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewLS" Style="{DynamicResource treeLibraryLS}" FontSize="12" Header="Line Styles" IsExpanded="True" Expanded="TreeViewPS_Expanded" Collapsed="TreeViewPS_Collapsed" KeyUp="TreeViewPS_KeyUp">
+                            </TreeViewItem>
+                            <!--
+                            <TreeViewItem Name="TreeViewLineStyle">
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Name="CtxMenuLineStyle" Header="Add LineStyle" Click="CtxMenuLineStyle_Click"/>
+                                                <MenuItem Name="CtxMenuLSDel" Header="Delete" Click="CtxMenuLSDel_Click"/>
+                                                <MenuItem Name="CtxMenuLSRen" Header="Rename" Click="CtxMenuLSRen_Click"/>
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
+                                        <Image Source="pack://application:,,,/Designer;component/res/icons/Border.png"/>
+                                        <Label Content="Line Styles"/>
+                                    </StackPanel>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            -->
+
+                            <TreeViewItem Margin="0,2" Name="TreeViewFillStyle">
+                                <TreeViewItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Name="CtxMenuFillStyle" Header="Add FillStyle" Click="CtxMenuImages_Click"/>
+                                                <MenuItem Name="CtxMenuFSDel" Header="Delete" Click="CtxMenuFSDel_Click"/>
+                                                <MenuItem Name="CtxMenuFSRen" Header="Rename" Click="CtxMenuFSRen_Click"/>
+                                            </ContextMenu>
+                                        </StackPanel.ContextMenu>
+                                        <Image Source="pack://application:,,,/Designer;component/res/icons/fill.png" Width="28"/>
+                                        <Label Content="Fill Styles"/>
+                                    </StackPanel>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+
+                        </TreeView>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+			<GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="Gainsboro" ShowsPreview="True" Height="5" />
+			<Border Grid.Row="3" Style="{StaticResource DefaultBorder}">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>	
+					<Label Content="Layout Properties" Margin="0,10,0,0" />
+					<Border Grid.Row="2" Style="{StaticResource DefaultBorder}" BorderThickness="0,1,0,0">
+						<DockPanel Name="PropertiesPanel" Background="{StaticResource AppBgColor}" VerticalAlignment="Stretch"/>
+					</Border>
+				</Grid>
+			</Border>
+		</Grid>
+		<GridSplitter Grid.Column="2" Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Center" Background="Gainsboro" ShowsPreview="True" Width="5"/>
+		<Grid Grid.Column="3" Grid.Row="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="20" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="20" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+			<Border Grid.RowSpan="2" Grid.ColumnSpan="2"  Style="{StaticResource DefaultBorder}">
+				<local:PageRuler x:Name="PageRuler" ClipToBounds="True" />
+			</Border>
+			<ScrollViewer Name="Scroller" Grid.Column="2" Grid.Row="2" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
+				<Border Style="{StaticResource DefaultBorder}" Background="Gainsboro">
+					<DockPanel Name="PanelCanvas" Background="Gainsboro" PreviewMouseWheel="PanelCanvas_PreviewMouseWheel" />
+				</Border>
+			</ScrollViewer>
+		</Grid>
+        <Border Grid.Row="3" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Style="{StaticResource DefaultBorder}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40*" />
+                    <ColumnDefinition Width="10*" />
+                    <ColumnDefinition Width="10*" />
+                    <ColumnDefinition Width="10*" />
+                    <ColumnDefinition Width="10*" />
+                    <ColumnDefinition Width="10*" />
+                    <ColumnDefinition Width="10*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Style="{StaticResource DefaultBorder}" BorderThickness="0,0,1,0">
+                    <Label Name="LabelInfo" Content="Layout Ready" Style="{StaticResource DescriptionBarLabel}" />
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource DefaultBorder}" BorderThickness="0,0,1,0">
+                    <Label Name="LabelUser" Content="UserName" Style="{StaticResource DescriptionBarLabel}" />
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource DefaultBorder}" BorderThickness="0,0,1,0">
+                    <Label Name="LabelSelectedControl" Content="" Style="{StaticResource DescriptionBarLabel}" />
+                </Border>
+                <Border Grid.Column="3" Style="{StaticResource DefaultBorder}" BorderThickness="0,0,1,0">
+                    <Label Name="LabelMouseX" Content="X: 0.0" Style="{StaticResource DescriptionBarLabel}" />
+                </Border>
+                <Border Grid.Column="4" Style="{StaticResource DefaultBorder}" BorderThickness="0,0,1,0">
+                    <Label Name="LabelMouseY" Content="Y: 0.0" Style="{StaticResource DescriptionBarLabel}" />
+                </Border>
+                <Border Grid.Column="5" Style="{StaticResource DefaultBorder}" BorderThickness="0,0,1,0">
+                    <Label Name="LabelPageWidth" Content="W: 0.0" Style="{StaticResource DescriptionBarLabel}" />
+                </Border>
+                <Border Grid.Column="6" Style="{StaticResource DefaultBorder}" BorderThickness="0,0,0,0">
+                    <Label Name="LabelPageHeight" Content="H: 0.0" Style="{StaticResource DescriptionBarLabel}" />
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

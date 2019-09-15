@@ -1,0 +1,73 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:xc="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+             xmlns:xcdg="http://schemas.xceed.com/wpf/xaml/datagrid"
+             xmlns:local="clr-namespace:Designer"
+			 xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+             xmlns:Designer="clr-namespace:Designer" x:Class="Designer.Development"
+             mc:Ignorable="d"
+             d:DesignHeight="1080" d:DesignWidth="1920">
+	<UserControl.Resources>
+		<Style TargetType="Border" x:Key="DefaultBorder">
+			<Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
+			<Setter Property="BorderThickness" Value="1" />
+		</Style>
+	</UserControl.Resources>
+	<Grid Background="#FFEEF5FD">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="80*"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="20*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<Border Grid.ColumnSpan="2" Style="{DynamicResource DefaultBorder}">
+			<DockPanel HorizontalAlignment="Center">
+				<ToolBarTray Grid.ColumnSpan="2" Orientation="Horizontal">
+					<ToolBarTray.Resources>
+						<Style TargetType="{x:Type Button}" x:Key="DefaultButton">
+							<Setter Property="Margin" Value="5,0,5,0" />
+						</Style>
+					</ToolBarTray.Resources>
+					<ToolBar>
+						<xc:IntegerUpDown x:Name="PageNumUpDown" ValueChanged="PageUpDown_ValueChanged" />
+						<Button Content="|&lt;" x:Name="ButtonGotoStart" Click="ButtonGotoStart_Click" Style="{StaticResource DefaultButton}" />
+						<Button Content="&lt;&lt;" x:Name="ButtonFastBack" Click="ButtonFastBack_Click" Style="{StaticResource DefaultButton}" />
+						<Button Content="&lt;" x:Name="ButtonBack" Click="ButtonBack_Click" Style="{StaticResource DefaultButton}" />
+						<Button Content="&gt;" x:Name="ButtonForward" Click="ButtonForward_Click" Style="{StaticResource DefaultButton}" />
+						<Button Content="&gt;&gt;" x:Name="ButtonFastForward" Click="ButtonFastForward_Click" Style="{StaticResource DefaultButton}" />
+						<Button Content="&gt;|" x:Name="ButtonGotoEnd" Click="ButtonGotoEnd_Click" Style="{StaticResource DefaultButton}" />
+					</ToolBar>
+					<ToolBar>
+						<Button Content="+" Click="ButtonZoomIn_Click" Style="{StaticResource DefaultButton}" />
+						<Button Content="-" Click="ButtonZoomOut_Click" Style="{StaticResource DefaultButton}" />
+					</ToolBar>
+				</ToolBarTray>
+			</DockPanel>
+		</Border>
+		<Border Grid.Row="1" Style="{DynamicResource DefaultBorder}" BorderThickness="1,0,1,0">
+			<ToolBarTray Orientation="Vertical">
+				<ToolBar>
+					<Button Content="Test" />
+				</ToolBar>
+			</ToolBarTray>
+		</Border>
+		<ScrollViewer x:Name="Scroller" Grid.Row="1" Grid.Column="1" Background="Gainsboro" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" SizeChanged="Scroller_SizeChanged" PreviewMouseWheel="Scroller_PreviewMouseWheel">
+			<DockPanel x:Name="PanelCanvas" />
+		</ScrollViewer>
+		<GridSplitter Grid.Row="1" Grid.Column="2" VerticalAlignment="Stretch" HorizontalAlignment="Center" Background="Gainsboro" ShowsPreview="True" Width="5"/>
+		<DockPanel  Grid.Column="3" Grid.Row="1" Background="#FFEEF5FD">
+			<WindowsFormsHost>
+				<WindowsFormsHost.Child>
+					<local:SchemaControl x:Name="DataView"/>
+				</WindowsFormsHost.Child>
+			</WindowsFormsHost>
+		</DockPanel>
+	</Grid>
+</UserControl>

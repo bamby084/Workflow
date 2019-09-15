@@ -1,0 +1,65 @@
+﻿
+
+
+
+        <DataGrid
+            x:Name="dataGrid"
+            Grid.Row="1"
+            Grid.Column="0"
+            AutoGenerateColumns="False"
+            CanUserAddRows="False"
+            ColumnWidth="*"
+            GridLinesVisibility="All"
+            RowHeaderWidth="20">
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Gray" />
+
+                <Style x:Key="gridHeaderStyle" TargetType="DataGridColumnHeader">
+
+                    <Setter Property="FontFamily" Value="Verdana" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="Padding" Value="5,1" />
+                    <Setter Property="FontWeight" Value="Normal" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="SeparatorBrush" Value="Black" />
+
+                </Style>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Level}" Value="Warn">
+                            <Setter Property="Foreground" Value="Blue" />
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding Level}" Value="Error">
+                            <Setter Property="Foreground" Value="Red" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    MinWidth="60"
+                    MaxWidth="120"
+                    Binding="{Binding Path=Struct, Mode=OneWay}"
+                    Header="Structure"
+                    HeaderStyle="{StaticResource gridHeaderStyle}"
+                    IsReadOnly="True" />
+
+                <DataGridTextColumn
+                    MinWidth="60"
+                    MaxWidth="120"
+                    Binding="{Binding Path=Type, Mode=OneWay}"
+                    Header="Type"
+                    HeaderStyle="{StaticResource gridHeaderStyle}"
+                    IsReadOnly="True" />
+
+                <DataGridTextColumn
+                    MinWidth="60"
+                    Binding="{Binding Path=Value, Mode=OneWay}"
+                    Header="Value"
+                    HeaderStyle="{StaticResource gridHeaderStyle}"
+                    IsReadOnly="True" />
+
+
+            </DataGrid.Columns>
+        </DataGrid>

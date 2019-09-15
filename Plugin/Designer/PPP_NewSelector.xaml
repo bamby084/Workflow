@@ -1,0 +1,39 @@
+﻿<Window x:Class="Designer.PPP_NewSelector"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Designer"
+      mc:Ignorable="d" 
+      Width="400" SizeToContent="Height"
+      Title="Create New Selector">
+
+    <Grid Background="#FFEEF5FD">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="5"/>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="5"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="5"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="5"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="5"/>
+		</Grid.RowDefinitions>
+
+		<Label Grid.Row="2" Grid.Column="1" Content="New Selector:"/>
+		<TextBox Name="Field" Grid.Row="2" Grid.Column="2"/>
+
+		<Grid Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="auto"/>
+			</Grid.ColumnDefinitions>
+			<Button Name="ButtonOK" Width="39" Content="OK" Click="ButtonOK_Click" Margin="0,0,5,0"/>
+			<Button Name="ButtonCancel" Content="Cancel" Click="ButtonCancel_Click" Grid.Column="1"/>
+		</Grid>
+	</Grid>
+</Window>

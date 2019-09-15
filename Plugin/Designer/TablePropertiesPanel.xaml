@@ -1,0 +1,155 @@
+﻿<UserControl x:Class="Designer.TablePropertiesPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Designer"
+             xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="500" x:Name="TablePanel">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="AppBgColor" Color="#FFEEF5FD"/>
+    </UserControl.Resources>
+    <Grid Background="{StaticResource AppBgColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Name="lblTableName" Content="Tbl X - Tables"/>
+        <Button Content="Add Table" Grid.Row="1" Width="100" HorizontalAlignment="Left" Background="#FFDDFEF5" Margin="0,2,0,4"/>
+        <TabControl Grid.Row="2" SelectedIndex="0" Background="{StaticResource AppBgColor}">
+            <TabItem Header="General" Name="TabGeneral">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="32" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <!--
+                    <Label Content="Type:" />
+                    <ComboBox Name="cbType" Grid.Column="1" Margin="0, 2, 0, 2" ItemsSource="{Binding ElementName=TablePanel, Path=Type, Mode=OneWay}" SelectionChanged="cbType_SelectionChanged" />
+
+                    <Label Content="Row set:" Grid.Row="1"/>
+                    <ComboBox Grid.Row="1" Name="cbRowSet" Grid.Column="1" Margin="0, 2, 0, 2" ItemsSource="{Binding ElementName=TextPanel, Path=RowSet, Mode=OneWay}" SelectionChanged="cbRowSet_SelectionChanged" />
+                    -->
+                    
+                    <Label Content="Table style:" Grid.Row="2"/>
+                    <ComboBox Grid.Row="2" Name="cbTableStyle" SelectedIndex="0" Grid.Column="1" Margin="0, 2, 0, 2" SelectionChanged="cbTableStyle_SelectionChanged" >
+                        <ComboBoxItem Content="Empty"/>
+                    </ComboBox>
+                    <Image Grid.Row="2" Margin="6,0,0,0" Grid.Column="3" Source="pack://application:,,,/Designer;component/res/icons/forward-24.png" Width="16" Height="16" Focusable="False" HorizontalAlignment="Left"/>
+                    
+                    <Label Content="Border style:" Grid.Row="3"/>
+                    <ComboBox Grid.Row="3" Name="cbBorderStyle" SelectedIndex="0" Grid.Column="1" Margin="0, 2, 0, 2" SelectionChanged="cbBorderStyle_SelectionChanged" >
+                        <ComboBoxItem Content="Empty"/>
+                    </ComboBox>
+                    <Image Grid.Row="3" Margin="6,0,0,0" Grid.Column="3" Source="pack://application:,,,/Designer;component/res/icons/forward-24.png" Width="16" Height="16" Focusable="False" HorizontalAlignment="Left"/>
+                    
+                    <Label Content="Border type:" Grid.Row="4"/>
+                    <ComboBox Name="cbBorderType" SelectedIndex="0" Grid.Row="4" Grid.Column="1" Margin="0, 2, 0, 2" SelectionChanged="cbBorderType_SelectionChanged" >
+                        <ComboBoxItem Content="Merge borders"/>
+                    </ComboBox>
+
+                    <Label Content="Alignment:" Grid.Row="5"/>
+                    <ComboBox Name="cbAlignment" SelectedIndex="0" Grid.Row="5" Grid.Column="1" Margin="0, 2, 0, 2" SelectionChanged="cbAlignment_SelectionChanged" >
+                        <ComboBoxItem Content="Left"/>
+                        <ComboBoxItem Content="Center"/>
+                        <ComboBoxItem Content="Right"/>
+                    </ComboBox>
+
+                    <CheckBox Name="chkPercentWidth" Margin="0, 5, 4, 5" Content="Percent width" Grid.Row="6" IsChecked="True"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownPercentWidth" Margin="0, 2, 0, 2" Grid.Row="6" Grid.Column="1" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="100"/>
+
+                    <CheckBox Name="chkMinWidth" Margin="0, 5, 0, 5" Content="Min width" Grid.Row="7" IsChecked="True"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownMinWidth" Margin="0, 2, 0, 2" Grid.Row="7" Grid.Column="1" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="1"/>
+                    <Label Name="lblMinWidthUnit" Content="mm" Grid.Row="7" Grid.Column="2" />
+                    <!--
+                    <CheckBox Name="chkIncludeLineGap" Margin="0, 5, 0, 5" Content="Include line gap" Grid.Row="8" Grid.ColumnSpan="2"/>
+                    <CheckBox Name="chkApplyHTMLFromatting" Margin="0, 5, 0, 5" Content="Apply HTML formatting" Grid.Row="9" Grid.ColumnSpan="2"/>
+                    <CheckBox Name="chkResponsiveHTML" Margin="0, 5, 0, 5" Content="Responsive HTML" Grid.Row="10" Grid.ColumnSpan="2"/>
+                    -->
+                </Grid>
+            </TabItem>
+            <TabItem Header="Columns" Name="tabColumns">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <DataGrid Name="DataGridSheet" Margin="4, 4, 4, 4" CanUserAddRows="False" AutoGenerateColumns="False" ItemsSource="{Binding ElementName=ParagraphPanel, Path=GridDataSet}">
+                        <DataGrid.Resources>
+                            <DataTemplate x:Key="MinWidthTemplate" DataType="Designer:RowData">
+                                <xceed:PropertyGridEditorDecimalUpDown UpdateValueOnEnterKey="True" Increment="1" Value="{Binding ElementName=TextPanel, Path=MinWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                            <DataTemplate x:Key="SizeRatioTemplate" DataType="Designer:RowData">
+                                <xceed:PropertyGridEditorDecimalUpDown UpdateValueOnEnterKey="True" FormatString="F2" Increment="0.1" Value="{Binding ElementName=TextPanel, Path=SizeRatio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Min.Width" Width="30*" CellTemplate="{StaticResource MinWidthTemplate}"/>
+                            <DataGridTemplateColumn Header="Size Ratio" Width="30*" CellTemplate="{StaticResource SizeRatioTemplate}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Spacing" Name="tabSpacing">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="32"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Horizontal spacing:" Grid.Row="0"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownHorizontalSpacing" Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="1" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="0"/>
+                    <Label Name="lblHorizontalSpacingUnit" Content="mm" Grid.Row="0" Grid.Column="2" />
+
+                    <Label Content="Vertical spacing:" Grid.Row="1"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownVerticalSpacing" Margin="0, 2, 0, 2" Grid.Row="1" Grid.Column="1" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="0"/>
+                    <Label Name="lblUpDownVerticalSpacingUnit" Content="mm" Grid.Row="1" Grid.Column="2" />
+
+                    <Label Content="Space left:" Grid.Row="2"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownSpaceLeft" Margin="0, 2, 0, 2" Grid.Row="2" Grid.Column="1" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="0"/>
+                    <Label Name="lblSpaceLeftUnit" Content="mm" Grid.Row="2" Grid.Column="2" />
+
+                    <Label Content="Space top:" Grid.Row="3"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownSpaceTop" Margin="0, 2, 0, 2" Grid.Row="3" Grid.Column="1" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="0"/>
+                    <Label Name="lblSpaceTopUnit" Content="mm" Grid.Row="3" Grid.Column="2" />
+
+                    <Label Content="Space right:" Grid.Row="4"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownSpaceRight" Margin="0, 2, 0, 2" Grid.Row="4" Grid.Column="1" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="0"/>
+                    <Label Name="lblSpaceRightUnit" Content="mm" Grid.Row="4" Grid.Column="2" />
+
+                    <Label Content="Space bottom:" Grid.Row="5"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownSpaceBottom" Margin="0, 2, 0, 2" Grid.Row="5" Grid.Column="1" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="0"/>
+                    <Label Name="lblSpaceBottomUnit" Content="mm" Grid.Row="5" Grid.Column="2" />
+
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>
+

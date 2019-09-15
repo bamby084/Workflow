@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CSVMetadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <!--The icon path should be relative to the IconDirectory path specified in App.config-->
+  <IconPath>2.png</IconPath>
+  <DisplayName>CSV</DisplayName>
+  <ToolTip>Provides an CSV for other modules.</ToolTip>
+  <OutputDisplayName>Schema</OutputDisplayName>
+</CSVMetadata>

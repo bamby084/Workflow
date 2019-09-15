@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+
+namespace Designer
+{
+    /// <summary>
+    /// Interaction logic for InsertTableWindow.xaml
+    /// </summary>
+    public partial class InsertTableWindow : Window
+    {
+        public InsertTableWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void cbVariable_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+    }
+}

@@ -1,0 +1,15 @@
+﻿<Window x:Class="Designer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:p="clr-namespace:Designer.Properties"
+        xmlns:local="clr-namespace:Designer"
+        mc:Ignorable="d"
+		WindowState="Maximized"
+        Height="1080" Width="1920" Background="{DynamicResource AppBgColor}">
+	<Window.Resources>
+		<SolidColorBrush x:Key="AppBgColor" Color="#FFEEF5FD" />
+	</Window.Resources>
+	<local:DesignerPage x:Name="DesignerControl" />
+</Window>

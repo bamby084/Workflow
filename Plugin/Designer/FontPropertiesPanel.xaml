@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="Designer.FontPropertiesPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Designer"
+              xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="500" x:Name="FontPanel">
+ 
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="AppBgColor" Color="#FFEEF5FD"/>
+    </UserControl.Resources>
+    <Grid Background="{StaticResource AppBgColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Name="lblFontName" Content="F X - Fonts"/>
+        <TabControl Grid.Row="1" SelectedIndex="0" Background="{StaticResource AppBgColor}">
+            <TabItem Header="Font" Name="TabFont">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!--
+                    <Label Content="Linked font:"/>
+                    <ComboBox Name="cbLinkedFont" Margin="0,2,0,2" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding ElementName=FontPanel, Path=LinkedFont, Mode=OneWay}" SelectionChanged="cbLinkedFont_SelectionChanged" />
+
+                    <CheckBox Name="chkAddLetters" Content="Add letters" Margin="4,2,0,2" Grid.Row="1" Grid.ColumnSpan="2"/>
+                    -->
+                    <DataGrid Name="SubFamilyGrid" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" IsEnabled="False" CanUserAddRows="False" AutoGenerateColumns="False" SelectionUnit="FullRow" SelectionMode="Single">
+                        <DataGrid.Resources>
+                            <DataTemplate x:Key="PreviewTemplate" DataType="Designer:RowData">
+                                <TextBox Text="{Binding Path=Preview}" FontFamily="{Binding Path=FontName}" FontStyle="{Binding Path=FontStyle}" FontWeight="{Binding Path=Weight}" IsReadOnly="True" Background="Transparent" BorderThickness="0"/>
+                            </DataTemplate>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Subfamily" Width="30*" Binding="{Binding SubFamily}" IsReadOnly="True" Selector.IsSelected="False"/>
+                            <DataGridTextColumn Header="Style" Width="20*" Binding="{Binding Style}" IsReadOnly="True" Selector.IsSelected="False"/>
+                            <DataGridTemplateColumn Header="Preview" Width="50*" CellTemplate="{StaticResource PreviewTemplate}" IsReadOnly="True" Selector.IsSelected="False"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

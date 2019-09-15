@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<Invoices>
+   <Invoice>
+	  <ID>1</ID>
+	  <LOBS>
+		<LOB>
+			<Product>
+			<Type>Mutual fund</Type>
+			</Product>
+		</LOB>
+	  </LOBS>
+	  <TransactionDate>11/01/2015</TransactionDate>
+      <Company>Company ABC</Company>
+      <add1>123 Somewhere St</add1>
+      <City>Toronto</City>
+      <State>FL</State>
+	  <ZIP>1234</ZIP>
+	  <BilltoCompany>Bill to Company 1</BilltoCompany>
+      <Billtoadd1>123 Bill to St 1</Billtoadd1>
+      <BilltoCity>Montreal</BilltoCity>
+      <BilltoState>NC</BilltoState>
+	  <BilltoZIP>9999</BilltoZIP>
+	  <ShiptoCompany>Ship to Company 1</ShiptoCompany>
+      <Shiptoadd1>123 Ship to St</Shiptoadd1>
+      <ShiptoCity>Vancouver</ShiptoCity>
+      <ShiptoState>SC</ShiptoState>
+	  <ShiptoZIP>7777</ShiptoZIP>
+	  <SM>Peter Smith</SM>
+		<items>
+			<item>
+				<QTY>2</QTY>
+				<ItemNumber>2345</ItemNumber>
+				<Description>Product 1</Description>
+				<UnitPrice>19.99</UnitPrice>
+				<Total>38.98</Total>
+			</item>
+			<item>
+				<QTY>3</QTY>
+				<ItemNumber>678</ItemNumber>
+				<Description>Product 3</Description>
+				<UnitPrice>10.00</UnitPrice>
+				<Total>30.00</Total>
+			</item>
+		</items>
+		<GST>15.00</GST>
+		<Total>200.00</Total>
+   </Invoice>
+   <Invoice>
+	  <ID>2</ID>
+	  <TransactionDate>12/01/2015</TransactionDate>
+      <Company>Company ABC</Company>
+      <add1>123 Somewhere St</add1>
+      <City>Toronto</City>
+      <State>FL</State>
+	  <ZIP>1234</ZIP>
+	  <BilltoCompany>Bill to Company 2</BilltoCompany>
+      <Billtoadd1>123 Bill to St 2</Billtoadd1>
+      <BilltoCity>Montreal</BilltoCity>
+      <BilltoState>NC</BilltoState>
+	  <BilltoZIP>8888</BilltoZIP>
+	  <ShiptoCompany>Ship to Company 2</ShiptoCompany>
+      <Shiptoadd1>123 Ship to St 2</Shiptoadd1>
+      <ShiptoCity>Vancouver</ShiptoCity>
+      <ShiptoState>SC</ShiptoState>
+	  <ShiptoZIP>2222</ShiptoZIP>
+	  	  <SM>john Stone</SM>
+		<items>
+			<item>
+				<QTY>10</QTY>
+				<ItemNumber>2345</ItemNumber>
+				<Description>Product 6</Description>
+				<UnitPrice>19.99</UnitPrice>
+				<Total>38.98</Total>
+			</item>
+			<item>
+				<QTY>20</QTY>
+				<ItemNumber>37665</ItemNumber>
+				<Description>Product 10</Description>
+				<UnitPrice>10.00</UnitPrice>
+				<Total>60.00</Total>
+			</item>
+		</items>
+		<GST>14.00</GST>
+		<Total>98.00.00</Total>
+   </Invoice>
+   <Invoice>
+	  <ID>3</ID>
+	  <TransactionDate>01/22/2015</TransactionDate>
+      <Company>Company ABC</Company>
+      <add1>123 Somewhere St</add1>
+      <City>Toronto</City>
+      <State>FL</State>
+	  <ZIP>1234</ZIP>
+	  <BilltoCompany>Bill to Company 3</BilltoCompany>
+      <Billtoadd1>123 Bill to St 3</Billtoadd1>
+      <BilltoCity>Montreal</BilltoCity>
+      <BilltoState>NC</BilltoState>
+	  <BilltoZIP>8888</BilltoZIP>
+	  <ShiptoCompany>Ship to Company 3</ShiptoCompany>
+      <Shiptoadd1>123 Ship to St 3</Shiptoadd1>
+      <ShiptoCity>Vancouver</ShiptoCity>
+      <ShiptoState>SC</ShiptoState>
+	  <ShiptoZIP>2222</ShiptoZIP>
+	  <SM>Shawn jacob</SM>
+		<items>
+			<item>
+				<QTY>6</QTY>
+				<ItemNumber>8765</ItemNumber>
+				<Description>Product 22</Description>
+				<UnitPrice>5.0</UnitPrice>
+				<Total>3120.00</Total>
+			</item>
+			<item>
+				<QTY>1000</QTY>
+				<ItemNumber>34456</ItemNumber>
+				<Description>Product 66</Description>
+				<UnitPrice>.50</UnitPrice>
+				<Total>500.00</Total>
+			</item>
+		</items>
+		<GST>150.00</GST>
+		<Total>3500.00</Total>
+   </Invoice>
+   <Invoice>
+      <ID>4</ID>
+	  <TransactionDate>06/31/2016</TransactionDate>
+      <Company>Company ABC</Company>
+      <add1>123 Somewhere St</add1>
+      <City>Toronto</City>
+      <State>FL</State>
+	  <ZIP>1234</ZIP>
+	  <BilltoCompany>Bill to Company 4</BilltoCompany>
+      <Billtoadd1>123 Bill to St 4</Billtoadd1>
+      <BilltoCity>Montreal</BilltoCity>
+      <BilltoState>NC</BilltoState>
+	  <BilltoZIP>8888</BilltoZIP>
+	  <ShiptoCompany>Ship to Company 4</ShiptoCompany>
+      <Shiptoadd1>123 Ship to St 4</Shiptoadd1>
+      <ShiptoCity>Vancouver</ShiptoCity>
+      <ShiptoState>SC</ShiptoState>
+	  <ShiptoZIP>2222</ShiptoZIP>
+	  	  <SM>Shawn jacob</SM>
+		<items>
+			<item>
+				<QTY>2</QTY>
+				<ItemNumber>7654</ItemNumber>
+				<Description>Product 87</Description>
+				<UnitPrice>5.0</UnitPrice>
+				<Total>3120.00</Total>
+			</item>
+			<item>
+				<QTY>1000</QTY>
+				<ItemNumber>6789</ItemNumber>
+				<Description>Product 67</Description>
+				<UnitPrice>.50</UnitPrice>
+				<Total>500.00</Total>
+			</item>
+			<item>
+				<QTY>1000</QTY>
+				<ItemNumber>4276</ItemNumber>
+				<Description>Product 23</Description>
+				<UnitPrice>.50</UnitPrice>
+				<Total>500.00</Total>
+			</item>
+		</items>
+	<GST>250.00</GST>
+	<Total>4000.00</Total>
+   </Invoice>
+</Invoices>

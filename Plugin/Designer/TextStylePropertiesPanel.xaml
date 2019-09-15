@@ -1,0 +1,426 @@
+﻿<UserControl x:Class="Designer.TextStylePropertiesPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Designer"
+             xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="350" d:DesignWidth="500" x:Name="TextPanel">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="AppBgColor" Color="#FFEEF5FD"/>
+    </UserControl.Resources>
+    <Grid Background="{StaticResource AppBgColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Name="lblTextName" Content="T X - Text Styles"/>
+        <TabControl Grid.Row="1" SelectedIndex="0" Background="{StaticResource AppBgColor}">
+            <TabItem Header="Font" Name="TabGeneral">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="48" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Font name:" />
+                    <Image Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbFontName" Margin="0, 2, 0, 2" Grid.Column="2" ItemsSource="{Binding ElementName=TextPanel, Path=FontName, Mode=OneWay}" SelectionChanged="cbFontName_SelectionChanged" />
+
+                    <Label Content="Subfamily:" Grid.Row="1"/>
+                    <Image Grid.Row="1" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Grid.Row="1" Name="cbSubfamily" Margin="0, 2, 0, 2" Grid.Column="2" ItemsSource="{Binding ElementName=TextPanel, Path=SubFamily, Mode=OneWay}" SelectionChanged="cbSubfamily_SelectionChanged" />
+
+                    <Label Content="Font size:" Grid.Row="2"/>
+                    <Image Grid.Row="2" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Grid.Row="2" Name="cbFontSize" SelectedIndex="0" HorizontalContentAlignment="Right" Margin="0, 2, 0, 2" Grid.Column="2" SelectionChanged="cbFontSize_SelectionChanged">
+                        <ComboBoxItem Content="8" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="9" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="10" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="11" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="12" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="14" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="16" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="18" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="20" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="22" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="24" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="26" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="28" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="36" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="48" HorizontalContentAlignment="Right"/>
+                        <ComboBoxItem Content="72" HorizontalContentAlignment="Right"/>
+                    </ComboBox>
+                    <Label Name="lblFontSizeUnit" Content="pt" Grid.Row="2" Grid.Column="3" />
+
+                    <Label Content="Bold:" Grid.Row="3"/>
+                    <Image Grid.Row="3" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Grid.Row="3" Name="cbFontBold" Margin="0, 2, 0, 2" Grid.Column="2" ItemsSource="{Binding ElementName=TextPanel, Path=FontBold, Mode=OneWay}" SelectionChanged="cbFontBold_SelectionChanged" />
+                    
+                    <Label Content="Italic:" Grid.Row="4"/>
+                    <Image Grid.Row="4" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbFontItalic" SelectedIndex="0" Margin="0, 2, 0, 2" Grid.Row="4" Grid.Column="2" SelectionChanged="cbFontItalic_SelectionChanged">
+                        <ComboBoxItem Content="No"/>
+                        <ComboBoxItem Content="Yes"/>
+                    </ComboBox>
+
+                    <Label Content="Small caps:" Grid.Row="5"/>
+                    <Image Grid.Row="5" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbSmallCaps" SelectedIndex="0" Margin="0, 2, 0, 2" Grid.Row="5" Grid.Column="2" SelectionChanged="cbSmallCaps_SelectionChanged">
+                        <ComboBoxItem Content="No"/>
+                        <ComboBoxItem Content="Yes"/>
+                    </ComboBox>
+                    
+                    <Label Content="Super/Subscript:" Grid.Row="6"/>
+                    <Image Grid.Row="6" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbSuperSubscript" SelectedIndex="0" Margin="0, 2, 0, 2" Grid.Row="6" Grid.Column="2" SelectionChanged="cbSuperSubscript_SelectionChanged">
+                        <ComboBoxItem Content="No"/>
+                        <ComboBoxItem Content="Yes"/>
+                    </ComboBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Rules" Name="tabRules">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="48"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <!--
+                    <Label Content="Baseline shift:" Grid.Row="0"/>
+                    <Image Grid.Row="0" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownBaselineShift" Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="0"/>
+                    <Label Name="lblBaselineShiftUnit" Content="mm" Grid.Row="0" Grid.Column="3" />
+                    -->
+                    <Label Content="Inter.spacing:" Grid.Row="1"/>
+                    <Image Grid.Row="1" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownInterSpacing" Margin="0, 2, 0, 2" Grid.Row="1" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="0"/>
+                    <Label Name="lblInterSpacingUnit" Content="mm" Grid.Row="1" Grid.Column="3" />
+
+                    <Label Content="Kerning:" Grid.Row="2"/>
+                    <Image Grid.Row="2" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbKerning" SelectedIndex="0" Grid.Row="2" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbKerning_SelectionChanged">
+                        <ComboBoxItem Content="No"/>
+                        <ComboBoxItem Content="Yes"/>
+                    </ComboBox>
+
+                    <Label Content="Use fixed width:" Grid.Row="3"/>
+                    <Image Grid.Row="3" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbUseFixedWidth" SelectedIndex="0" Grid.Row="3" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbUseFixedWidth_SelectionChanged">
+                        <ComboBoxItem Content="No"/>
+                        <ComboBoxItem Content="Yes"/>
+                    </ComboBox>
+
+                    <Label Content="Fixed width:" Grid.Row="4"/>
+                    <Image Grid.Row="4" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownFixedWidth" Margin="0, 2, 0, 2" Grid.Row="4" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="3.0" IsEnabled="False"/>
+                    <Label Name="lblFixedWidthUnit" Content="mm" Grid.Row="4" Grid.Column="3" />
+
+                    <Label Content="Language:" Grid.Row="5"/>
+                    <Image Grid.Row="5" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbLanguage" SelectedIndex="0" Grid.Row="5" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbLanguage_SelectionChanged">
+                        <ComboBox.Items>
+                            <ComboBoxItem Height="20">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="pack://application:,,,/Designer;component/res/icons/Border.png" Margin="0,0,10,0"/>
+                                    <TextBlock Text="English United Kingdom"/>
+                                </StackPanel>
+                            </ComboBoxItem>
+                        </ComboBox.Items> 
+                    </ComboBox>
+                    
+                    <Label Content="Horizontal scale:" Grid.Row="6"/>
+                    <Image Grid.Row="6" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownHorizontalScale" Margin="0, 2, 0, 2" Grid.Row="6" Grid.Column="2" UpdateValueOnEnterKey="True" Increment="1" Maximum="100" Minimum="0" Value="100"/>
+                    <Label Name="lblLeftIndentUnit" Content="mm" Grid.Row="6" Grid.Column="3" />
+
+                    <Label Content="URL target:" Grid.Row="7"/>
+                    <Image Grid.Row="7" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbURLTarget" SelectedIndex="0" Grid.Row="7" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbURLTarget_SelectionChanged">
+                        <ComboBoxItem Content="Empty"/>
+                    </ComboBox>
+                    <!--
+                    <Label Content="Wrapping rule:" Grid.Row="8"/>
+                    <Image Grid.Row="8" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbWrappingRule" Grid.Row="8" Grid.Column="2" Margin="0, 2, 0, 2" ItemsSource="{Binding ElementName=TextPanel, Path=WrappingRule, Mode=OneWay}" SelectionChanged="cbWrappingRule_SelectionChanged" />
+                    -->
+                </Grid>
+            </TabItem>
+            <TabItem Header="Super/Sub Script" Name="tabSuperSubscript">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="48"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Superscript offset:" Grid.Row="0"/>
+                    <Image Grid.Row="0" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownSuperscriptOffset" Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="33"/>
+                    <Label Name="lblSuperscriptOffsetUnit" Content="%" Grid.Row="0" Grid.Column="3" />
+
+                    <Label Content="Subscript offset:" Grid.Row="1" Grid.ColumnSpan="2"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownSubscriptOffset" Margin="0, 2, 0, 2" Grid.Row="1" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="33"/>
+                    <Label Name="lblSubscriptOffsetUnit" Content="%" Grid.Row="1" Grid.Column="3" />
+
+                    <Label Content="Super/Subscript size:" Grid.Row="2" Grid.ColumnSpan="2"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownSuperSubscriptSize" Margin="0, 2, 0, 2" Grid.Row="2" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="58"/>
+                    <Label Name="lblSuperSubscriptSizeUnit" Content="%" Grid.Row="2" Grid.Column="3" />
+
+                    <Label Content="Affect sup(b)script underline:" Grid.Row="3" Grid.ColumnSpan="2"/>
+                    <ComboBox Name="cbSupSubUnderline" SelectedIndex="1" Grid.Row="3" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbSupSubUnderline_SelectionChanged">
+                        <ComboBoxItem Content="No"/>
+                        <ComboBoxItem Content="Yes"/>
+                    </ComboBox>
+
+                    <Label Content="Affect sup(b)script strikethrough:" Grid.Row="4" Grid.ColumnSpan="2"/>
+                    <ComboBox Name="cbSupSubStrike" SelectedIndex="1" Grid.Row="4" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbSupSubStrike_SelectionChanged">
+                        <ComboBoxItem Content="No"/>
+                        <ComboBoxItem Content="Yes"/>
+                    </ComboBox>
+
+                    <Label Content="Small caps size:" Grid.Row="5" Grid.ColumnSpan="2"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownSmallCapsSize" Margin="0, 2, 0, 2" Grid.Row="5" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="70"/>
+                    <Label Name="lblSmallCapsSizeUnit" Content="%" Grid.Row="5" Grid.Column="3" />
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Lines" Name="tabLines">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="48"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Label Content="Underline:" />
+                    <Image Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbUnderline" SelectedIndex="0" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbUnderline_SelectionChanged" >
+                        <ComboBoxItem Content="No"/>
+                        <ComboBoxItem Content="Yes"/>
+                    </ComboBox>
+
+                    <Label Grid.Row="1" Content="Underline line style:" />
+                    <Image Grid.Row="1" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbUnderlineStyle" SelectedIndex="0" Grid.Row="1" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbUnderlineStyle_SelectionChanged" >
+                        <ComboBoxItem Content="Empty"/>
+                    </ComboBox>
+                    <Image Grid.Row="1" Margin="6,0,0,0" Grid.Column="3" Source="pack://application:,,,/Designer;component/res/icons/forward-24.png" Width="16" Height="16" Focusable="False" HorizontalAlignment="Left"/>
+                    
+                    <Label Grid.Row="2" Content="Strikethrough:" />
+                    <Image Grid.Row="2" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbStrikethrough" SelectedIndex="0" Grid.Row="2" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbStrikethrough_SelectionChanged">
+                        <ComboBoxItem Content="No"/>
+                        <ComboBoxItem Content="Yes"/>
+                    </ComboBox>
+
+                    <Label Grid.Row="3" Content="Strikethrough line style:" />
+                    <Image Grid.Row="3" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbStrikethroughStyle" SelectedIndex="0" Grid.Row="3" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbStrikethroughStyle_SelectionChanged" >
+                        <ComboBoxItem Content="Empty"/>
+                    </ComboBox>
+                    <Image Grid.Row="3" Margin="6,0,0,0" Grid.Column="3" Source="pack://application:,,,/Designer;component/res/icons/forward-24.png" Width="16" Height="16" Focusable="False" HorizontalAlignment="Left"/>
+                    
+                    <Label Grid.Row="4" Content="Custom underline/strike:" />
+                    <Image Grid.Row="4" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbCUnderlineStrike" SelectedIndex="0" Grid.Row="4" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbCUnderlineStrike_SelectionChanged" >
+                        <ComboBoxItem Content="No"/>
+                        <ComboBoxItem Content="Yes"/>
+                    </ComboBox>
+
+                    <Label Content="Underline offset:" Grid.Row="5" Grid.ColumnSpan="2"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownUnderlineOffset" Margin="0, 2, 0, 2" Grid.Row="5" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="10.6" IsEnabled="False"/>
+                    <Label Name="lbUnderlineOffsetUnit" Content="%" Grid.Row="5" Grid.Column="3" />
+
+                    <Label Content="Underline width:" Grid.Row="6" Grid.ColumnSpan="2"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownUnderlineWidth" Margin="0, 2, 0, 2" Grid.Row="6" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="7.3" IsEnabled="False"/>
+                    <Label Name="lblUnderlineWidthUnit" Content="%" Grid.Row="6" Grid.Column="3" />
+
+                    <Label Content="Strikethrough offset:" Grid.Row="7" Grid.ColumnSpan="2"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownStrikeOffset" Margin="0, 2, 0, 2" Grid.Row="7" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="23.6" IsEnabled="False" />
+                    <Label Name="lblStrikeOffsetUnit" Content="%" Grid.Row="7" Grid.Column="3" />
+
+                    <Label Content="Strikethrough width:" Grid.Row="8" Grid.ColumnSpan="2"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownStrikeWidth" Margin="0, 2, 0, 2" Grid.Row="8" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="7.3" IsEnabled="False"/>
+                    <Label Name="lblStrikeWidthUnit" Content="%" Grid.Row="8" Grid.Column="3" />
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Border" Name="tabBorder">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="32"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Label Content="Border style:" />
+                    <Image Grid.Row="0" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbBorderStyle" SelectedIndex="0" Grid.Row="0" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbBorderStyle_SelectionChanged" >
+                        <ComboBoxItem Content="Empty"/>
+                    </ComboBox>
+                    <Image Grid.Row="0" Margin="6,0,0,0" Grid.Column="3" Source="pack://application:,,,/Designer;component/res/icons/forward-24.png" Width="16" Height="16" Focusable="False" HorizontalAlignment="Left"/>
+                    
+                    <Label Grid.Row="1" Content="Connect borders:" />
+                    <Image Grid.Row="1" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbConnectBorders" SelectedIndex="0" Grid.Row="1" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbConnectBorders_SelectionChanged" >
+                        <ComboBoxItem Content="No"/>
+                        <ComboBoxItem Content="Yes"/>
+                    </ComboBox>
+
+                    <Label Content="With line gap:" Grid.Row="2"/>
+                    <Image Grid.Row="2" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbWidthLineGap" SelectedIndex="0" Grid.Row="2" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbWidthLineGap_SelectionChanged" >
+                        <ComboBoxItem Content="No"/>
+                        <ComboBoxItem Content="Yes"/>
+                    </ComboBox>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Outline" Name="tabOutline">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="32"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Line width:" Grid.Row="0"/>
+                    <Image Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownLineWidth" Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="0.1"/>
+                    <Label Name="lblLineWidthUnit" Content="mm" Grid.Row="0" Grid.Column="3" />
+
+                    <Label Content="Miter:" Grid.Row="1"/>
+                    <Image Grid.Row="1" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownMiter" Margin="0, 2, 0, 2" Grid.Row="1" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="10"/>
+                    
+                    <Label Grid.Row="2" Content="Cap:" />
+                    <Image Grid.Row="2" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbCap" SelectedIndex="0" Grid.Row="2" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbCap_SelectionChanged" >
+                        <ComboBox.Items>
+                            <ComboBoxItem Height="20">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Margin="0,0,6,0" Source="pack://application:,,,/Designer;component/res/icons/border.png"/>
+                                    <TextBlock Text="Butt"/>
+                                </StackPanel>
+                            </ComboBoxItem>
+                        </ComboBox.Items>
+                    </ComboBox>
+
+                    <Label Grid.Row="3" Content="Join:" />
+                    <Image Grid.Row="3" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbJoin" Grid.Row="3" SelectedIndex="0" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbJoin_SelectionChanged" >
+                        <ComboBox.Items>
+                            <ComboBoxItem Height="20">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Margin="0,0,6,0" Source="pack://application:,,,/Designer;component/res/icons/border.png"/>
+                                    <TextBlock Text="Bevel"/>
+                                </StackPanel>
+                            </ComboBoxItem>
+                        </ComboBox.Items>
+                    </ComboBox>
+
+                    <Label Grid.Row="4" Content="Fill style:" />
+                    <Image Grid.Row="4" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbFillStyle" SelectedIndex="0" Grid.Row="4" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbFillStyle_SelectionChanged" >
+                        <ComboBox.Items>
+                            <ComboBoxItem Height="20">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Margin="0,0,6,0" Source="pack://application:,,,/Designer;component/res/icons/rect-24.png"/>
+                                    <TextBlock Text="BlackFill"/>
+                                </StackPanel>
+                            </ComboBoxItem>
+                        </ComboBox.Items>
+                    </ComboBox>
+                    <Image Grid.Row="4" Margin="6,0,0,0" Grid.Column="3" Source="pack://application:,,,/Designer;component/res/icons/forward-24.png" Width="16" Height="16" Focusable="False" HorizontalAlignment="Left"/>
+                    
+                    <Label Grid.Row="5" Content="Line fill style:" />
+                    <Image Grid.Row="5" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbLineFillStyle" SelectedIndex="0" Grid.Row="5" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbLineFillStyle_SelectionChanged" >
+                        <ComboBoxItem Content="Empty"/>
+                    </ComboBox>
+                    <Image Grid.Row="5" Margin="6,0,0,0" Grid.Column="3" Source="pack://application:,,,/Designer;component/res/icons/forward-24.png" Width="16" Height="16" Focusable="False" HorizontalAlignment="Left"/>
+                    
+                    <Label Grid.Row="6" Content="Shadow fill style:" />
+                    <Image Grid.Row="6" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <ComboBox Name="cbShadowFillStyle" SelectedIndex="0" Grid.Row="6" Grid.Column="2" Margin="0, 2, 0, 2" SelectionChanged="cbShadowFillStyle_SelectionChanged" >
+                        <ComboBoxItem Content="Empty"/>
+                    </ComboBox>
+                    <Image Grid.Row="6" Margin="6,0,0,0" Grid.Column="3" Source="pack://application:,,,/Designer;component/res/icons/forward-24.png" Width="16" Height="16" Focusable="False" HorizontalAlignment="Left"/>
+                    
+                    <Label Content="Shadow offset X:" Grid.Row="7"/>
+                    <Image Grid.Row="7" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownShadowOffsetX" Margin="0, 2, 0, 2" Grid.Row="7" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="0" IsEnabled="False"/>
+                    <Label Name="lbShadowOffsetXUnit" Content="mm" Grid.Row="7" Grid.Column="3" />
+
+                    <Label Content="Shadow offset Y:" Grid.Row="8"/>
+                    <Image Grid.Row="8" Grid.Column="1" Source="pack://application:,,,/Designer;component/res/icons/linkicon.png" Focusable="False" Opacity="0.5"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Name="UpDownShadowOffsetY" Margin="0, 2, 0, 2" Grid.Row="8" Grid.Column="2" FormatString="F2" UpdateValueOnEnterKey="True" Increment="0.1" Value="0" IsEnabled="False"/>
+                    <Label Name="lblShadowOffsetYUnit" Content="mm" Grid.Row="8" Grid.Column="3" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>
+
