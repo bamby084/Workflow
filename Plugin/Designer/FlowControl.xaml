@@ -8,18 +8,53 @@
              d:DesignHeight="300" d:DesignWidth="300"
              SizeChanged="UserControl_SizeChanged"
              Loaded="UserControl_Loaded">
-    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-        <WindowsFormsHost Grid.Row="0" Margin="0,0,0,0" VerticalAlignment="Top" Height="26">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type TableCell}">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush">
+                <Setter.Value>
+                    <DrawingBrush Viewport="0,0,4,4" ViewportUnits="Absolute" TileMode="Tile">
+                        <DrawingBrush.Drawing>
+                            <DrawingGroup>
+                                <GeometryDrawing Brush="Black">
+                                    <GeometryDrawing.Geometry>
+                                        <GeometryGroup>
+                                            <RectangleGeometry Rect="0,0,50,50" />
+                                            <RectangleGeometry Rect="50,50,50,50" />
+                                        </GeometryGroup>
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+                            </DrawingGroup>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>    
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <WindowsFormsHost Grid.Row="0" Height="26">
             <local:TextRuler x:Name="Ruler"/>
         </WindowsFormsHost>
-        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Label x:Name="lblTitle" Content="" Height="22" VerticalAlignment="Top" Margin="0,30,0,0" Background="#FFC5C5C5" Padding="5,0" FontSize="16" VerticalContentAlignment="Center" Panel.ZIndex="1"/>
-            <WindowsFormsHost Margin="0,56,0,0" VerticalAlignment="Stretch" x:Name="TextContainer">
+
+        <Label x:Name="lblTitle" Grid.Row="1" Content="" Height="22" Background="#FFC5C5C5" 
+               Padding="5,0" FontSize="16" VerticalContentAlignment="Center" />
+
+        <Canvas Grid.Row="2" Background="#FFFFFF" x:Name="Container" PreviewMouseRightButtonDown="OnPreviewMouseRightButtonDown">
+            <Canvas.ContextMenu>
+                <ContextMenu x:Name="ContextMenu">
+                    <MenuItem Header="Insert Table" Click="OnInsertTable"></MenuItem>
+                </ContextMenu>
+            </Canvas.ContextMenu>
+            <WindowsFormsHost x:Name="TextContainer" Canvas.Left="0" Canvas.Top="0" Visibility="Collapsed">
                 <local:ExtendedRichTextBox x:Name="TextEditor"/>
             </WindowsFormsHost>
-        </Grid>
+        </Canvas>
     </Grid>
 </UserControl>

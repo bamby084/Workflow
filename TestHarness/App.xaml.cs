@@ -13,13 +13,5 @@ namespace TestHarness
     /// </summary>
     public partial class App : Application
     {
-        //StartupUri="pack://application:,,,/Designer;component/MainWindow.xaml"
-
-        [STAThread]
-        public static void Main()
-        {
-            var designer = Designer.MainWindow.Instance;
-            designer.ShowDialog();
-        }
     }
 }

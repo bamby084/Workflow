@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
@@ -16,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Designer.ExtensionMethods;
+
 using WPFCanvasTable;
 
 namespace Designer
@@ -24,12 +23,12 @@ namespace Designer
     /// <summary>
     /// Interaction logic for FlowControl.xaml
     /// </summary>
-    public partial class FlowControl : System.Windows.Controls.UserControl
+    public partial class FlowControl2 : System.Windows.Controls.UserControl
     {
 
         private System.Drawing.Rectangle contentRectagle;
 
-        public FlowControl()
+        public FlowControl2()
         {
             InitializeComponent();
 
@@ -96,7 +95,7 @@ namespace Designer
             this.TextEditor.SelectionIndent = 0;
             this.TextEditor.SelectionRightIndent = 0;
             this.TextEditor.SelectionHangingIndent = 0;
-            this.TextEditor.ScrollBars = RichTextBoxScrollBars.None;
+            this.TextEditor.ScrollBars = RichTextBoxScrollBars.None;            
         }
 
         private void TextEditor_ContentsResized(object sender, ContentsResizedEventArgs e)
@@ -410,63 +409,6 @@ namespace Designer
             this.TextEditor.Select(0, 0);
             this.TextEditor.Clear();
             this.TextEditor.SetLayoutType(ExtendedRichTextBox.LayoutModes.WYSIWYG);
-        }
-
-        private void OnInsertTable(object sender, RoutedEventArgs e)
-        {
-            var tableDialog = new InsertTableWindow();
-            var result = tableDialog.ShowDialog();
-            if (result == null || result.Value == false)
-                return;
-
-            var table = new Table();
-            table.AddColumns(tableDialog.Columns);
-
-            if (tableDialog.HeaderRows > 0)
-            {
-                var header = CreateRowGroup(tableDialog.HeaderRows, tableDialog.Columns);
-                table.RowGroups.Add(header);
-            }
-
-            var body = CreateRowGroup(tableDialog.BodyRows, tableDialog.Columns);
-            table.RowGroups.Add(body);
-
-            if (tableDialog.FooterRows > 0)
-            {
-                var footer = CreateRowGroup(tableDialog.FooterRows, tableDialog.Columns);
-                table.RowGroups.Add(footer);
-            }
-
-            var flowDocument = new FlowDocument();
-            flowDocument.Blocks.Add(table);
-
-            var flowContainer = new FlowDocumentScrollViewer();
-            flowContainer.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            flowContainer.Document = flowDocument;
-
-            Canvas.SetLeft(flowContainer, _mousePos.X);
-            Canvas.SetTop(flowContainer, _mousePos.Y);
-            Container.Children.Add(flowContainer);
-        }
-
-        private TableRowGroup CreateRowGroup(int rows, int columns)
-        {
-            var rowGroup = new TableRowGroup();
-            for (int i = 0; i < rows; i++)
-            {
-                var row = new TableRow();
-                row.AddEmptyCells(columns);
-
-                rowGroup.Rows.Add(row);
-            }
-
-            return rowGroup;
-        }
-
-        private Point _mousePos;
-        private void OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            _mousePos = Mouse.GetPosition(Container);
         }
     }
 }
