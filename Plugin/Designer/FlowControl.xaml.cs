@@ -414,39 +414,44 @@ namespace Designer
 
         private void OnInsertTable(object sender, RoutedEventArgs e)
         {
-            var tableDialog = new InsertTableWindow();
-            var result = tableDialog.ShowDialog();
-            if (result == null || result.Value == false)
-                return;
+            //var tableDialog = new InsertTableWindow();
+            //var result = tableDialog.ShowDialog();
+            //if (result == null || result.Value == false)
+            //    return;
 
-            var table = new Table();
-            table.AddColumns(tableDialog.Columns);
+            //var table = new Table();
+            //table.AddColumns(tableDialog.Columns);
 
-            if (tableDialog.HeaderRows > 0)
-            {
-                var header = CreateRowGroup(tableDialog.HeaderRows, tableDialog.Columns);
-                table.RowGroups.Add(header);
-            }
+            //if (tableDialog.HeaderRows > 0)
+            //{
+            //    var header = CreateRowGroup(tableDialog.HeaderRows, tableDialog.Columns);
+            //    table.RowGroups.Add(header);
+            //}
 
-            var body = CreateRowGroup(tableDialog.BodyRows, tableDialog.Columns);
-            table.RowGroups.Add(body);
+            //var body = CreateRowGroup(tableDialog.BodyRows, tableDialog.Columns);
+            //table.RowGroups.Add(body);
 
-            if (tableDialog.FooterRows > 0)
-            {
-                var footer = CreateRowGroup(tableDialog.FooterRows, tableDialog.Columns);
-                table.RowGroups.Add(footer);
-            }
+            //if (tableDialog.FooterRows > 0)
+            //{
+            //    var footer = CreateRowGroup(tableDialog.FooterRows, tableDialog.Columns);
+            //    table.RowGroups.Add(footer);
+            //}
 
-            var flowDocument = new FlowDocument();
-            flowDocument.Blocks.Add(table);
+            //var flowDocument = new FlowDocument();
+            //flowDocument.Blocks.Add(table);
 
-            var flowContainer = new FlowDocumentScrollViewer();
-            flowContainer.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            flowContainer.Document = flowDocument;
+            //var flowContainer = new FlowDocumentScrollViewer();
+            //flowContainer.Width = Container.Width - _mousePos.X;
+            //flowContainer.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            //flowContainer.Document = flowDocument;
 
-            Canvas.SetLeft(flowContainer, _mousePos.X);
-            Canvas.SetTop(flowContainer, _mousePos.Y);
-            Container.Children.Add(flowContainer);
+            //Canvas.SetLeft(flowContainer, _mousePos.X);
+            //Canvas.SetTop(flowContainer, _mousePos.Y);
+            //Container.Children.Add(flowContainer);
+            var t = new TableEx();
+            t.Construct();
+            
+            Container.Children.Add(t);
         }
 
         private TableRowGroup CreateRowGroup(int rows, int columns)

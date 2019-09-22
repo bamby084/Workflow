@@ -198,6 +198,7 @@
     <Compile Include="SheetNameDataGrid.xaml.cs">
       <DependentUpon>SheetNameDataGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TableEx.cs" />
     <Compile Include="TablePropertiesPanel.xaml.cs">
       <DependentUpon>TablePropertiesPanel.xaml</DependentUpon>
     </Compile>
