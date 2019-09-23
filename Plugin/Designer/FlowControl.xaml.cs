@@ -414,44 +414,23 @@ namespace Designer
 
         private void OnInsertTable(object sender, RoutedEventArgs e)
         {
-            //var tableDialog = new InsertTableWindow();
-            //var result = tableDialog.ShowDialog();
-            //if (result == null || result.Value == false)
-            //    return;
+            var tableDialog = new InsertTableWindow();
+            var result = tableDialog.ShowDialog();
+            if (result == null || result.Value == false)
+                return;
 
-            //var table = new Table();
-            //table.AddColumns(tableDialog.Columns);
+            var table = new TableEx();
+            table.Columns = tableDialog.Columns;
+            table.HeaderRows = tableDialog.HeaderRows;
+            table.BodyRows = tableDialog.BodyRows;
+            table.FooterRows = tableDialog.FooterRows;
+            table.Build();
 
-            //if (tableDialog.HeaderRows > 0)
-            //{
-            //    var header = CreateRowGroup(tableDialog.HeaderRows, tableDialog.Columns);
-            //    table.RowGroups.Add(header);
-            //}
-
-            //var body = CreateRowGroup(tableDialog.BodyRows, tableDialog.Columns);
-            //table.RowGroups.Add(body);
-
-            //if (tableDialog.FooterRows > 0)
-            //{
-            //    var footer = CreateRowGroup(tableDialog.FooterRows, tableDialog.Columns);
-            //    table.RowGroups.Add(footer);
-            //}
-
-            //var flowDocument = new FlowDocument();
-            //flowDocument.Blocks.Add(table);
-
-            //var flowContainer = new FlowDocumentScrollViewer();
-            //flowContainer.Width = Container.Width - _mousePos.X;
-            //flowContainer.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //flowContainer.Document = flowDocument;
-
-            //Canvas.SetLeft(flowContainer, _mousePos.X);
-            //Canvas.SetTop(flowContainer, _mousePos.Y);
-            //Container.Children.Add(flowContainer);
-            var t = new TableEx();
-            t.Construct();
+            table.Width = Container.ActualWidth * table.WidthPercentage;
+            Canvas.SetLeft(table, table.Alignment == TableAlignment.Left ? 0 : Container.ActualWidth - table.Width);
+            Canvas.SetTop(table, _mousePos.Y);
             
-            Container.Children.Add(t);
+            Container.Children.Add(table);
         }
 
         private TableRowGroup CreateRowGroup(int rows, int columns)
