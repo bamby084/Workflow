@@ -9,7 +9,7 @@
              SizeChanged="UserControl_SizeChanged"
              Loaded="UserControl_Loaded">
     <UserControl.Resources>
-        <Style TargetType="{x:Type TableCell}">
+        <Style TargetType="{x:Type local:FlowTableCell}">
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="BorderBrush">
                 <Setter.Value>
@@ -29,7 +29,12 @@
                     </DrawingBrush>
                 </Setter.Value>
             </Setter>
-        </Style>    
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{x:Static SystemColors.GradientInactiveCaptionBrush}"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>  
     </UserControl.Resources>
     
     <Grid>
@@ -46,7 +51,8 @@
         <Label x:Name="lblTitle" Grid.Row="1" Content="" Height="22" Background="#FFC5C5C5" 
                Padding="5,0" FontSize="16" VerticalContentAlignment="Center" />
 
-        <Canvas Grid.Row="2" Background="#FFFFFF" x:Name="Container" PreviewMouseRightButtonDown="OnPreviewMouseRightButtonDown">
+        <Canvas Grid.Row="2" Background="#FFFFFF" x:Name="Container" PreviewMouseRightButtonDown="OnPreviewMouseRightButtonDown"
+                MouseLeftButtonDown="OnMouseLeftButtonDown">
             <Canvas.ContextMenu>
                 <ContextMenu x:Name="ContextMenu">
                     <MenuItem Header="Insert Table" Click="OnInsertTable"></MenuItem>

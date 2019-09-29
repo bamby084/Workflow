@@ -166,7 +166,6 @@
     <Compile Include="ExtendedRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ExtensionMethods\TableExtensions.cs" />
     <Compile Include="FlowEx.cs" />
     <Compile Include="FlowControl.xaml.cs">
       <DependentUpon>FlowControl.xaml</DependentUpon>
@@ -198,7 +197,7 @@
     <Compile Include="SheetNameDataGrid.xaml.cs">
       <DependentUpon>SheetNameDataGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TableEx.cs" />
+    <Compile Include="FlowTable.cs" />
     <Compile Include="TablePropertiesPanel.xaml.cs">
       <DependentUpon>TablePropertiesPanel.xaml</DependentUpon>
     </Compile>
@@ -512,6 +511,9 @@
       <Project>{82420440-bb28-424c-bd1d-bd8ab4bea33d}</Project>
       <Name>JdSuite.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ExtensionMethods\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

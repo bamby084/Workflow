@@ -16,7 +16,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Designer.ExtensionMethods;
 using WPFCanvasTable;
 
 namespace Designer
@@ -419,7 +418,7 @@ namespace Designer
             if (result == null || result.Value == false)
                 return;
 
-            var table = new TableEx();
+            var table = new FlowTable();
             table.Columns = tableDialog.Columns;
             table.HeaderRows = tableDialog.HeaderRows;
             table.BodyRows = tableDialog.BodyRows;
@@ -427,30 +426,20 @@ namespace Designer
             table.Build();
 
             table.Width = Container.ActualWidth * table.WidthPercentage;
-            Canvas.SetLeft(table, table.Alignment == TableAlignment.Left ? 0 : Container.ActualWidth - table.Width);
+            Canvas.SetLeft(table, table.Alignment == FlowTableAlignment.Left ? 0 : Container.ActualWidth - table.Width);
             Canvas.SetTop(table, _mousePos.Y);
             
             Container.Children.Add(table);
-        }
-
-        private TableRowGroup CreateRowGroup(int rows, int columns)
-        {
-            var rowGroup = new TableRowGroup();
-            for (int i = 0; i < rows; i++)
-            {
-                var row = new TableRow();
-                row.AddEmptyCells(columns);
-
-                rowGroup.Rows.Add(row);
-            }
-
-            return rowGroup;
         }
 
         private Point _mousePos;
         private void OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             _mousePos = Mouse.GetPosition(Container);
+        }
+
+        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
         }
     }
 }

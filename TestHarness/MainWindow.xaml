@@ -4,16 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestHarness"
+        xmlns:designer="clr-namespace:Designer;assembly=Designer"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Window.Resources>
-        <Style TargetType="{x:Type Button}">
+        <Style TargetType="{x:Type designer:FlowTableCell}">
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="BorderBrush">
                 <Setter.Value>
                     <DrawingBrush Viewport="0,0,4,4" ViewportUnits="Absolute" TileMode="Tile">
                         <DrawingBrush.Drawing>
                             <DrawingGroup>
-                                <GeometryDrawing Brush="Red">
+                                <GeometryDrawing Brush="Black">
                                     <GeometryDrawing.Geometry>
                                         <GeometryGroup>
                                             <RectangleGeometry Rect="0,0,50,50" />
@@ -26,11 +28,51 @@
                     </DrawingBrush>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{x:Static SystemColors.GradientInactiveCaptionBrush}"></Setter>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Grid>
-        <Button BorderThickness="1" >
-            
-        </Button>
-    </Grid>
+
+    <!--<Grid>
+        <FlowDocumentScrollViewer VerticalScrollBarVisibility="Hidden">
+            <FlowDocument>
+                <Table>
+                    <Table.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem>dsd</MenuItem>
+                            <MenuItem>dsd</MenuItem>
+                            <MenuItem>dsd</MenuItem>
+                        </ContextMenu>
+                    </Table.ContextMenu>
+                    <Table.Columns>
+                        <TableColumn/>
+                        <TableColumn/>
+                        <TableColumn/>
+                    </Table.Columns>
+                    
+                    <Table.RowGroups>
+                        <TableRowGroup>
+                            <TableRow>
+                                <TableCell/>
+                                <TableCell/>
+                                <TableCell/>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell/>
+                                <TableCell/>
+                                <TableCell/>
+                            </TableRow>
+                        </TableRowGroup>
+                        <TableRowGroup>
+                            
+                        </TableRowGroup>
+                    </Table.RowGroups>
+                </Table>
+            </FlowDocument>
+           
+        </FlowDocumentScrollViewer>
+    </Grid>-->
 </Window>
