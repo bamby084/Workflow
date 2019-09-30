@@ -99,7 +99,12 @@ namespace Designer
 
             InitFont();
             InitColorComboBox();
+            FlowTableManager.Instance().TableAdded += OnFlowTableAdded;
+        }
 
+        private void OnFlowTableAdded(object sender, TableEventEventArgs e)
+        {
+            AddNewTableStyle(e.Table);
         }
 
         public Page AddNewPage()
@@ -1238,9 +1243,10 @@ namespace Designer
             e.Handled = true;
         }
 
-        private void AddNewTableStyle()
+        private void AddNewTableStyle(FlowTable table)
         {
             TableStyle ps = new TableStyle(_table_id);
+            ps.FlowTable = table;
             ps.PropertyChanged += Styles_PropertyChanged;
             _table_id++;
 
@@ -1262,7 +1268,11 @@ namespace Designer
         {
             TableStyle pg = item.Resources["TableStyleRef"] as TableStyle;
             if (pg != null)
+            {
                 TableStyles.Remove(pg);
+                FlowTableManager.Instance().Remove(pg.FlowTable.Id);
+            }
+
             if (item != null)
             {
                 TreeViewTables.Items.Remove(item);
@@ -1273,7 +1283,7 @@ namespace Designer
 
         private void CtxMenuTable_Click(object sender, RoutedEventArgs e)
         {
-            AddNewTableStyle();
+            AddNewTableStyle(FlowTable.CreateDefaultTable());
         }
 
         public FontStyles FontStyles = new FontStyles();

@@ -90,6 +90,7 @@ namespace Designer
             Id = "Tbl" + id.ToString();
         }
 
+        public FlowTable FlowTable { get; set; }
 
         public void WriteXml(XmlWriter writer)
         {

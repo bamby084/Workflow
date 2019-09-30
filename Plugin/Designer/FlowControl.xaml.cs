@@ -96,6 +96,20 @@ namespace Designer
             this.TextEditor.SelectionRightIndent = 0;
             this.TextEditor.SelectionHangingIndent = 0;
             this.TextEditor.ScrollBars = RichTextBoxScrollBars.None;
+
+            FlowTableManager.Instance().TableRemoved += OnTableRemoved;
+        }
+
+        private void OnTableRemoved(object sender, TableEventEventArgs e)
+        {
+            foreach (UIElement child in Container.Children)
+            {
+                if (child is FlowTable table && table.Id == e.Table.Id)
+                {
+                    Container.Children.Remove(child);
+                    return;
+                }
+            }
         }
 
         private void TextEditor_ContentsResized(object sender, ContentsResizedEventArgs e)
@@ -430,6 +444,7 @@ namespace Designer
             Canvas.SetTop(table, _mousePos.Y);
             
             Container.Children.Add(table);
+            FlowTableManager.Instance().Add(table);
         }
 
         private Point _mousePos;

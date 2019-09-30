@@ -23,7 +23,7 @@ namespace Designer
         private ContextMenu CellContextMenu => SelectedCells.Count == 1 ? SingleCellContextMenu : MultipleCellsContextMenu;
 
         public List<FlowTableCell> SelectedCells { get; set; }
-
+        public Guid Id { get; set; }
         public FrameworkElement Root { get; private set; }
         public int Columns { get; set; }
         public int HeaderRows { get; set; }
@@ -36,7 +36,18 @@ namespace Designer
         public FlowTable()
         {
             SelectedCells = new List<FlowTableCell>();
+            Id = Guid.NewGuid();
             CreateContextMenus();
+        }
+
+        public static FlowTable CreateDefaultTable()
+        {
+            var table = new FlowTable();
+            table.Columns = 1;
+            table.BodyRows = 1;
+            table.Build();
+
+            return table;
         }
 
         public void Build()
