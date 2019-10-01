@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using iText.Layout.Element;
 using WPFCanvasTable;
 
 namespace Designer
@@ -100,16 +101,31 @@ namespace Designer
             FlowTableManager.Instance().TableRemoved += OnTableRemoved;
         }
 
+        public void AddTablePresenter(FlowTablePresenter presenter, FlowTableSettings tableSettings, Point position)
+        {
+            presenter.Width = tableSettings.WidthPercentage * Container.ActualWidth;
+            Canvas.SetLeft(presenter, tableSettings.Alignment == FlowTableAlignment.Left
+                ? 0
+                : Container.ActualWidth - presenter.Width);
+            Canvas.SetTop(presenter, position.Y);
+            Container.Children.Add(presenter);
+        }
+
         private void OnTableRemoved(object sender, TableEventEventArgs e)
         {
+            List<UIElement> itemsToRemove = new List<UIElement>();
+
             foreach (UIElement child in Container.Children)
             {
-                if (child is FlowTable table && table.Id == e.Table.Id)
+                if (child is FlowTablePresenter table && table.ParentId == e.Table.Id)
                 {
-                    Container.Children.Remove(child);
-                    return;
+                    itemsToRemove.Add(child);
                 }
             }
+
+            foreach (var item in itemsToRemove)
+                Container.Children.Remove(item);
+
         }
 
         private void TextEditor_ContentsResized(object sender, ContentsResizedEventArgs e)
@@ -433,17 +449,13 @@ namespace Designer
                 return;
 
             var table = new FlowTable();
-            table.Columns = tableDialog.Columns;
-            table.HeaderRows = tableDialog.HeaderRows;
-            table.BodyRows = tableDialog.BodyRows;
-            table.FooterRows = tableDialog.FooterRows;
-            table.Build();
+            table.Settings.Columns = tableDialog.Columns;
+            table.Settings.HeaderRows = tableDialog.HeaderRows;
+            table.Settings.BodyRows = tableDialog.BodyRows;
+            table.Settings.FooterRows = tableDialog.FooterRows;
 
-            table.Width = Container.ActualWidth * table.WidthPercentage;
-            Canvas.SetLeft(table, table.Alignment == FlowTableAlignment.Left ? 0 : Container.ActualWidth - table.Width);
-            Canvas.SetTop(table, _mousePos.Y);
-            
-            Container.Children.Add(table);
+            var presenter = table.CreatePresenter();
+            AddTablePresenter(presenter, table.Settings, _mousePos);
             FlowTableManager.Instance().Add(table);
         }
 

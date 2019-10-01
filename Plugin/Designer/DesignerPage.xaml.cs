@@ -273,6 +273,15 @@ namespace Designer
 
                 ActivePage.AddCanvasItem(control, e.GetPosition(ActivePage.Canvas));
             }
+            else if (item.ElementType == typeof(TableStyle) && ActivePage is FlowEx flowEx)
+            {
+                var ts = item.TreeViewItem.Resources["TableStyleRef"] as TableStyle;
+                if (ts != null)
+                {
+                    var tablePresenter = ts.FlowTable.CreatePresenter();
+                    flowEx.Flow.AddTablePresenter(tablePresenter, ts.FlowTable.Settings, e.GetPosition(ActivePage.Canvas));
+                }
+            }
         }
 
         private void Canvas_Loaded(object sender, RoutedEventArgs e)
@@ -1283,7 +1292,10 @@ namespace Designer
 
         private void CtxMenuTable_Click(object sender, RoutedEventArgs e)
         {
-            AddNewTableStyle(FlowTable.CreateDefaultTable());
+            var table = FlowTable.Default();
+            AddNewTableStyle(table);
+
+            FlowTableManager.Instance().Add(table, false);
         }
 
         public FontStyles FontStyles = new FontStyles();

@@ -15,45 +15,41 @@ namespace Designer
         Right
     }
 
-    public class FlowTable: Panel
+    public class FlowTablePresenter: Panel
     {
         public event EventHandler SelectedCellChange;
+
         private ContextMenu SingleCellContextMenu { get; set; }
         private  ContextMenu MultipleCellsContextMenu { get; set; }
         private ContextMenu CellContextMenu => SelectedCells.Count == 1 ? SingleCellContextMenu : MultipleCellsContextMenu;
 
         public List<FlowTableCell> SelectedCells { get; set; }
         public Guid Id { get; set; }
+        public Guid ParentId { get; set; }
         public FrameworkElement Root { get; private set; }
-        public int Columns { get; set; }
-        public int HeaderRows { get; set; }
-        public int FooterRows { get; set; }
-        public int BodyRows { get; set; }
-        public double WidthPercentage { get; set; } = 1.0;
-        public new double MinWidth { get; set; }
-        public FlowTableAlignment Alignment { get; set; }
-
-        public FlowTable()
+        
+        public FlowTablePresenter(FlowTableSettings settings)
         {
             SelectedCells = new List<FlowTableCell>();
             Id = Guid.NewGuid();
             CreateContextMenus();
+            Build(settings);
         }
 
-        public static FlowTable CreateDefaultTable()
-        {
-            var table = new FlowTable();
-            table.Columns = 1;
-            table.BodyRows = 1;
-            table.Build();
+        //public static FlowTablePresenter CreateDefaultTable()
+        //{
+        //    var table = new FlowTablePresenter();
+        //    table.Columns = 1;
+        //    table.BodyRows = 1;
+        //    table.Build();
 
-            return table;
-        }
+        //    return table;
+        //}
 
-        public void Build()
+        private void Build(FlowTableSettings settings)
         {
             var table = new Table();
-            AddRowGroup(table, HeaderRows + BodyRows + FooterRows);
+            AddRowGroup(table, settings.HeaderRows + settings.BodyRows + settings.FooterRows, settings.Columns);
             
             var container = new FlowDocumentScrollViewer();
             container.IsSelectionEnabled = false;
@@ -99,7 +95,7 @@ namespace Designer
             MultipleCellsContextMenu.Items.Add(mergeCellsMenuItem);
         }
 
-        private void AddRowGroup(Table table, int rows)
+        private void AddRowGroup(Table table, int rows, int columns)
         {
             if (rows == 0)
                 return;
@@ -112,7 +108,7 @@ namespace Designer
                 var row  = new FlowTableRow();
                 row.GroupIndex = index;
                 row.Index = index + i;
-                AddCells(row, Columns);
+                AddCells(row, columns);
                 
                 rowGroup.Rows.Add(row);
             }
@@ -255,7 +251,6 @@ namespace Designer
             return true;
         }
 
-        #region Presenter
         protected override int VisualChildrenCount => 1;
 
         protected override Visual GetVisualChild(int index)
@@ -274,8 +269,50 @@ namespace Designer
             Root.Arrange(new Rect(0, 0, finalSize.Width, finalSize.Height));
             return finalSize;
         }
-        #endregion
+    }
 
+    public class FlowTable
+    {
+        public Guid Id { get;}
+        public FlowTableSettings Settings { get;}
+        public IList<FlowTablePresenter> TablePresenters { get; }
+
+        public FlowTable()
+        {
+            Id = Guid.NewGuid();
+            Settings = new FlowTableSettings();
+            TablePresenters = new List<FlowTablePresenter>();
+        }
+
+        public FlowTablePresenter CreatePresenter()
+        {
+            var presenter = new FlowTablePresenter(Settings);
+            presenter.ParentId = this.Id;
+            TablePresenters.Add(presenter);
+
+            return presenter;
+        }
+
+        public static FlowTable Default()
+        {
+            var table = new FlowTable();
+            table.Settings.Columns = 2;
+            table.Settings.BodyRows = 2;
+            table.Settings.WidthPercentage = 1;
+
+            return table;
+        }
+    }
+
+    public class FlowTableSettings
+    {
+        public int Columns { get; set; }
+        public int HeaderRows { get; set; }
+        public int FooterRows { get; set; }
+        public int BodyRows { get; set; }
+        public double WidthPercentage { get; set; } = 1.0;
+        public double MinWidth { get; set; }
+        public FlowTableAlignment Alignment { get; set; }
     }
 
     public class FlowTableCell : TableCell

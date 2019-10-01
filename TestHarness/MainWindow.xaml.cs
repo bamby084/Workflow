@@ -25,20 +25,20 @@ namespace TestHarness
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private FlowTable _table;
+        private FlowTablePresenter _table;
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = this;
 
-            _table = new FlowTable();
-            _table.Columns = 5;
-            _table.HeaderRows = 2;
-            _table.FooterRows = 2;
-            _table.BodyRows = 3;
-            _table.Build();
+            //_table = new FlowTablePresenter();
+            //_table.Columns = 5;
+            //_table.HeaderRows = 2;
+            //_table.FooterRows = 2;
+            //_table.BodyRows = 3;
+            //_table.Build();
 
-            this.AddChild(_table);
+            //this.AddChild(_table);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

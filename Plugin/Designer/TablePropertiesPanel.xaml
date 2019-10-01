@@ -17,7 +17,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Label Name="lblTableName" Content="Tbl X - Tables"/>
-        <Button Content="Add Table" Grid.Row="1" Width="100" HorizontalAlignment="Left" Background="#FFDDFEF5" Margin="0,2,0,4"/>
         <TabControl Grid.Row="2" SelectedIndex="0" Background="{StaticResource AppBgColor}">
             <TabItem Header="General" Name="TabGeneral">
                 <Grid>

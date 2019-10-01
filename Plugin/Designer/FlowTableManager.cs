@@ -7,7 +7,7 @@ namespace Designer
     public delegate void TableEventHandler(object sender, TableEventEventArgs e);
     public class TableEventEventArgs : EventArgs
     {
-        public FlowTable Table { get; private set; }
+        public FlowTable Table { get; }
 
         public TableEventEventArgs(FlowTable table)
         {
@@ -40,10 +40,12 @@ namespace Designer
             }
         }
 
-        public void Add(FlowTable table)
+        public void Add(FlowTable table, bool fireEvent = true)
         {
             _tables.Add(table);
-            TableAdded?.Invoke(this, new TableEventEventArgs(table));
+
+            if (fireEvent && TableAdded != null)
+                TableAdded(this, new TableEventEventArgs(table));
         }
 
         public FlowTable GetById(Guid id)
