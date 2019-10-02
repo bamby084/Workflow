@@ -454,7 +454,7 @@ namespace Designer
             table.Settings.BodyRows = tableDialog.BodyRows;
             table.Settings.FooterRows = tableDialog.FooterRows;
 
-            var presenter = table.CreatePresenter();
+            var presenter = table.NewPresenter();
             AddTablePresenter(presenter, table.Settings, _mousePos);
             FlowTableManager.Instance().Add(table);
         }

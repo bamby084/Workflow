@@ -36,16 +36,6 @@ namespace Designer
             Build(settings);
         }
 
-        //public static FlowTablePresenter CreateDefaultTable()
-        //{
-        //    var table = new FlowTablePresenter();
-        //    table.Columns = 1;
-        //    table.BodyRows = 1;
-        //    table.Build();
-
-        //    return table;
-        //}
-
         private void Build(FlowTableSettings settings)
         {
             var table = new Table();
@@ -284,13 +274,18 @@ namespace Designer
             TablePresenters = new List<FlowTablePresenter>();
         }
 
-        public FlowTablePresenter CreatePresenter()
+        public FlowTablePresenter NewPresenter()
         {
             var presenter = new FlowTablePresenter(Settings);
             presenter.ParentId = this.Id;
             TablePresenters.Add(presenter);
 
             return presenter;
+        }
+
+        public FlowTablePresenter GetPresenter(Guid id)
+        {
+            return TablePresenters.FirstOrDefault(table => table.Id == id);
         }
 
         public static FlowTable Default()
@@ -339,10 +334,6 @@ namespace Designer
 
     public static class TableExtensions
     {
-        public static void AddRowGroup(this Table table, int rows, int columns)
-        {
-        }
-
         public static int GetNewRowGroupIndex(this Table table)
         {
             var totalRows = table.RowGroups.Sum(rowGroup => rowGroup.Rows.Count);

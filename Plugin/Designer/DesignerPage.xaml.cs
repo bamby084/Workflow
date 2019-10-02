@@ -104,7 +104,7 @@ namespace Designer
 
         private void OnFlowTableAdded(object sender, TableEventEventArgs e)
         {
-            AddNewTableStyle(e.Table);
+            AddNewTableStyle(e.Table.Id);
         }
 
         public Page AddNewPage()
@@ -278,8 +278,9 @@ namespace Designer
                 var ts = item.TreeViewItem.Resources["TableStyleRef"] as TableStyle;
                 if (ts != null)
                 {
-                    var tablePresenter = ts.FlowTable.CreatePresenter();
-                    flowEx.Flow.AddTablePresenter(tablePresenter, ts.FlowTable.Settings, e.GetPosition(ActivePage.Canvas));
+                    var table = FlowTableManager.Instance().GetById(ts.TableId);
+                    var tablePresenter = table.NewPresenter();
+                    flowEx.Flow.AddTablePresenter(tablePresenter, table.Settings, e.GetPosition(ActivePage.Canvas));
                 }
             }
         }
@@ -1252,10 +1253,10 @@ namespace Designer
             e.Handled = true;
         }
 
-        private void AddNewTableStyle(FlowTable table)
+        private void AddNewTableStyle(Guid tableId)
         {
             TableStyle ps = new TableStyle(_table_id);
-            ps.FlowTable = table;
+            ps.TableId = tableId;
             ps.PropertyChanged += Styles_PropertyChanged;
             _table_id++;
 
@@ -1279,7 +1280,7 @@ namespace Designer
             if (pg != null)
             {
                 TableStyles.Remove(pg);
-                FlowTableManager.Instance().Remove(pg.FlowTable.Id);
+                FlowTableManager.Instance().Remove(pg.TableId);
             }
 
             if (item != null)
@@ -1293,7 +1294,7 @@ namespace Designer
         private void CtxMenuTable_Click(object sender, RoutedEventArgs e)
         {
             var table = FlowTable.Default();
-            AddNewTableStyle(table);
+            AddNewTableStyle(table.Id);
 
             FlowTableManager.Instance().Add(table, false);
         }
