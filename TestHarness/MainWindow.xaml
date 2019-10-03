@@ -35,44 +35,8 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-
-    <!--<Grid>
-        <FlowDocumentScrollViewer VerticalScrollBarVisibility="Hidden">
-            <FlowDocument>
-                <Table>
-                    <Table.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem>dsd</MenuItem>
-                            <MenuItem>dsd</MenuItem>
-                            <MenuItem>dsd</MenuItem>
-                        </ContextMenu>
-                    </Table.ContextMenu>
-                    <Table.Columns>
-                        <TableColumn/>
-                        <TableColumn/>
-                        <TableColumn/>
-                    </Table.Columns>
-                    
-                    <Table.RowGroups>
-                        <TableRowGroup>
-                            <TableRow>
-                                <TableCell/>
-                                <TableCell/>
-                                <TableCell/>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell/>
-                                <TableCell/>
-                                <TableCell/>
-                            </TableRow>
-                        </TableRowGroup>
-                        <TableRowGroup>
-                            
-                        </TableRowGroup>
-                    </Table.RowGroups>
-                </Table>
-            </FlowDocument>
-           
-        </FlowDocumentScrollViewer>
-    </Grid>-->
+    
+    <Canvas>
+        <Button Width="200" Height="100" x:Name="Button1" Click="Button1_Click" Canvas.Left="100" Canvas.Top="100"></Button>
+    </Canvas>
 </Window>

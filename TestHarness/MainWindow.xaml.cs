@@ -30,15 +30,6 @@ namespace TestHarness
         {
             InitializeComponent();
             this.DataContext = this;
-
-            //_table = new FlowTablePresenter();
-            //_table.Columns = 5;
-            //_table.HeaderRows = 2;
-            //_table.FooterRows = 2;
-            //_table.BodyRows = 3;
-            //_table.Build();
-
-            //this.AddChild(_table);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -46,6 +37,13 @@ namespace TestHarness
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void Button1_Click(object sender, RoutedEventArgs e)
+        {
+            var adornerLayer = AdornerLayer.GetAdornerLayer(Button1);
+            if(adornerLayer != null)
+                adornerLayer.Add(new DesignerItemAdorner(Button1));
         }
     }
 }

@@ -160,6 +160,8 @@
     <Compile Include="CustomSpinner.xaml.cs">
       <DependentUpon>CustomSpinner.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DesignerItem.cs" />
+    <Compile Include="DesignerItemAdorner.cs" />
     <Compile Include="ElementPropertiesPanel.xaml.cs">
       <DependentUpon>ElementPropertiesPanel.xaml</DependentUpon>
     </Compile>
