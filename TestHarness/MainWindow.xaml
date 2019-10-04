@@ -35,8 +35,9 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    
+
     <Canvas>
-        <Button Width="200" Height="100" x:Name="Button1" Click="Button1_Click" Canvas.Left="100" Canvas.Top="100"></Button>
+        <Button Width="114" Height="65" x:Name="Button1" Click="Button1_Click" Canvas.Left="73" Canvas.Top="114"></Button>
     </Canvas>
+
 </Window>

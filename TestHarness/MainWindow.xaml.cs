@@ -42,8 +42,11 @@ namespace TestHarness
         private void Button1_Click(object sender, RoutedEventArgs e)
         {
             var adornerLayer = AdornerLayer.GetAdornerLayer(Button1);
-            if(adornerLayer != null)
+            if (adornerLayer != null)
+            {
                 adornerLayer.Add(new DesignerItemAdorner(Button1));
+                adornerLayer.Add(new SizeAdorner(Button1));
+            }
         }
     }
 }
