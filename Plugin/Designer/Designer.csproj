@@ -135,6 +135,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adorners\PositionAdorner.cs" />
+    <Compile Include="Adorners\ResizeMarker.cs" />
+    <Compile Include="Adorners\SizeAdorner.cs" />
     <Compile Include="BlockStyle.cs" />
     <Compile Include="BlockStylePropertiesPanel.xaml.cs">
       <DependentUpon>BlockStylePropertiesPanel.xaml</DependentUpon>
@@ -161,7 +164,7 @@
       <DependentUpon>CustomSpinner.xaml</DependentUpon>
     </Compile>
     <Compile Include="DesignerItem.cs" />
-    <Compile Include="DesignerItemAdorner.cs" />
+    <Compile Include="Adorners\DesignerItemAdorner.cs" />
     <Compile Include="ElementPropertiesPanel.xaml.cs">
       <DependentUpon>ElementPropertiesPanel.xaml</DependentUpon>
     </Compile>
