@@ -26,13 +26,6 @@ namespace TestHarness
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void Button1_Click(object sender, RoutedEventArgs e)
-        {
-            var adornerLayer = AdornerLayer.GetAdornerLayer(Button1);
-            if (adornerLayer != null)
-            {
-                adornerLayer.Add(new DesignerItemAdorner(Button1));
-            }
-        }
+       
     }
 }

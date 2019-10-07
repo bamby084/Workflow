@@ -36,8 +36,13 @@
         </Style>
     </Window.Resources>
 
-    <Canvas>
-        <Button Width="114" Height="65" x:Name="Button1" Click="Button1_Click" Canvas.Left="73" Canvas.Top="114"></Button>
-    </Canvas>
+    <designer:DesignerCanvas Background="White">
+        <Border Background="Wheat" BorderThickness="1" BorderBrush="Green" 
+                designer:DesignerCanvas.IsSelectable="True"
+                Canvas.Left="100" Canvas.Top="100" Width="100" Height="80"></Border>
+        <Border Background="Azure" BorderThickness="1" BorderBrush="Bisque" 
+                designer:DesignerCanvas.IsSelectable="True"
+                Canvas.Left="300" Canvas.Top="50" Width="100" Height="80"></Border>
+    </designer:DesignerCanvas>
 
 </Window>
