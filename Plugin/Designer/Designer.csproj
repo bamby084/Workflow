@@ -163,6 +163,7 @@
     <Compile Include="CustomSpinner.xaml.cs">
       <DependentUpon>CustomSpinner.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DesignerCanvas.cs" />
     <Compile Include="DesignerItem.cs" />
     <Compile Include="Adorners\DesignerItemAdorner.cs" />
     <Compile Include="ElementPropertiesPanel.xaml.cs">
@@ -191,6 +192,7 @@
     <Compile Include="InsertTableWindow.xaml.cs">
       <DependentUpon>InsertTableWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ISelectable.cs" />
     <Compile Include="LineStyle.cs" />
     <Compile Include="LineStylePropertiesPanel.xaml.cs">
       <DependentUpon>LineStylePropertiesPanel.xaml</DependentUpon>
