@@ -6,17 +6,15 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Linq;
 using System.Collections.Generic;
-using System.Windows.Shapes;
 using Designer.Adorners;
 
 namespace Designer
 {
-    public class DesignerCanvas: Canvas
+    public class DesignerCanvas : Canvas
     {
-        private UIElement _selectedItem;
-        private Rectangle _selectionBox;
         private bool _isMouseDown;
         private Point _mouseDownPos;
+        private bool _isDragging;
 
         public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.RegisterAttached(
             "IsSelected",
@@ -30,14 +28,17 @@ namespace Designer
            typeof(DesignerCanvas),
            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsRender));
 
+        private IList<UIElement> SelectedItems { get; }
+
+        private CanvasSelectionAdorner SelectionAdorner { get; set; }
 
         public static void SetIsSelected(UIElement element, bool value)
         {
             element.SetValue(IsSelectedProperty, value);
             if (value)
-                SelectElement(element);
+                ShowItemAdorners(element);
             else
-                DeselectElement(element);
+                HideItemAdorners(element);
         }
 
         public static bool GetIsSelected(UIElement element)
@@ -57,71 +58,81 @@ namespace Designer
 
         public DesignerCanvas()
         {
-            _selectionBox = new Rectangle();
-            _selectionBox.StrokeThickness = 0.5;
-            _selectionBox.Visibility = Visibility.Hidden;
-            _selectionBox.Stroke = Brushes.Black;
-            _selectionBox.StrokeDashArray = new DoubleCollection(new List<double>() {3, 3});
+            SelectedItems = new List<UIElement>();
+            this.Loaded += OnLoaded;
+            Focusable = true;
+        }
 
-            Children.Add(_selectionBox);
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            SelectionAdorner = new CanvasSelectionAdorner(this);
+            var adornerLayer = AdornerLayer.GetAdornerLayer(this);
+
+            adornerLayer.Add(SelectionAdorner);
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             var hitTestObject = VisualTreeHelper.HitTest(this, e.GetPosition(this)).VisualHit as UIElement;
 
-            if(hitTestObject == this)
+            //click on the canvas?
+            if (hitTestObject.Equals(this))
             {
-                if (_selectedItem != null)
-                {
-                    DeselectElement(_selectedItem);
-                    _selectedItem = null;
-                }
-
+                ClearSelectedItems();
                 _isMouseDown = true;
                 _mouseDownPos = e.GetPosition(this);
                 this.CaptureMouse();
-                Canvas.SetLeft(_selectionBox, _mouseDownPos.X);
-                Canvas.SetTop(_selectionBox, _mouseDownPos.Y);
-                _selectionBox.Width = 0;
-                _selectionBox.Height = 0;
-                _selectionBox.Visibility = Visibility.Visible;
-
-                return;
+                SelectionAdorner.Update(_mouseDownPos.X, _mouseDownPos.Y, 0, 0);
             }
+            else
+            {
+                var isSelectable = GetIsSelectable(hitTestObject);
+                if (!isSelectable)
+                    return;
 
-            var isSelectable = GetIsSelectable(hitTestObject);
-            if (!isSelectable)
-                return;
-
-            if (_selectedItem != null)
-                SetIsSelected(_selectedItem, false);
-
-            SetIsSelected(hitTestObject, true);
-            _selectedItem = hitTestObject;
+                if (IsCtrlKeyDown())
+                {
+                    bool isSelected = GetIsSelected(hitTestObject);
+                    if (isSelected)
+                        DeselectItem(hitTestObject);
+                    else
+                        SelectItem(hitTestObject);
+                }
+                else
+                {
+                    ClearSelectedItems();
+                    SelectItem(hitTestObject);
+                }
+            }
         }
 
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
-            _isMouseDown = false;
             this.ReleaseMouseCapture();
-            _selectionBox.Visibility = Visibility.Hidden;
+            SelectionAdorner.Update(0, 0, 0, 0);
 
-            var mouseUpPos = e.GetPosition(this);
-
-            var selectionRect = new Rect(_mouseDownPos, mouseUpPos);
-            foreach (UIElement child in Children)
+            if (_isDragging)
             {
-                var selectable = GetIsSelectable(child);
-                if (selectable)
+                var mouseUpPos = e.GetPosition(this);
+                var selectionRect = new Rect(_mouseDownPos, mouseUpPos);
+                foreach (UIElement child in Children)
                 {
-                    var childRect = new Rect(new Point(GetLeft(child), GetTop(child)), child.DesiredSize);
-                    if (selectionRect.Contains(childRect))
+                    var selectable = GetIsSelectable(child);
+                    if (selectable)
                     {
-                        SetIsSelected(child,  true);
+                        var childRect = new Rect(new Point(GetLeft(child), GetTop(child)), child.DesiredSize);
+                        if (selectionRect.IntersectsWith(childRect))
+                        {
+                            SelectItem(child);
+                        }
                     }
                 }
+
+                Keyboard.Focus(this);
             }
+
+            _isMouseDown = false;
+            _isDragging = false;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -130,24 +141,36 @@ namespace Designer
                 return;
 
             Point mousePos = e.GetPosition(this);
-            SetLeft(_selectionBox, Math.Min(_mouseDownPos.X, mousePos.X));
-            SetTop(_selectionBox, Math.Min(_mouseDownPos.Y, mousePos.Y));
-            _selectionBox.Width = Math.Abs(_mouseDownPos.X - mousePos.X);
-            _selectionBox.Height = Math.Abs(_mouseDownPos.Y - mousePos.Y);
+            SelectionAdorner.Update(Math.Min(_mouseDownPos.X, mousePos.X), Math.Min(_mouseDownPos.Y, mousePos.Y),
+                Math.Abs(_mouseDownPos.X - mousePos.X), Math.Abs(_mouseDownPos.Y - mousePos.Y));
+            _isDragging = true;
         }
 
-        private static void SelectElement(UIElement element)
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                foreach (var item in SelectedItems)
+                {
+                    this.Children.Remove(item);
+                }
+
+                SelectedItems.Clear();
+            }
+        }
+
+        private static void ShowItemAdorners(UIElement element)
         {
             var adornerLayer = AdornerLayer.GetAdornerLayer(element);
             var adorners = adornerLayer.GetAdorners(element);
 
-            if(adorners == null || adorners.All(adorner => adorner.GetType() != typeof(DesignerItemAdorner)))
+            if (adorners == null || adorners.All(adorner => adorner.GetType() != typeof(DesignerItemAdorner)))
             {
                 adornerLayer.Add(new DesignerItemAdorner(element));
             }
         }
 
-        private static void DeselectElement(UIElement element)
+        private static void HideItemAdorners(UIElement element)
         {
             var adornerLayer = AdornerLayer.GetAdornerLayer(element);
             var adorners = adornerLayer.GetAdorners(element);
@@ -160,5 +183,32 @@ namespace Designer
                 adornerLayer.Remove(designerItemAdorner);
         }
 
+        private void ClearSelectedItems()
+        {
+            foreach (var item in SelectedItems)
+            {
+                HideItemAdorners(item);
+                SetIsSelected(item, false);
+            }
+
+            SelectedItems.Clear();
+        }
+
+        private void SelectItem(UIElement item)
+        {
+            SetIsSelected(item, true);
+            SelectedItems.Add(item);
+        }
+
+        private void DeselectItem(UIElement item)
+        {
+            SetIsSelected(item, false);
+            SelectedItems.Remove(item);
+        }
+
+        private bool IsCtrlKeyDown()
+        {
+            return Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+        }
     }
 }

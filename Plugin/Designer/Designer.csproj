@@ -135,6 +135,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adorners\BaseAdorner.cs" />
+    <Compile Include="Adorners\CanvasSelectionAdorner.cs" />
     <Compile Include="Adorners\PositionAdorner.cs" />
     <Compile Include="Adorners\ResizeMarker.cs" />
     <Compile Include="Adorners\SizeAdorner.cs" />

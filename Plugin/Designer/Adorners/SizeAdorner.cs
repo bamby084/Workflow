@@ -12,10 +12,11 @@ namespace Designer.Adorners
     {
         public double LineMargin => 10.0;
         public double TextPadding => 5.0;
-
-        public VisualCollection Children { get; }
+        public double LineThickness => 1;
 
         public Brush LineBrush { get; }
+
+        public VisualCollection Children { get; }
 
         protected SizeAdorner(UIElement adornedElement)
             : base(adornedElement)
@@ -31,32 +32,44 @@ namespace Designer.Adorners
 
     public abstract class HorizontalSizeAdorner : SizeAdorner
     {
-        private Line _adornerLine;
+        private Border _adornerLine;
+        private Border _adornerLine2;
         private TextBlock _adornerTextBlock;
+        private const double LineHeight = 1.0;
+        private const double Line2Height = 10;
 
         protected HorizontalSizeAdorner(UIElement adornedElement)
             : base(adornedElement)
         {
-            AddLine();
+            AddLines();
             AddText();
         }
 
         protected abstract double Top { get; }
 
-        private void AddLine()
+        private void AddLines()
         {
-            _adornerLine = new Line()
+            _adornerLine = new Border()
             {
-                StrokeThickness = 1,
-                SnapsToDevicePixels = true,
-                Stroke = LineBrush
+                BorderBrush = LineBrush,
+                BorderThickness = new Thickness(1),
+                Height = LineHeight
             };
 
             var lineWidthBinding = new Binding("Width");
             lineWidthBinding.Source = AdornedElement;
-
-            _adornerLine.SetBinding(Line.X2Property, lineWidthBinding);
+            _adornerLine.SetBinding(Rectangle.WidthProperty, lineWidthBinding);
             Children.Add(_adornerLine);
+
+            _adornerLine2 = new Border()
+            {
+                BorderBrush = LineBrush,
+                BorderThickness = new Thickness(1, 0, 1, 0),
+                Height = Line2Height
+            };
+
+            _adornerLine2.SetBinding(WidthProperty, lineWidthBinding);
+            Children.Add(_adornerLine2);
         }
 
         private void AddText()
@@ -81,7 +94,8 @@ namespace Designer.Adorners
             var textWidth = _adornerTextBlock.DesiredSize.Width;
             var textHeight = _adornerTextBlock.DesiredSize.Height;
 
-            _adornerLine.Arrange(new Rect(0, Top, width, this.DesiredSize.Height));
+            _adornerLine.Arrange(new Rect(0, Top, width, LineHeight));
+            _adornerLine2.Arrange(new Rect(0, Top - Line2Height / 2, width, Line2Height));
             _adornerTextBlock.Arrange(new Rect((width - textWidth) / 2, Top - textHeight / 2,
                 textWidth, textHeight));
 
@@ -91,32 +105,46 @@ namespace Designer.Adorners
 
     public abstract class VerticalSizeAdorner : SizeAdorner
     {
-        private Line _adornerLine;
+        private Border _adornerLine;
+        private Border _adornerLine2;
         private TextBlock _adornerTextBlock;
+        private const double LineWidth = 1.0;
+        private const double Line2Width = 10.0;
 
         protected VerticalSizeAdorner(UIElement adornedElement)
             : base(adornedElement)
         {
-            AddLine();
+            AddLines();
             AddText();
         }
 
         protected abstract double Left { get; }
 
-        private void AddLine()
+        private void AddLines()
         {
-            _adornerLine = new Line()
+            _adornerLine = new Border()
             {
-                StrokeThickness = 1,
-                SnapsToDevicePixels = true,
-                Stroke = LineBrush
+                BorderThickness = new Thickness(1),
+                BorderBrush = LineBrush,
+                Width = LineWidth
             };
 
             var lineHeightBinding = new Binding("Height");
             lineHeightBinding.Source = AdornedElement;
 
-            _adornerLine.SetBinding(Line.Y2Property, lineHeightBinding);
+            _adornerLine.SetBinding(HeightProperty, lineHeightBinding);
             Children.Add(_adornerLine);
+
+            _adornerLine2 = new Border()
+            {
+                BorderBrush = LineBrush,
+                BorderThickness = new Thickness(0, 1, 0, 1),
+                Width = Line2Width
+            };
+
+            _adornerLine2.SetBinding(HeightProperty, lineHeightBinding);
+            Children.Add(_adornerLine2);
+            
         }
 
         private void AddText()
@@ -143,7 +171,8 @@ namespace Designer.Adorners
             var textWidth = _adornerTextBlock.DesiredSize.Width;
             var textHeight = _adornerTextBlock.DesiredSize.Height;
 
-            _adornerLine.Arrange(new Rect(Left, 0, this.DesiredSize.Width, height));
+            _adornerLine.Arrange(new Rect(Left, 0, LineWidth, height));
+            _adornerLine2.Arrange(new Rect(Left - Line2Width / 2, 0, Line2Width, height));
             _adornerTextBlock.Arrange(new Rect(Left - textWidth / 2, (height - textHeight) / 2, textWidth, textHeight));
 
             return finalSize;
