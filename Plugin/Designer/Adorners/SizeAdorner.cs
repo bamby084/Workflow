@@ -1,33 +1,24 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Xceed.Wpf.Toolkit.Core.Converters;
 
 namespace Designer.Adorners
 {
-    public abstract class SizeAdorner : Adorner
+    public abstract class SizeAdorner : BaseAdorner
     {
         public double LineMargin => 10.0;
         public double TextPadding => 5.0;
         public double LineThickness => 1;
 
-        public Brush LineBrush { get; }
-
-        public VisualCollection Children { get; }
+        public Brush LineBrush { get; } = new SolidColorBrush(SystemColors.HighlightColor);
 
         protected SizeAdorner(UIElement adornedElement)
             : base(adornedElement)
         {
-            Children = new VisualCollection(this);
-            LineBrush = new SolidColorBrush(SystemColors.HighlightColor);
         }
-
-        protected override int VisualChildrenCount => Children.Count;
-
-        protected override Visual GetVisualChild(int index) => Children[index];
     }
 
     public abstract class HorizontalSizeAdorner : SizeAdorner

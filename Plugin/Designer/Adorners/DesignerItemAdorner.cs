@@ -1,18 +1,14 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace Designer.Adorners
 {
-    public class DesignerItemAdorner : Adorner
+    public class DesignerItemAdorner : BaseAdorner
     {
-        private VisualCollection _children;
-        
         public DesignerItemAdorner(UIElement adornedElement)
             : base(adornedElement)
         {
-            _children = new VisualCollection(this);
             BuidAdorner();
         }
 
@@ -30,31 +26,27 @@ namespace Designer.Adorners
                 BorderBrush = new SolidColorBrush(SystemColors.HighlightColor)
             };
 
-            _children.Add(border);
+            Children.Add(border);
         }
 
         private void BuidResizeMarkers()
         {
-            _children.Add(new TopLeftResizeMarker(AdornedElement));
-            _children.Add(new TopRightResizeMarker(AdornedElement));
-            _children.Add(new BottomLeftResizeMarker(AdornedElement));
-            _children.Add(new BottomRightResizeMarker(AdornedElement));
-            _children.Add(new CenterTopResizeMarker(AdornedElement));
-            _children.Add(new CenterLeftMarker(AdornedElement));
-            _children.Add(new CenterRightMarker(AdornedElement));
-            _children.Add(new CenterBottomResizeMarker(AdornedElement));
-            _children.Add(new CenterMarker(AdornedElement));
+            Children.Add(new TopLeftResizeMarker(AdornedElement));
+            Children.Add(new TopRightResizeMarker(AdornedElement));
+            Children.Add(new BottomLeftResizeMarker(AdornedElement));
+            Children.Add(new BottomRightResizeMarker(AdornedElement));
+            Children.Add(new CenterTopResizeMarker(AdornedElement));
+            Children.Add(new CenterLeftMarker(AdornedElement));
+            Children.Add(new CenterRightMarker(AdornedElement));
+            Children.Add(new CenterBottomResizeMarker(AdornedElement));
+            Children.Add(new MoveMarker(AdornedElement));
         }
-
-        protected override int VisualChildrenCount => _children.Count;
-
-        protected override Visual GetVisualChild(int index) => _children[index];
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            foreach (var control in _children)
+            foreach (var control in Children)
             {
-                if (control is ResizeMarker marker)
+                if (control is Marker marker)
                 {
                     marker.Arrange(marker.GetSize());
                 }

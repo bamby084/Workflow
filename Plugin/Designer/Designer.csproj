@@ -137,6 +137,8 @@
   <ItemGroup>
     <Compile Include="Adorners\BaseAdorner.cs" />
     <Compile Include="Adorners\CanvasSelectionAdorner.cs" />
+    <Compile Include="Adorners\Marker.cs" />
+    <Compile Include="Adorners\MoveMarker.cs" />
     <Compile Include="Adorners\PositionAdorner.cs" />
     <Compile Include="Adorners\ResizeMarker.cs" />
     <Compile Include="Adorners\SizeAdorner.cs" />
@@ -372,6 +374,14 @@
     <Page Include="TextStylePropertiesPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Thumb.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TreeItemLibrary.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -1,54 +1,20 @@
 ﻿using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace Designer.Adorners
 {
-    public abstract class ResizeMarker : Thumb
+    public abstract class ResizeMarker : Marker
     {
         private new const double MinWidth = 30.0;
         private new const double MinHeight = 30.0;
 
-        protected UIElement AdornedElement { get; }
-
         protected ResizeMarker(UIElement adornedElement)
+            :base(adornedElement)
         {
-            Width = Height = 6;
-            Background = Brushes.Transparent;
-            AdornedElement = adornedElement;
-            BorderThickness = new Thickness(1);
-            BorderBrush = new SolidColorBrush(SystemColors.HighlightColor);
-
-            DragDelta += OnDrag;
-            DragStarted += OnDragStarted;
-            DragCompleted += OnDragCompleted;
-        }
-
-        protected virtual void OnDragStarted(object sender, DragStartedEventArgs e)
-        {
-        }
-
-        protected virtual void OnDrag(object sender, DragDeltaEventArgs e)
-        {
-        }
-
-        protected virtual void OnDragCompleted(object sender, DragCompletedEventArgs e)
-        {
-            var adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
-            if (adornerLayer == null)
-                return;
-
-            var adorners = adornerLayer.GetAdorners(AdornedElement);
-            foreach (var adorner in adorners)
-            {
-                if (adorner is SizeAdorner)
-                    adornerLayer.Remove(adorner);
-            }
         }
 
         protected virtual void ExpandToLeft(double delta)
@@ -81,7 +47,6 @@ namespace Designer.Adorners
             AdornedElement.SetValue(HeightProperty, newHeight);
         }
 
-        public abstract Rect GetSize();
     }
 
     public class TopLeftResizeMarker : ResizeMarker
@@ -339,53 +304,4 @@ namespace Designer.Adorners
             return new Rect((AdornedElement.DesiredSize.Width - width) / 2, AdornedElement.DesiredSize.Height - height / 2, width, height);
         }
     }
-
-    public class CenterMarker : ResizeMarker
-    {
-        public CenterMarker(UIElement adornedElement)
-            : base(adornedElement)
-        {
-            Cursor = Cursors.SizeAll;
-        }
-
-        protected override void OnDrag(object sender, DragDeltaEventArgs e)
-        {
-            var oldLeft = Canvas.GetLeft(AdornedElement);
-            Canvas.SetLeft(AdornedElement, oldLeft + e.HorizontalChange);
-
-            var oldTop = Canvas.GetTop(AdornedElement);
-            Canvas.SetTop(AdornedElement, oldTop + e.VerticalChange);
-        }
-
-        protected override void OnDragStarted(object sender, DragStartedEventArgs e)
-        {
-            var adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
-            if (adornerLayer == null)
-                return;
-
-            adornerLayer.Add(new PositionAdorner(AdornedElement));
-        }
-
-        protected override void OnDragCompleted(object sender, DragCompletedEventArgs e)
-        {
-            var adornerLayer = AdornerLayer.GetAdornerLayer(AdornedElement);
-            if (adornerLayer == null)
-                return;
-
-            var adorners = adornerLayer.GetAdorners(AdornedElement);
-            var positionAdorner = adorners.FirstOrDefault(adorner => adorner.GetType() == typeof(PositionAdorner));
-
-            if (positionAdorner != null)
-                adornerLayer.Remove(positionAdorner);
-        }
-
-        public override Rect GetSize()
-        {
-            var width = this.DesiredSize.Width;
-            var height = this.DesiredSize.Height;
-
-            return new Rect((AdornedElement.DesiredSize.Width - width) / 2, (AdornedElement.DesiredSize.Height - height) / 2, width, height);
-        }
-    }
-
 }

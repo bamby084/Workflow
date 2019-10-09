@@ -7,15 +7,13 @@ using Xceed.Wpf.Toolkit.Core.Converters;
 
 namespace Designer.Adorners
 {
-    public class PositionAdorner: Adorner
+    public class PositionAdorner: BaseAdorner
     {
-        private readonly VisualCollection _children;
         private TextBlock _positionTextBlock;
 
         public PositionAdorner(UIElement adornedElement) 
             : base(adornedElement)
         {
-            _children = new VisualCollection(this);
             Build();
         }
 
@@ -42,12 +40,8 @@ namespace Designer.Adorners
             _positionTextBlock.Inlines.Add(top);
 
             _positionTextBlock.Inlines.Add(new Run() {Text = ")"});            
-            _children.Add(_positionTextBlock);
+            Children.Add(_positionTextBlock);
         }
-
-        protected override int VisualChildrenCount => _children.Count;
-
-        protected override Visual GetVisualChild(int index) => _children[index];
 
         protected override Size ArrangeOverride(Size finalSize)
         {
