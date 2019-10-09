@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adorners\BaseAdorner.cs" />
+    <Compile Include="Adorners\BlockDrawingAdorner.cs" />
     <Compile Include="Adorners\CanvasSelectionAdorner.cs" />
     <Compile Include="Adorners\Marker.cs" />
     <Compile Include="Adorners\MoveMarker.cs" />
@@ -150,6 +151,10 @@
     <Compile Include="BorderStylePropertiesPanel.xaml.cs">
       <DependentUpon>BorderStylePropertiesPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DesignerItems\Block\DesignerBlock.cs" />
+    <Compile Include="DesignerTools\DesignerTool.cs" />
+    <Compile Include="DesignerTools\BlockTool.cs" />
+    <Compile Include="DesignerTools\SelectionTool.cs" />
     <Compile Include="ColorPickerWindow.xaml.cs">
       <DependentUpon>ColorPickerWindow.xaml</DependentUpon>
     </Compile>
@@ -168,7 +173,7 @@
       <DependentUpon>CustomSpinner.xaml</DependentUpon>
     </Compile>
     <Compile Include="DesignerCanvas.cs" />
-    <Compile Include="DesignerItem.cs" />
+    <Compile Include="DesignerItems\DesignerItem.cs" />
     <Compile Include="Adorners\DesignerItemAdorner.cs" />
     <Compile Include="ElementPropertiesPanel.xaml.cs">
       <DependentUpon>ElementPropertiesPanel.xaml</DependentUpon>
@@ -375,6 +380,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Themes\Block.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -533,6 +542,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DesignerItems\Table\" />
     <Folder Include="ExtensionMethods\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

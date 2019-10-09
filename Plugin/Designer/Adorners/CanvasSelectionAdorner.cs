@@ -14,14 +14,23 @@ namespace Designer.Adorners
 
         private Rectangle SelectionBox { get; }
 
+        public virtual double BorderThickness { get; } = 0.5;
+
+        public virtual Brush BorderColor { get; } = Brushes.Black;
+
+        public virtual Brush BackGround { get; } = Brushes.Transparent;
+
+        public virtual DoubleCollection BorderDashArray { get; } = new DoubleCollection(new List<double>() { 3, 3 });
+
         public CanvasSelectionAdorner(UIElement adornedElement)
             : base(adornedElement)
         {
             SelectionBox = new Rectangle()
             {
-                StrokeThickness = 0.5,
-                Stroke = Brushes.Black,
-                StrokeDashArray = new DoubleCollection(new List<double>() { 3, 3 })
+                StrokeThickness = BorderThickness,
+                Stroke = BorderColor,
+                StrokeDashArray = BorderDashArray,
+                Fill = BackGround
             };
 
             Children.Add(SelectionBox);
