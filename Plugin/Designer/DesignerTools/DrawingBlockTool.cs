@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace Designer.DesignerTools
 {
-    public class BlockTool : DesignerTool
+    public class DrawingBlockTool : DesignerTool
     {
         private bool _isMouseDown;
         private Point _mouseDownPos;
@@ -28,7 +28,7 @@ namespace Designer.DesignerTools
             }
         }
 
-        public BlockTool(DesignerCanvas canvas)
+        public DrawingBlockTool(DesignerCanvas canvas)
             :base(canvas)
         {
 
@@ -48,13 +48,27 @@ namespace Designer.DesignerTools
         public override void HandleMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             _isMouseDown = false;
-            _isDragging = false;
             Canvas.ReleaseMouseCapture();
             DrawingAdorner.Update(0, 0, 0, 0);
 
-            var block = new DesignerBlock();
-            
-            Canvas.Children.Add(block);
+            if (_isDragging)
+            {
+                var mouseUpPos = e.GetPosition(Canvas);
+                var left = Math.Min(_mouseDownPos.X, mouseUpPos.X);
+                var top = Math.Min(_mouseDownPos.Y, mouseUpPos.Y);
+                
+                var block = new DesignerBlock();
+                block.Width = Math.Abs(_mouseDownPos.X - mouseUpPos.X);
+                block.Height = Math.Abs(_mouseDownPos.Y - mouseUpPos.Y);
+               
+                block.SetValue(System.Windows.Controls.Canvas.LeftProperty, left);
+                block.SetValue(System.Windows.Controls.Canvas.TopProperty, top);
+                block.SetValue(DesignerCanvas.IsSelectableProperty, true);
+
+                Canvas.Children.Add(block);
+            }
+
+            _isDragging = false;
         }
 
         public override void HandleMouseMove(MouseEventArgs e)

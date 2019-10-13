@@ -1,14 +1,14 @@
 ﻿
-using System.Windows.Controls;
+using System.Windows;
 
 namespace Designer.DesignerItems
 {
     public class DesignerBlock: DesignerItem
     {
-        //static DesignerBlock()
-        //{
-
-        //}
+        static DesignerBlock()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(DesignerBlock), new FrameworkPropertyMetadata(typeof(DesignerBlock)));
+        }
 
         public DesignerBlock()
         {

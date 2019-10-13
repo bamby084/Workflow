@@ -55,10 +55,10 @@ namespace Designer
         {
             SelectedItems = new List<UIElement>();
             Focusable = true;
-            ActiveTool = new BlockTool(this);
+            ActiveTool = new SelectionTool(this);
         }
 
-        public DesignerTool ActiveTool { get; }
+        public DesignerTool ActiveTool { get; set; }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {

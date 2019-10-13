@@ -5,6 +5,8 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using Designer.Adorners;
+using Designer.DesignerItems;
+using Designer.ExtensionMethods;
 
 namespace Designer.DesignerTools
 {
@@ -39,10 +41,12 @@ namespace Designer.DesignerTools
 
         public override void HandleMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            var hitTestObject = VisualTreeHelper.HitTest(Canvas, e.GetPosition(Canvas)).VisualHit as UIElement;
+            var hitObject = VisualTreeHelper.HitTest(Canvas, e.GetPosition(Canvas)).VisualHit as UIElement;
+            if (hitObject == null)
+                return;
 
             //click on the canvas?
-            if (hitTestObject.Equals(Canvas))
+            if (hitObject.Equals(Canvas))
             {
                 ClearSelectedItems();
                 _isMouseDown = true;
@@ -52,22 +56,26 @@ namespace Designer.DesignerTools
             }
             else
             {
-                var isSelectable = DesignerCanvas.GetIsSelectable(hitTestObject);
+                var designerItem = TreeHelperExtensions.FindVisualParent<DesignerItem>(hitObject);
+                if (designerItem == null)
+                    return;
+
+                var isSelectable = DesignerCanvas.GetIsSelectable(designerItem);
                 if (!isSelectable)
                     return;
 
                 if (IsCtrlKeyDown())
                 {
-                    bool isSelected = DesignerCanvas.GetIsSelected(hitTestObject);
+                    bool isSelected = DesignerCanvas.GetIsSelected(designerItem);
                     if (isSelected)
-                        DeselectItem(hitTestObject);
+                        DeselectItem(designerItem);
                     else
-                        SelectItem(hitTestObject);
+                        SelectItem(designerItem);
                 }
                 else
                 {
                     ClearSelectedItems();
-                    SelectItem(hitTestObject);
+                    SelectItem(designerItem);
                 }
             }
         }
@@ -94,10 +102,11 @@ namespace Designer.DesignerTools
                 var selectionRect = new Rect(_mouseDownPos, mouseUpPos);
                 foreach (UIElement child in Canvas.Children)
                 {
-                    var selectable = DesignerCanvas.GetIsSelectable(child);
-                    if (selectable)
+                    if (child is DesignerItem)
                     {
-                        var childRect = new Rect(new Point(DesignerCanvas.GetLeft(child), DesignerCanvas.GetTop(child)), child.DesiredSize);
+                        var childRect = new Rect(new Point(System.Windows.Controls.Canvas.GetLeft(child),
+                            System.Windows.Controls.Canvas.GetTop(child)), child.DesiredSize);
+
                         if (selectionRect.IntersectsWith(childRect))
                         {
                             SelectItem(child);

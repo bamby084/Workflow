@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Documents;
 using Designer;
 using Designer.Adorners;
+using Designer.DesignerTools;
 
 
 namespace TestHarness
@@ -26,6 +27,15 @@ namespace TestHarness
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-       
+
+        private void SelectionToolClicked(object sender, RoutedEventArgs e)
+        {
+            Canvas.ActiveTool = new SelectionTool(Canvas);
+        }
+
+        private void BlockToolClicked(object sender, RoutedEventArgs e)
+        {
+            Canvas.ActiveTool = new DrawingBlockTool(Canvas);
+        }
     }
 }
