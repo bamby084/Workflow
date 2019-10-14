@@ -136,7 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adorners\BaseAdorner.cs" />
-    <Compile Include="Adorners\BlockDrawingAdorner.cs" />
+    <Compile Include="Adorners\DrawingBlockAdorner.cs" />
     <Compile Include="Adorners\CanvasSelectionAdorner.cs" />
     <Compile Include="Adorners\Marker.cs" />
     <Compile Include="Adorners\MoveMarker.cs" />

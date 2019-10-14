@@ -3,7 +3,7 @@ using System.Windows.Media;
 
 namespace Designer.Adorners
 {
-    public class BlockDrawingAdorner: CanvasSelectionAdorner
+    public class DrawingBlockAdorner: CanvasSelectionAdorner
     {
         public override double BorderThickness => 2.5;
 
@@ -11,7 +11,7 @@ namespace Designer.Adorners
 
         public override DoubleCollection BorderDashArray => null;
 
-        public BlockDrawingAdorner(UIElement adornedElement)
+        public DrawingBlockAdorner(UIElement adornedElement)
             :base(adornedElement)
         {
         }

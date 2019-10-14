@@ -13,13 +13,13 @@ namespace Designer.DesignerTools
         private Point _mouseDownPos;
         private bool _isDragging;
 
-        private BlockDrawingAdorner _drawingAdorner;
-        private BlockDrawingAdorner DrawingAdorner {
+        private DrawingBlockAdorner _drawingAdorner;
+        private DrawingBlockAdorner DrawingAdorner {
             get
             {
                 if(_drawingAdorner == null)
                 {
-                    _drawingAdorner = new BlockDrawingAdorner(Canvas);
+                    _drawingAdorner = new DrawingBlockAdorner(Canvas);
                     var adornerLayer = AdornerLayer.GetAdornerLayer(Canvas);
                     adornerLayer.Add(_drawingAdorner);
                 }

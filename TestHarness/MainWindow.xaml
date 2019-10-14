@@ -48,15 +48,6 @@
         </ToolBar>
 
         <designer:DesignerCanvas Background="White" Grid.Row="1" x:Name="Canvas">
-            <Border BorderThickness="1" BorderBrush="Green"  Background="Wheat"
-                    designer:DesignerCanvas.IsSelectable="True"
-                    Canvas.Left="100" Canvas.Top="100" Width="100" Height="80"></Border>
-            <Border BorderThickness="1" BorderBrush="Green" Background="White"
-                    designer:DesignerCanvas.IsSelectable="True"
-                    Canvas.Left="300" Canvas.Top="50" Width="100" Height="80"></Border>
-            <Border BorderThickness="1" BorderBrush="Green" Background="Yellow"
-                    designer:DesignerCanvas.IsSelectable="True"
-                    Canvas.Left="300" Canvas.Top="150" Width="100" Height="80"></Border>
         </designer:DesignerCanvas>
     </Grid>
 </Window>

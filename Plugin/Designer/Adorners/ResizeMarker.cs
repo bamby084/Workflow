@@ -23,7 +23,8 @@ namespace Designer.Adorners
             AdornedElement.SetValue(WidthProperty, newWidth);
 
             var oldLeft = Canvas.GetLeft(AdornedElement);
-            Canvas.SetLeft(AdornedElement, oldLeft - (newWidth - AdornedElement.DesiredSize.Width));
+            var newLeft = oldLeft - newWidth + AdornedElement.DesiredSize.Width;
+            Canvas.SetLeft(AdornedElement, newLeft);
         }
 
         protected virtual void ExpandToTop(double delta)
@@ -46,7 +47,6 @@ namespace Designer.Adorners
             var newHeight = Math.Max(AdornedElement.DesiredSize.Height + delta, MinHeight);
             AdornedElement.SetValue(HeightProperty, newHeight);
         }
-
     }
 
     public class TopLeftResizeMarker : ResizeMarker
@@ -70,7 +70,7 @@ namespace Designer.Adorners
                 return;
 
             adornerLayer.Add(new TopSizeAdorner(AdornedElement));
-            adornerLayer.Add(new LeftSizeAdorner(AdornedElement));
+            adornerLayer.Add(new RightSizeAdorner(AdornedElement));
         }
 
         public override Rect GetSize()
@@ -103,7 +103,7 @@ namespace Designer.Adorners
                 return;
 
             adornerLayer.Add(new TopSizeAdorner(AdornedElement));
-            adornerLayer.Add(new RightSizeAdorner(AdornedElement));
+            adornerLayer.Add(new LeftSizeAdorner(AdornedElement));
         }
 
         public override Rect GetSize()
@@ -135,7 +135,7 @@ namespace Designer.Adorners
             if (adornerLayer == null)
                 return;
 
-            adornerLayer.Add(new LeftSizeAdorner(AdornedElement));
+            adornerLayer.Add(new RightSizeAdorner(AdornedElement));
             adornerLayer.Add(new BottomSizeAdorner(AdornedElement));
         }
 
@@ -168,7 +168,7 @@ namespace Designer.Adorners
             if (adornerLayer == null)
                 return;
 
-            adornerLayer.Add(new RightSizeAdorner(AdornedElement));
+            adornerLayer.Add(new LeftSizeAdorner(AdornedElement));
             adornerLayer.Add(new BottomSizeAdorner(AdornedElement));
         }
 
