@@ -153,6 +153,7 @@
     </Compile>
     <Compile Include="DesignerItems\Block\DesignerBlock.cs" />
     <Compile Include="DesignerTools\DesignerTool.cs" />
+    <Compile Include="DesignerTools\DesignerToolbar.cs" />
     <Compile Include="DesignerTools\DrawingBlockTool.cs" />
     <Compile Include="DesignerTools\SelectionTool.cs" />
     <Compile Include="ColorPickerWindow.xaml.cs">
@@ -385,6 +386,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\DesignerToolbar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -544,6 +549,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DesignerItems\Table\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Toolbar\select.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Toolbar\block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Toolbar\cursor.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

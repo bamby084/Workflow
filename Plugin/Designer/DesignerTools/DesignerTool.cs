@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Designer.DesignerTools
 {
@@ -10,6 +11,10 @@ namespace Designer.DesignerTools
         {
             get => Cursors.Arrow;
         }
+
+        public virtual  ImageSource Image { get; }
+
+        public bool IsSelected { get; set; }
 
         public DesignerTool(DesignerCanvas canvas)
         {

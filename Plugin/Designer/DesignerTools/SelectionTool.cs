@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Designer.Adorners;
 using Designer.DesignerItems;
 using Designer.ExtensionMethods;
@@ -38,6 +39,9 @@ namespace Designer.DesignerTools
         {
             SelectedItems = new List<UIElement>();
         }
+
+        public override ImageSource Image => new BitmapImage(
+            new Uri("pack://application:,,,/Designer;component/Resources/Toolbar/cursor.png"));
 
         public override void HandleMouseLeftButtonDown(MouseButtonEventArgs e)
         {

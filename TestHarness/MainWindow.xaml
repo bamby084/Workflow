@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestHarness"
         xmlns:designer="clr-namespace:Designer;assembly=Designer"
+        xmlns:designerTools="clr-namespace:Designer.DesignerTools;assembly=Designer"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Window.Resources>
@@ -41,13 +42,21 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-        <ToolBar>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <ToolBar Grid.Row="0" Grid.Column="1">
             <Button Content="Select" Click="SelectionToolClicked"/>
             <Button Content="Block" Click="BlockToolClicked"/>
         </ToolBar>
 
-        <designer:DesignerCanvas Background="White" Grid.Row="1" x:Name="Canvas">
+        <designerTools:DesignerToolbar Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical">
+            
+        </designerTools:DesignerToolbar>
+        
+        <designer:DesignerCanvas Background="White" Grid.Row="1" Grid.Column="1" x:Name="Canvas">
         </designer:DesignerCanvas>
     </Grid>
 </Window>

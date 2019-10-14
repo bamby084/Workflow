@@ -6,7 +6,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type designerItems:DesignerBlock}" >
                     <Border BorderThickness="2.5" BorderBrush="Blue">
-                        <Canvas />
+                        <Canvas Background="White" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

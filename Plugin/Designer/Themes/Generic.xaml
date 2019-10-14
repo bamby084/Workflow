@@ -3,5 +3,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Designer;component/Themes/Thumb.xaml"/>
         <ResourceDictionary Source="/Designer;component/Themes/Block.xaml"/>
+        <ResourceDictionary Source="/Designer;component/Themes/DesignerToolbar.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
