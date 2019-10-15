@@ -1,11 +1,13 @@
-﻿using System.Windows.Input;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Designer.DesignerTools
 {
-    public abstract class DesignerTool
+    public abstract class DesignerTool: INotifyPropertyChanged
     {
-        public DesignerCanvas Canvas { get; }
+        public DesignerCanvas Canvas { get; set; }
 
         public virtual Cursor Cursor
         {
@@ -14,12 +16,27 @@ namespace Designer.DesignerTools
 
         public virtual  ImageSource Image { get; }
 
-        public bool IsSelected { get; set; }
-
-        public DesignerTool(DesignerCanvas canvas)
+        private bool _isSelected;
+        public bool IsSelected
         {
-            Canvas = canvas;
-            Canvas.Cursor = Cursor;
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public DesignerTool()
+        {
+
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged([CallerMemberName] string properyName = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(properyName));
         }
 
         public virtual void HandleMouseLeftButtonDown(MouseButtonEventArgs e)

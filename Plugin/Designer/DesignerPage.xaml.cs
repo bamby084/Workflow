@@ -21,6 +21,8 @@ using System.Drawing.Text;
 using System.Xml.Serialization;
 using JdSuite.Common.Logging.Enums;
 using JdSuite.Common.Module;
+using System.Collections.ObjectModel;
+using Designer.DesignerTools;
 
 namespace Designer
 {
@@ -99,7 +101,20 @@ namespace Designer
 
             InitFont();
             InitColorComboBox();
+            InitDesignerTools();
             FlowTableManager.Instance().TableAdded += OnFlowTableAdded;
+            this.DataContext = this;
+        }
+
+        public ObservableCollection<DesignerTool> DesignerTools { get; private set; }
+
+        private void InitDesignerTools()
+        {
+            DesignerTools = new ObservableCollection<DesignerTool>()
+            {
+                new SelectionTool(),
+                new DrawingBlockTool()
+            };
         }
 
         private void OnFlowTableAdded(object sender, TableEventEventArgs e)

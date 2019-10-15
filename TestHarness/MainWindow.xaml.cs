@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Documents;
 using Designer;
@@ -18,6 +19,17 @@ namespace TestHarness
         {
             InitializeComponent();
             this.DataContext = this;
+
+            Tools = new ObservableCollection<DesignerTool>();
+            Tools.Add(new SelectionTool());
+            Tools.Add(new DrawingBlockTool());
+
+            this.Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            Tools[0].IsSelected = true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -27,15 +39,6 @@ namespace TestHarness
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-
-        private void SelectionToolClicked(object sender, RoutedEventArgs e)
-        {
-            Canvas.ActiveTool = new SelectionTool(Canvas);
-        }
-
-        private void BlockToolClicked(object sender, RoutedEventArgs e)
-        {
-            Canvas.ActiveTool = new DrawingBlockTool(Canvas);
-        }
+        public ObservableCollection<DesignerTool> Tools { get; set; }
     }
 }

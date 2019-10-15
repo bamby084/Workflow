@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Designer"
 			 xmlns:Designer="clr-namespace:Designer"
+             xmlns:designerTools="clr-namespace:Designer.DesignerTools"
              mc:Ignorable="d"
              d:DesignHeight="1080" d:DesignWidth="1920">
     <UserControl.Resources>
@@ -1690,37 +1691,41 @@
             </StackPanel>
         </Border>
         <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource DefaultBorder}" BorderThickness="1,0,1,1">
-            <ToolBar>
-                <ToolBar.LayoutTransform>
-                    <RotateTransform Angle="90" />
-                </ToolBar.LayoutTransform>
-                <ToggleButton x:Name="chkNormalArrow" Checked="chkNormalArrow_Checked" Unchecked="chkNormalArrow_Unchecked">
-                    <Image Source="pack://application:,,,/Designer;component/res/icons/bold-24.png" Width="20" Height="20" Opacity="1" RenderTransformOrigin="0.5,0.5">
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="-90"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
-                </ToggleButton>
-                <ToggleButton x:Name="chkBlockArrow" Checked="chkBlockArrow_Checked" Unchecked="chkBlockArrow_Unchecked">
-                    <Image Source="pack://application:,,,/Designer;component/res/icons/Italic-24.png" Width="20" Height="20" Opacity="1" RenderTransformOrigin="0.5,0.5">
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="-90"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
-                </ToggleButton>
-                <Button Style="{StaticResource LeftToolBarItem}" Content="Test" />
-                <Button Style="{StaticResource LeftToolBarItem}" Content="Test" />
-            </ToolBar>
+            <Grid>
+                <ToolBar Visibility="Collapsed">
+                    <ToolBar.LayoutTransform>
+                        <RotateTransform Angle="90" />
+                    </ToolBar.LayoutTransform>
+                    <ToggleButton x:Name="chkNormalArrow" Checked="chkNormalArrow_Checked" Unchecked="chkNormalArrow_Unchecked">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/bold-24.png" Width="20" Height="20" Opacity="1" RenderTransformOrigin="0.5,0.5">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="-90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+                    </ToggleButton>
+                    <ToggleButton x:Name="chkBlockArrow" Checked="chkBlockArrow_Checked" Unchecked="chkBlockArrow_Unchecked">
+                        <Image Source="pack://application:,,,/Designer;component/res/icons/Italic-24.png" Width="20" Height="20" Opacity="1" RenderTransformOrigin="0.5,0.5">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="-90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+                    </ToggleButton>
+                    <Button Style="{StaticResource LeftToolBarItem}" Content="Test" />
+                    <Button Style="{StaticResource LeftToolBarItem}" Content="Test" />
+                </ToolBar>
+                
+                <designerTools:DesignerToolBar Orientation="Vertical" ItemsSource="{Binding Path=DesignerTools}"/>
+            </Grid>
         </Border>
         <Grid Grid.Row="2" Grid.Column="1" Grid.RowSpan="2" Background="{StaticResource AppBgColor}" VerticalAlignment="Stretch" Margin="10,10,0,28">
             <Grid.RowDefinitions>

@@ -30,8 +30,7 @@ namespace Designer.DesignerTools
             }
         }
 
-        public DrawingBlockTool(DesignerCanvas canvas)
-            :base(canvas)
+        public DrawingBlockTool()
         {
 
         }

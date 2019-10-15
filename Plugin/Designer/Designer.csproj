@@ -153,7 +153,7 @@
     </Compile>
     <Compile Include="DesignerItems\Block\DesignerBlock.cs" />
     <Compile Include="DesignerTools\DesignerTool.cs" />
-    <Compile Include="DesignerTools\DesignerToolbar.cs" />
+    <Compile Include="DesignerTools\DesignerToolBar.cs" />
     <Compile Include="DesignerTools\DrawingBlockTool.cs" />
     <Compile Include="DesignerTools\SelectionTool.cs" />
     <Compile Include="ColorPickerWindow.xaml.cs">
@@ -386,7 +386,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\DesignerToolbar.xaml">
+    <Page Include="Themes\DesignerToolBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

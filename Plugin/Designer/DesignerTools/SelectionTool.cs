@@ -34,8 +34,7 @@ namespace Designer.DesignerTools
             }
         }
 
-        public SelectionTool(DesignerCanvas canvas)
-            :base(canvas)
+        public SelectionTool()
         {
             SelectedItems = new List<UIElement>();
         }
