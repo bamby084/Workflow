@@ -34,8 +34,8 @@ namespace Designer
             FlowControl.Height = PageHeight;
 
             Canvas.Children.Add(FlowControl);
-            Canvas.SetLeft(FlowControl, 0);
-            Canvas.SetTop(FlowControl, 0);
+            System.Windows.Controls.Canvas.SetLeft(FlowControl, 0);
+            System.Windows.Controls.Canvas.SetTop(FlowControl, 0);
 
             LayoutTransform.Changed += LayoutTransform_Changed;
         }

@@ -1724,7 +1724,7 @@
                     <Button Style="{StaticResource LeftToolBarItem}" Content="Test" />
                 </ToolBar>
                 
-                <designerTools:DesignerToolBar Orientation="Vertical" ItemsSource="{Binding Path=DesignerTools}"/>
+                <designerTools:DesignerToolBar Orientation="Vertical" x:Name="DesignerToolBar" ItemsSource="{Binding Path=DesignerTools}"/>
             </Grid>
         </Border>
         <Grid Grid.Row="2" Grid.Column="1" Grid.RowSpan="2" Background="{StaticResource AppBgColor}" VerticalAlignment="Stretch" Margin="10,10,0,28">

@@ -278,7 +278,7 @@ namespace Designer
 		public const double MM_PER_INCH = 25.4d;
 		public Border Border = new Border();
 
-		public Canvas Canvas = new Canvas()
+		public DesignerCanvas Canvas = new DesignerCanvas()
 		{
 			LayoutTransform = new ScaleTransform()
 		};
@@ -376,14 +376,14 @@ namespace Designer
 				binding.Source = this;
 				binding.Mode = BindingMode.TwoWay;
 				binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-				Canvas.SetBinding(Canvas.WidthProperty, binding);
+				Canvas.SetBinding(System.Windows.Controls.Canvas.WidthProperty, binding);
 			}
 			{
 				var binding = new Binding("PageHeight");
 				binding.Source = this;
 				binding.Mode = BindingMode.TwoWay;
 				binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-				Canvas.SetBinding(Canvas.HeightProperty, binding);
+				Canvas.SetBinding(System.Windows.Controls.Canvas.HeightProperty, binding);
 			}
 
 			LayoutProperties.PropertyChanged += LayoutProperties_PropertyChanged;
@@ -552,7 +552,7 @@ namespace Designer
 
 			// determine if there's any controls outside of the new boundary
 			foreach (UIElement child in Canvas.Children) {
-				var offset = new Size(Canvas.GetLeft(child), Canvas.GetTop(child));
+				var offset = new Size(System.Windows.Controls.Canvas.GetLeft(child), System.Windows.Controls.Canvas.GetTop(child));
 				if (offset.Width > newWidth || offset.Height > newHeight) {
 					var result = MessageBox.Show("Some elements are outside of the requested page size boundaries." +
 						" The elements outside of the new page boundaries will be removed. " +
@@ -570,7 +570,7 @@ namespace Designer
 
 			// remove overflowing controls
 			foreach (UIElement child in Canvas.Children) {
-				var offset = new Size(Canvas.GetLeft(child), Canvas.GetTop(child));
+				var offset = new Size(System.Windows.Controls.Canvas.GetLeft(child), System.Windows.Controls.Canvas.GetTop(child));
 				if (offset.Width > newWidth || offset.Height > newHeight) {
 					Application.Current.Dispatcher.BeginInvoke(new Action<PageBase>((sender =>
 					{

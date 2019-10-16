@@ -85,7 +85,7 @@ namespace Designer
         protected override void OnMouseMove(MouseEventArgs e)
         {
             if (ActiveTool != null)
-            ActiveTool.HandleMouseMove(e);
+                ActiveTool.HandleMouseMove(e);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

@@ -635,6 +635,10 @@ namespace Designer
                 page.Canvas.MouseLeftButtonUp -= Canvas_MouseLeftButtonUp;
                 page.Canvas.Drop -= Canvas_Drop;
                 page.CanvasControls.CollectionChanged -= CanvasControls_CollectionChanged;
+
+                var binding = new Binding("SelectedTool");
+                binding.ElementName = "DesignerToolBar";
+                page.Canvas.SetBinding(DesignerCanvas.ActiveToolProperty, binding);
             }
 
             page.PropertyChanged += Page_PropertyChanged;
