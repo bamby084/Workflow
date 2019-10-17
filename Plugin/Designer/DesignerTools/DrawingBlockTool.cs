@@ -1,6 +1,7 @@
 ﻿using Designer.Adorners;
 using Designer.DesignerItems;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -14,12 +15,14 @@ namespace Designer.DesignerTools
         private bool _isMouseDown;
         private Point _mouseDownPos;
         private bool _isDragging;
+        private bool _escape;
 
         private DrawingBlockAdorner _drawingAdorner;
-        private DrawingBlockAdorner DrawingAdorner {
+        private DrawingBlockAdorner DrawingAdorner
+        {
             get
             {
-                if(_drawingAdorner == null)
+                if (_drawingAdorner == null)
                 {
                     _drawingAdorner = new DrawingBlockAdorner(Canvas);
                     var adornerLayer = AdornerLayer.GetAdornerLayer(Canvas);
@@ -60,11 +63,11 @@ namespace Designer.DesignerTools
                 var mouseUpPos = e.GetPosition(Canvas);
                 var left = Math.Min(_mouseDownPos.X, mouseUpPos.X);
                 var top = Math.Min(_mouseDownPos.Y, mouseUpPos.Y);
-                
+
                 var block = new DesignerBlock();
                 block.Width = Math.Abs(_mouseDownPos.X - mouseUpPos.X);
                 block.Height = Math.Abs(_mouseDownPos.Y - mouseUpPos.Y);
-               
+
                 block.SetValue(System.Windows.Controls.Canvas.LeftProperty, left);
                 block.SetValue(System.Windows.Controls.Canvas.TopProperty, top);
                 block.SetValue(DesignerCanvas.IsSelectableProperty, true);
@@ -77,6 +80,8 @@ namespace Designer.DesignerTools
 
         public override void HandleMouseMove(MouseEventArgs e)
         {
+            Debug.WriteLine(Keyboard.FocusedElement);
+
             if (!_isMouseDown)
                 return;
 
@@ -84,6 +89,17 @@ namespace Designer.DesignerTools
             DrawingAdorner.Update(Math.Min(_mouseDownPos.X, mousePos.X), Math.Min(_mouseDownPos.Y, mousePos.Y),
                 Math.Abs(_mouseDownPos.X - mousePos.X), Math.Abs(_mouseDownPos.Y - mousePos.Y));
             _isDragging = true;
+        }
+
+        public override void HandleKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape && _isDragging)
+            {
+                DrawingAdorner.Update(0, 0, 0, 0);
+                _isMouseDown = false;
+                _isDragging = false;
+                Canvas.ReleaseMouseCapture();
+            }
         }
     }
 }

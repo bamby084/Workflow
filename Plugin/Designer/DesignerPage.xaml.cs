@@ -635,21 +635,21 @@ namespace Designer
                 page.Canvas.MouseLeftButtonUp -= Canvas_MouseLeftButtonUp;
                 page.Canvas.Drop -= Canvas_Drop;
                 page.CanvasControls.CollectionChanged -= CanvasControls_CollectionChanged;
-
-                var binding = new Binding("SelectedTool");
-                binding.ElementName = "DesignerToolBar";
-                page.Canvas.SetBinding(DesignerCanvas.ActiveToolProperty, binding);
             }
 
             page.PropertyChanged += Page_PropertyChanged;
             page.CanvasControls.CollectionChanged += CanvasControls_CollectionChanged;
             page.Canvas.Loaded += Canvas_Loaded;
             page.Canvas.SizeChanged += Canvas_Loaded;
-            page.Canvas.MouseLeftButtonDown += Canvas_MouseLeftButtonDown;
-            page.Canvas.MouseMove += Canvas_MouseMove;
-            page.Canvas.MouseLeftButtonUp += Canvas_MouseLeftButtonUp;
+            //page.Canvas.MouseLeftButtonDown += Canvas_MouseLeftButtonDown;
+            //page.Canvas.MouseMove += Canvas_MouseMove;
+            //page.Canvas.MouseLeftButtonUp += Canvas_MouseLeftButtonUp;
             page.Canvas.PreviewMouseMove += Canvas_PreviewMouseMove;
             page.Canvas.Drop += Canvas_Drop;
+
+            var binding = new Binding("SelectedTool");
+            binding.ElementName = "DesignerToolBar";
+            page.Canvas.SetBinding(DesignerCanvas.ActiveToolProperty, binding);
 
             ActivePage = page;
             SetActiveProperties(ActivePage.GetPropertyLayout());

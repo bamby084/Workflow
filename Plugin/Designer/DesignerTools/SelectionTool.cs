@@ -53,8 +53,8 @@ namespace Designer.DesignerTools
             {
                 ClearSelectedItems();
                 _isMouseDown = true;
-                _mouseDownPos = e.GetPosition(Canvas);
                 Canvas.CaptureMouse();
+                _mouseDownPos = e.GetPosition(Canvas);
                 SelectionAdorner.Update(_mouseDownPos.X, _mouseDownPos.Y, 0, 0);
             }
             else
@@ -81,7 +81,7 @@ namespace Designer.DesignerTools
                     SelectItem(designerItem);
                 }
 
-                Keyboard.Focus(Canvas);
+                //Keyboard.Focus(designerItem);
             }
         }
 
@@ -118,10 +118,9 @@ namespace Designer.DesignerTools
                         }
                     }
                 }
-
-                Keyboard.Focus(Canvas);
             }
 
+            Keyboard.Focus(Canvas);
             _isMouseDown = false;
             _isDragging = false;
         }

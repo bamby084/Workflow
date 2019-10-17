@@ -33,6 +33,7 @@ namespace Designer.Adorners
                 Fill = BackGround
             };
 
+            Focusable = false;
             Children.Add(SelectionBox);
         }
 

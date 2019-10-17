@@ -11,11 +11,10 @@
                                 <DataTemplate>
                                     <RadioButton GroupName="Common" Width="36" Height="36" IsChecked="{Binding Path=IsSelected}">
                                         <RadioButton.Template>
-                                            <ControlTemplate>
-                                                <ToggleButton IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                                                              Background="Transparent" BorderThickness="0">
+                                            <ControlTemplate TargetType="{x:Type RadioButton}">
+                                                <designer:DesignerToolBarItem IsSelected="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
                                                     <Image Source="{Binding Path=Image}" Width="32" Height="32"></Image>
-                                                </ToggleButton>
+                                                </designer:DesignerToolBarItem>
                                             </ControlTemplate>
                                         </RadioButton.Template>
                                     </RadioButton>

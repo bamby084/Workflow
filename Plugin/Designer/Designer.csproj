@@ -154,6 +154,7 @@
     <Compile Include="DesignerItems\Block\DesignerBlock.cs" />
     <Compile Include="DesignerTools\DesignerTool.cs" />
     <Compile Include="DesignerTools\DesignerToolBar.cs" />
+    <Compile Include="DesignerTools\DesignerToolBarItem.cs" />
     <Compile Include="DesignerTools\DrawingBlockTool.cs" />
     <Compile Include="DesignerTools\SelectionTool.cs" />
     <Compile Include="ColorPickerWindow.xaml.cs">

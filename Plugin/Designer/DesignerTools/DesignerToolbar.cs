@@ -8,8 +8,6 @@ namespace Designer.DesignerTools
 {
     public class DesignerToolBar: Control
     {
-        public ObservableCollection<DesignerTool> Tools { get; set; }
-
         public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(
             "Orientation", typeof(Orientation), typeof(DesignerToolBar), new PropertyMetadata(default(Orientation)));
 

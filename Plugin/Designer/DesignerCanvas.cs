@@ -73,19 +73,29 @@ namespace Designer
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             if (ActiveTool != null)
+            {
                 ActiveTool.HandleMouseLeftButtonDown(e);
+                e.Handled = true;
+                Keyboard.Focus(this);
+            }
         }
 
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
             if (ActiveTool != null)
+            {
                 ActiveTool.HandleMouseLeftButtonUp(e);
+                e.Handled = true;
+            }
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
             if (ActiveTool != null)
+            {
                 ActiveTool.HandleMouseMove(e);
+                e.Handled = true;
+            }
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
