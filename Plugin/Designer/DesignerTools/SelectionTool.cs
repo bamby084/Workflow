@@ -80,8 +80,6 @@ namespace Designer.DesignerTools
                     ClearSelectedItems();
                     SelectItem(designerItem);
                 }
-
-                //Keyboard.Focus(designerItem);
             }
         }
 

@@ -44,15 +44,20 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
+
         <designerTools:DesignerToolBar Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
                                        Orientation="Vertical" x:Name="Toolbar" ItemsSource="{Binding Path=Tools}">
-            
         </designerTools:DesignerToolBar>
+
+        <ContentControl Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Content="{Binding Path=SelectedControlProperties}">
+            
+        </ContentControl>
         
-        <designer:DesignerCanvas Background="White" Grid.Row="1" Grid.Column="1" x:Name="Canvas" ActiveTool="{Binding Path=SelectedTool, ElementName=Toolbar}">
+        <designer:DesignerCanvas Background="White" Grid.Row="1" Grid.Column="2" x:Name="Canvas" 
+                                 ActiveTool="{Binding Path=SelectedTool, ElementName=Toolbar}">
         </designer:DesignerCanvas>
     </Grid>
 </Window>

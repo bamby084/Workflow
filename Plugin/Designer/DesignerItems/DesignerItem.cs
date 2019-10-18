@@ -2,11 +2,13 @@
 
 namespace Designer.DesignerItems
 {
-    public class DesignerItem: ContentControl
+    public class DesignerItem: ContentControl, IControlPropertyProvider
     {
         public DesignerItem()
         {
             this.SetValue(DesignerCanvas.IsSelectableProperty, true);
         }
+
+        public virtual ControlPropertiesViewModel Properties => null;
     }
 }

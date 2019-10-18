@@ -40,5 +40,15 @@ namespace TestHarness
         }
 
         public ObservableCollection<DesignerTool> Tools { get; set; }
+
+        private ControlPropertiesViewModel _selectedControlProperties;
+        public ControlPropertiesViewModel SelectedControlProperties {
+            get => _selectedControlProperties;
+            set
+            {
+                _selectedControlProperties = value;
+                NotifyPropertyChanged();
+            }
+        }
     }
 }

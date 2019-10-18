@@ -11,5 +11,10 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        
+        <Setter Property="Canvas.Left" Value="{Binding Path=Left, Mode=TwoWay}"/>
+        <Setter Property="Canvas.Top" Value="{Binding Path=Top, Mode=TwoWay}"/>
+        <Setter Property="Width" Value="{Binding Path=Width, Mode=TwoWay}"/>
+        <Setter Property="Height" Value="{Binding Path=Height, Mode=TwoWay}"/>
     </Style>
 </ResourceDictionary>

@@ -3,12 +3,20 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Linq;
-using System.Collections.Generic;
 using Designer.Adorners;
 using Designer.DesignerTools;
+using Designer.DesignerItems;
+using System.Collections.Generic;
 
 namespace Designer
 {
+    public struct DesignerItemsSelectedEventArgs
+    {
+        public IList<DesignerItem> SelectedItems { get; set; }
+    }
+
+    public delegate void DesignerItemsSelectedEventHandler(object sender, DesignerItemsSelectedEventArgs e);
+
     public class DesignerCanvas : Canvas
     {
         public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.RegisterAttached(
@@ -28,6 +36,8 @@ namespace Designer
             typeof(DesignerTool),
             typeof(DesignerCanvas),
             new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnActiveToolChanged)));
+
+        public DesignerItemsSelectedEventHandler ItemsSelected;
 
         public static void SetIsSelected(UIElement element, bool value)
         {
