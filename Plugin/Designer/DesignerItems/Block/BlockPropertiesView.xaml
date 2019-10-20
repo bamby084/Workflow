@@ -3,9 +3,128 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:designer="clr-namespace:Designer"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+             d:DesignHeight="450" d:DesignWidth="350">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="AppBgColor" Color="#FFEEF5FD"/>
+    </UserControl.Resources>
+    
+    <Grid Background="{StaticResource AppBgColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Label Content="Block Properties"/>
+        
+        <TabControl Grid.Row="1" SelectedIndex="0" Background="{StaticResource AppBgColor}">
+            <TabItem Header="Position" Name="TabPosition">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <GroupBox Header="Position" Grid.Row="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                
+                                <Label Content="Left" Grid.Row="0" Grid.Column="0"/>
+                                <xceed:PropertyGridEditorDecimalUpDown  
+                                    Value="{Binding Path=Left, Mode=TwoWay, Converter={x:Static designer:UnitOfMeasure.PixelConverter}}" 
+                                    Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="1" FormatString="F2" Increment="0.1" />
+                                <Label Content="{Binding Source={x:Static designer:UnitOfMeasure.PixelConverter}, Path=Unit}" Grid.Row="0" Grid.Column="2"/>
+
+                                <Label Content="Top" Grid.Row="1" Grid.Column="0"/>
+                                <xceed:PropertyGridEditorDecimalUpDown  
+                                    Value="{Binding Path=Top, Mode=TwoWay, Converter={x:Static designer:UnitOfMeasure.PixelConverter}}" 
+                                    Margin="0, 2, 0, 2" Grid.Row="1" Grid.Column="1" FormatString="F2" Increment="0.1" />
+                                <Label Content="{Binding Source={x:Static designer:UnitOfMeasure.PixelConverter}, Path=Unit}" Grid.Row="1" Grid.Column="2"/>
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+                    
+                    <GroupBox Header="Size" Grid.Row="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Column="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Label Content="Width" Grid.Column="0" Grid.Row="0"/>
+                                <xceed:PropertyGridEditorDecimalUpDown 
+                                    Value="{Binding Path=Width, Mode=TwoWay, Converter={x:Static designer:UnitOfMeasure.PixelConverter}}" 
+                                    Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="1" FormatString="F2" Increment="0.1" />
+                                <Label Content="{Binding Source={x:Static designer:UnitOfMeasure.PixelConverter}, Path=Unit}" Grid.Column="2" Grid.Row="0"/>
+                            </Grid>
+
+                            <Grid Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label Content="Height" Grid.Column="0" Grid.Row="0"/>
+                                <xceed:PropertyGridEditorDecimalUpDown 
+                                    Value="{Binding Path=Height, Mode=TwoWay, Converter={x:Static designer:UnitOfMeasure.PixelConverter}}" 
+                                    Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="1" FormatString="F2" Increment="0.1" />
+                                <Label Content="{Binding Source={x:Static designer:UnitOfMeasure.PixelConverter}, Path=Unit}" Grid.Column="2" Grid.Row="0"/>
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+                    
+                    <GroupBox Header="Scale" Grid.Row="2">
+                        
+                    </GroupBox>
+                </Grid>
+            </TabItem>
             
+            <TabItem Header="Border">
+                <Grid HorizontalAlignment="Stretch" Margin="0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Border:" Width="80" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="cmbBorderList" Grid.Column="1" Height="26" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <ComboBoxItem Content="{Binding Id}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

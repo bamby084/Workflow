@@ -6,35 +6,49 @@
         xmlns:local="clr-namespace:TestHarness"
         xmlns:designer="clr-namespace:Designer;assembly=Designer"
         xmlns:designerTools="clr-namespace:Designer.DesignerTools;assembly=Designer"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="825">
     <Window.Resources>
-        <Style TargetType="{x:Type designer:FlowTableCell}">
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush">
-                <Setter.Value>
-                    <DrawingBrush Viewport="0,0,4,4" ViewportUnits="Absolute" TileMode="Tile">
-                        <DrawingBrush.Drawing>
-                            <DrawingGroup>
-                                <GeometryDrawing Brush="Black">
-                                    <GeometryDrawing.Geometry>
-                                        <GeometryGroup>
-                                            <RectangleGeometry Rect="0,0,50,50" />
-                                            <RectangleGeometry Rect="50,50,50,50" />
-                                        </GeometryGroup>
-                                    </GeometryDrawing.Geometry>
-                                </GeometryDrawing>
-                            </DrawingGroup>
-                        </DrawingBrush.Drawing>
-                    </DrawingBrush>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="{x:Static SystemColors.GradientInactiveCaptionBrush}"></Setter>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Designer;component/Themes/ControlPropertiesViewDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="{x:Type designer:FlowTableCell}">
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush">
+                    <Setter.Value>
+                        <DrawingBrush Viewport="0,0,4,4" ViewportUnits="Absolute" TileMode="Tile">
+                            <DrawingBrush.Drawing>
+                                <DrawingGroup>
+                                    <GeometryDrawing Brush="Black">
+                                        <GeometryDrawing.Geometry>
+                                            <GeometryGroup>
+                                                <RectangleGeometry Rect="0,0,50,50" />
+                                                <RectangleGeometry Rect="50,50,50,50" />
+                                            </GeometryGroup>
+                                        </GeometryDrawing.Geometry>
+                                    </GeometryDrawing>
+                                </DrawingGroup>
+                            </DrawingBrush.Drawing>
+                        </DrawingBrush>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Background" Value="{x:Static SystemColors.GradientInactiveCaptionBrush}"></Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <ObjectDataProvider x:Key="UnitTypeEnum" MethodName="GetValues"
+                                ObjectType="{x:Type System:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="designer:UnitType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+        </ResourceDictionary>
     </Window.Resources>
 
     <Grid>
@@ -44,7 +58,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
@@ -52,12 +66,27 @@
                                        Orientation="Vertical" x:Name="Toolbar" ItemsSource="{Binding Path=Tools}">
         </designerTools:DesignerToolBar>
 
-        <ContentControl Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Content="{Binding Path=SelectedControlProperties}">
-            
-        </ContentControl>
-        
-        <designer:DesignerCanvas Background="White" Grid.Row="1" Grid.Column="2" x:Name="Canvas" 
+
+        <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <ComboBox Grid.Row="0" Width="100" HorizontalAlignment="Left" 
+                      SelectedItem="{Binding Path=SelectedUnit}"
+                      ItemsSource="{Binding Source={StaticResource UnitTypeEnum}}"/>
+
+            <Border Grid.Row="1" BorderThickness="1" BorderBrush="Gray" Margin="0 5 0 0">
+                <ContentControl Content="{Binding Path=SelectedControlProperties}"  />
+            </Border>
+        </Grid>
+
+
+        <Border Grid.Row="1" Grid.Column="2" BorderThickness="1" BorderBrush="Gray" Margin="5 0 0 0">
+            <designer:DesignerCanvas Background="White" x:Name="Canvas"
                                  ActiveTool="{Binding Path=SelectedTool, ElementName=Toolbar}">
-        </designer:DesignerCanvas>
+            </designer:DesignerCanvas>
+        </Border>
     </Grid>
 </Window>

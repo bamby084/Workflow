@@ -10,12 +10,12 @@ using System.Collections.Generic;
 
 namespace Designer
 {
-    public struct DesignerItemsSelectedEventArgs
+    public struct SelectedItemsChangedEventArgs
     {
         public IList<DesignerItem> SelectedItems { get; set; }
     }
 
-    public delegate void DesignerItemsSelectedEventHandler(object sender, DesignerItemsSelectedEventArgs e);
+    public delegate void SelectedItemsChangedEventHandler(object sender, SelectedItemsChangedEventArgs e);
 
     public class DesignerCanvas : Canvas
     {
@@ -37,7 +37,7 @@ namespace Designer
             typeof(DesignerCanvas),
             new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnActiveToolChanged)));
 
-        public DesignerItemsSelectedEventHandler ItemsSelected;
+        public SelectedItemsChangedEventHandler SelectedItemsChanged;
 
         public static void SetIsSelected(UIElement element, bool value)
         {
@@ -136,6 +136,11 @@ namespace Designer
             var designerItemAdorner = adorners.FirstOrDefault(adorner => adorner.GetType() == typeof(DesignerItemAdorner));
             if (designerItemAdorner != null)
                 adornerLayer.Remove(designerItemAdorner);
+        }
+
+        public void NotifySelectedItemsChanged(IList<DesignerItem> items)
+        {
+            SelectedItemsChanged?.Invoke(this, new SelectedItemsChangedEventArgs() {SelectedItems = items});
         }
     }
 }

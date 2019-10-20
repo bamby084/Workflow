@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -17,7 +20,7 @@ namespace Designer.DesignerTools
         private Point _mouseDownPos;
         private bool _isDragging;
 
-        private IList<UIElement> SelectedItems { get; }
+        private ObservableCollection<DesignerItem> SelectedItems { get; }
 
         private CanvasSelectionAdorner _selectionAdorner;
         private CanvasSelectionAdorner SelectionAdorner {
@@ -36,7 +39,13 @@ namespace Designer.DesignerTools
 
         public SelectionTool()
         {
-            SelectedItems = new List<UIElement>();
+            SelectedItems = new ObservableCollection<DesignerItem>();
+            SelectedItems.CollectionChanged += OnSelectedItemsChanged;
+        }
+
+        private void OnSelectedItemsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            Canvas.NotifySelectedItemsChanged(SelectedItems);
         }
 
         public override ImageSource Image => new BitmapImage(
@@ -105,14 +114,14 @@ namespace Designer.DesignerTools
                 var selectionRect = new Rect(_mouseDownPos, mouseUpPos);
                 foreach (UIElement child in Canvas.Children)
                 {
-                    if (child is DesignerItem)
+                    if (child is DesignerItem designerItem)
                     {
-                        var childRect = new Rect(new Point(System.Windows.Controls.Canvas.GetLeft(child),
-                            System.Windows.Controls.Canvas.GetTop(child)), child.DesiredSize);
+                        var childRect = new Rect(new Point(System.Windows.Controls.Canvas.GetLeft(designerItem),
+                            System.Windows.Controls.Canvas.GetTop(designerItem)), designerItem.DesiredSize);
 
                         if (selectionRect.IntersectsWith(childRect))
                         {
-                            SelectItem(child);
+                            SelectItem(designerItem);
                         }
                     }
                 }
@@ -146,13 +155,13 @@ namespace Designer.DesignerTools
             SelectedItems.Clear();
         }
 
-        private void SelectItem(UIElement item)
+        private void SelectItem(DesignerItem item)
         {
             DesignerCanvas.SetIsSelected(item, true);
             SelectedItems.Add(item);
         }
 
-        private void DeselectItem(UIElement item)
+        private void DeselectItem(DesignerItem item)
         {
             DesignerCanvas.SetIsSelected(item, false);
             SelectedItems.Remove(item);

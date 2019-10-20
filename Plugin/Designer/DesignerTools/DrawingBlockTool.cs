@@ -65,11 +65,12 @@ namespace Designer.DesignerTools
                 var top = Math.Min(_mouseDownPos.Y, mouseUpPos.Y);
 
                 var block = new DesignerBlock();
-                block.Width = Math.Abs(_mouseDownPos.X - mouseUpPos.X);
-                block.Height = Math.Abs(_mouseDownPos.Y - mouseUpPos.Y);
-
-                block.SetValue(System.Windows.Controls.Canvas.LeftProperty, left);
-                block.SetValue(System.Windows.Controls.Canvas.TopProperty, top);
+                block.Properties.Width = Math.Abs(_mouseDownPos.X - mouseUpPos.X);
+                block.Properties.Height = Math.Abs(_mouseDownPos.Y - mouseUpPos.Y);
+                block.Properties.Left = left;
+                block.Properties.Top = top;
+                //block.SetValue(System.Windows.Controls.Canvas.LeftProperty, left);
+                //block.SetValue(System.Windows.Controls.Canvas.TopProperty, top);
                 block.SetValue(DesignerCanvas.IsSelectableProperty, true);
 
                 Canvas.Children.Add(block);
