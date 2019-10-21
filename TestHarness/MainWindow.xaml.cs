@@ -19,7 +19,7 @@ namespace TestHarness
         public MainWindow()
         {
             InitializeComponent();
-            UnitOfMeasure.UnitType = UnitType.Centimeter;
+            UnitOfMeasure.Current.UnitType = UnitType.Centimeter;
             this.DataContext = this;
 
             Tools = new ObservableCollection<DesignerTool>();
@@ -70,7 +70,7 @@ namespace TestHarness
             {
                 _selectedUnit = value;
                 NotifyPropertyChanged();
-                UnitOfMeasure.UnitType = value;
+                UnitOfMeasure.Current.UnitType = value;
             }
         }
     }

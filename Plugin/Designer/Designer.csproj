@@ -155,6 +155,7 @@
     <Compile Include="Converters\PixelToCentimeterConverter.cs" />
     <Compile Include="Converters\PixelToMeterConverter.cs" />
     <Compile Include="Converters\PixelToMillimeterConverter.cs" />
+    <Compile Include="Converters\UnitConverter.cs" />
     <Compile Include="ExtensionMethods\EnumExtensions.cs" />
     <Compile Include="UnitOfMeasure\UnitOfMeasure.cs" />
     <Compile Include="Converters\PixelConverter.cs" />
@@ -400,7 +401,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\Block.xaml">
+    <Page Include="Themes\DesignerBlock.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

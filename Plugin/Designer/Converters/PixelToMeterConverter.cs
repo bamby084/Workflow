@@ -6,6 +6,6 @@ namespace Designer.Converters
     {
         public override string Unit => UnitType.Meter.GetDescription();
 
-        public override double Factor => MillimetersPerInch / DotsPerInch / 1000;
+        public override decimal Factor => (decimal)(MillimetersPerInch / DotsPerInch / 1000);
     }
 }

@@ -5,10 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:designer="clr-namespace:Designer"
+             xmlns:converters="clr-namespace:Designer.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="350">
     <UserControl.Resources>
         <SolidColorBrush x:Key="AppBgColor" Color="#FFEEF5FD"/>
+        <converters:UnitConverter x:Key="UnitConverter"/>
     </UserControl.Resources>
     
     <Grid Background="{StaticResource AppBgColor}">
@@ -46,16 +48,29 @@
                                 </Grid.RowDefinitions>
                                 
                                 <Label Content="Left" Grid.Row="0" Grid.Column="0"/>
-                                <xceed:PropertyGridEditorDecimalUpDown  
-                                    Value="{Binding Path=Left, Mode=TwoWay, Converter={x:Static designer:UnitOfMeasure.PixelConverter}}" 
-                                    Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="1" FormatString="F2" Increment="0.1" />
-                                <Label Content="{Binding Source={x:Static designer:UnitOfMeasure.PixelConverter}, Path=Unit}" Grid.Row="0" Grid.Column="2"/>
+                                <xceed:PropertyGridEditorDecimalUpDown 
+                                    Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="1" FormatString="F2" Increment="0.1" >
+                                    <xceed:PropertyGridEditorDecimalUpDown.Value>
+                                        <MultiBinding Converter="{StaticResource UnitConverter}" Mode="TwoWay">
+                                            <Binding Path="Left"/>
+                                            <Binding Source="{x:Static designer:UnitOfMeasure.Current}" Path="UnitType"/>
+                                        </MultiBinding>
+                                    </xceed:PropertyGridEditorDecimalUpDown.Value>
+                                </xceed:PropertyGridEditorDecimalUpDown>
+                                <Label Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType}" Grid.Row="0" Grid.Column="2"/>
 
                                 <Label Content="Top" Grid.Row="1" Grid.Column="0"/>
                                 <xceed:PropertyGridEditorDecimalUpDown  
-                                    Value="{Binding Path=Top, Mode=TwoWay, Converter={x:Static designer:UnitOfMeasure.PixelConverter}}" 
-                                    Margin="0, 2, 0, 2" Grid.Row="1" Grid.Column="1" FormatString="F2" Increment="0.1" />
-                                <Label Content="{Binding Source={x:Static designer:UnitOfMeasure.PixelConverter}, Path=Unit}" Grid.Row="1" Grid.Column="2"/>
+                                    Margin="0, 2, 0, 2" Grid.Row="1" Grid.Column="1" FormatString="F2" Increment="0.1" >
+                                    <xceed:PropertyGridEditorDecimalUpDown.Value>
+                                        <MultiBinding Converter="{StaticResource UnitConverter}" Mode="TwoWay">
+                                            <Binding Path="Top"/>
+                                            <Binding Source="{x:Static designer:UnitOfMeasure.Current}" Path="UnitType"/>
+                                        </MultiBinding>
+                                    </xceed:PropertyGridEditorDecimalUpDown.Value>
+                                </xceed:PropertyGridEditorDecimalUpDown>
+
+                                <Label Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType}" Grid.Row="1" Grid.Column="2"/>
                             </Grid>
                         </Grid>
                     </GroupBox>
@@ -76,9 +91,16 @@
                                 
                                 <Label Content="Width" Grid.Column="0" Grid.Row="0"/>
                                 <xceed:PropertyGridEditorDecimalUpDown 
-                                    Value="{Binding Path=Width, Mode=TwoWay, Converter={x:Static designer:UnitOfMeasure.PixelConverter}}" 
-                                    Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="1" FormatString="F2" Increment="0.1" />
-                                <Label Content="{Binding Source={x:Static designer:UnitOfMeasure.PixelConverter}, Path=Unit}" Grid.Column="2" Grid.Row="0"/>
+                                    Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="1" FormatString="F2" Increment="0.1" >
+                                    <xceed:PropertyGridEditorDecimalUpDown.Value>
+                                        <MultiBinding Converter="{StaticResource UnitConverter}" Mode="TwoWay">
+                                            <Binding Path="Width"/>
+                                            <Binding Source="{x:Static designer:UnitOfMeasure.Current}" Path="UnitType"/>
+                                        </MultiBinding>
+                                    </xceed:PropertyGridEditorDecimalUpDown.Value>
+                                </xceed:PropertyGridEditorDecimalUpDown>
+                                
+                                <Label Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType}" Grid.Column="2" Grid.Row="0"/>
                             </Grid>
 
                             <Grid Grid.Column="1">
@@ -90,9 +112,15 @@
 
                                 <Label Content="Height" Grid.Column="0" Grid.Row="0"/>
                                 <xceed:PropertyGridEditorDecimalUpDown 
-                                    Value="{Binding Path=Height, Mode=TwoWay, Converter={x:Static designer:UnitOfMeasure.PixelConverter}}" 
-                                    Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="1" FormatString="F2" Increment="0.1" />
-                                <Label Content="{Binding Source={x:Static designer:UnitOfMeasure.PixelConverter}, Path=Unit}" Grid.Column="2" Grid.Row="0"/>
+                                    Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="1" FormatString="F2" Increment="0.1">
+                                    <xceed:PropertyGridEditorDecimalUpDown.Value>
+                                        <MultiBinding Converter="{StaticResource UnitConverter}" Mode="TwoWay">
+                                            <Binding Path="Height"/>
+                                            <Binding Source="{x:Static designer:UnitOfMeasure.Current}" Path="UnitType"/>
+                                        </MultiBinding>
+                                    </xceed:PropertyGridEditorDecimalUpDown.Value>
+                                </xceed:PropertyGridEditorDecimalUpDown>
+                                <Label Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType}" Grid.Column="2" Grid.Row="0"/>
                             </Grid>
                         </Grid>
                     </GroupBox>

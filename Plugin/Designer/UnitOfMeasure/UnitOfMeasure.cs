@@ -1,59 +1,40 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using Designer.Converters;
+﻿using System.Windows;
 
 namespace Designer
 {
-    public class UnitOfMeasure: INotifyPropertyChanged
+    public class UnitOfMeasure : DependencyObject
     {
-        private static readonly Dictionary<UnitType, PixelConverter> PixelConverters;
+        private static readonly object LockObject = new object();
+        private static UnitOfMeasure _current;
 
-        static UnitOfMeasure()
+        public static readonly DependencyProperty UnitTypeProperty = DependencyProperty.Register(
+            "UnitType",
+            typeof(UnitType),
+            typeof(UnitOfMeasure),
+            new FrameworkPropertyMetadata(UnitType.Millimeter));
+
+        private UnitOfMeasure()
         {
-            PixelConverters = new Dictionary<UnitType, PixelConverter>()
-            {
-                {UnitType.Meter, new PixelToMeterConverter()},
-                {UnitType.Centimeter, new PixelToCentimeterConverter()},
-                {UnitType.Millimeter, new PixelToMillimeterConverter()}
-            };
         }
 
-        public static UnitType UnitType { get; set; } = UnitType.Millimeter;
+        public UnitType UnitType
+        {
+            get => (UnitType)GetValue(UnitTypeProperty);
+            set => SetValue(UnitTypeProperty, value);
+        }
 
-        public static PixelConverter PixelConverter => PixelConverters[UnitType];
+        public static UnitOfMeasure Current
+        {
+            get
+            {
+                lock (LockObject)
+                {
+                    if (_current == null)
+                        _current = new UnitOfMeasure();
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        //private static readonly object LockObject = new object();
-        //private static UnitOfMeasure _current;
-        //private readonly Dictionary<UnitType, PixelConverter> _pixelConverters;
-
-        //private UnitOfMeasure()
-        //{
-        //    _pixelConverters = new Dictionary<UnitType, PixelConverter>()
-        //    {
-        //        {UnitType.Meter, new PixelToMeterConverter()},
-        //        {UnitType.Centimeter, new PixelToCentimeterConverter()},
-        //        {UnitType.Millimeter, new PixelToMillimeterConverter()}
-        //    };
-        //}
-
-        //public UnitType UnitType { get; set; } = UnitType.Millimeter;
-
-        //public PixelConverter Converter => _pixelConverters[UnitType];
-
-        //public static UnitOfMeasure Current
-        //{
-        //    get
-        //    {
-        //        lock (LockObject)
-        //        {
-        //            if(_current == null)
-        //                _current = new UnitOfMeasure();
-
-        //            return _current;
-        //        }
-        //    }
-        //}
+                    return _current;
+                }
+            }
+        }
     }
 }

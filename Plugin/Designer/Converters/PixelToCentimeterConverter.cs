@@ -1,6 +1,4 @@
-﻿
-
-using Designer.ExtensionMethods;
+﻿using Designer.ExtensionMethods;
 
 namespace Designer.Converters
 {
@@ -8,6 +6,6 @@ namespace Designer.Converters
     {
         public override string Unit => UnitType.Centimeter.GetDescription();
 
-        public override double Factor => MillimetersPerInch / DotsPerInch / 10;
+        public override decimal Factor => (decimal)(MillimetersPerInch / DotsPerInch / 10);
     }
 }
