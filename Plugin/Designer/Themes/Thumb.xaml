@@ -6,8 +6,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type adorners:Marker}">
-                    <Border BorderBrush="{Binding Path=BorderBrush, RelativeSource={RelativeSource TemplatedParent}}" 
+                    <Border BorderBrush="{Binding Path=BorderBrush, RelativeSource={RelativeSource TemplatedParent}}"
                             BorderThickness="{Binding Path=BorderThickness, RelativeSource={RelativeSource TemplatedParent}}" 
+                            Background="{Binding Path=Background, RelativeSource={RelativeSource TemplatedParent}}"
                             Width="{Binding Path=Width, RelativeSource={RelativeSource TemplatedParent}}" 
                             Height="{Binding Path=Height, RelativeSource={RelativeSource TemplatedParent}}">
                     </Border>

@@ -7,7 +7,7 @@ namespace Designer.Adorners
 {
     public abstract class Marker : Thumb
     {
-        private const double MarkerSize = 6;
+        private const double MarkerSize = 8;
 
         protected UIElement AdornedElement { get; }
 

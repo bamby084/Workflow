@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
+using Designer.Converters;
 using Xceed.Wpf.Toolkit.Core.Converters;
 
 namespace Designer.Adorners
@@ -24,18 +25,20 @@ namespace Designer.Adorners
             _positionTextBlock.Inlines.Add(new Run() {Text = "("});
 
             var left = new Run();
-            var leftBinding = new Binding("(Canvas.Left)");
-            leftBinding.Source = AdornedElement;
-            leftBinding.Converter = new RoundedValueConverter();
+            var leftBinding = new MultiBinding();
+            leftBinding.Converter = new UnitToStringConverter();
+            leftBinding.Bindings.Add(new Binding("(Canvas.Left)") {Source = AdornedElement});
+            leftBinding.Bindings.Add(new Binding("UnitType") { Source = UnitOfMeasure.Current });
             left.SetBinding(Run.TextProperty, leftBinding);
             _positionTextBlock.Inlines.Add(left);
 
             _positionTextBlock.Inlines.Add(new Run() { Text = "," });
 
             var top = new Run();
-            var topBinding = new Binding("(Canvas.Top)");
-            topBinding.Source = AdornedElement;
-            topBinding.Converter = new RoundedValueConverter();
+            var topBinding = new MultiBinding();
+            topBinding.Converter = new UnitToStringConverter();
+            topBinding.Bindings.Add(new Binding("(Canvas.Top)") {Source = AdornedElement});
+            topBinding.Bindings.Add(new Binding("UnitType") {Source = UnitOfMeasure.Current});
             top.SetBinding(Run.TextProperty, topBinding);
             _positionTextBlock.Inlines.Add(top);
 

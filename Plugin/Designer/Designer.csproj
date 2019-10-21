@@ -152,10 +152,14 @@
       <DependentUpon>BorderStylePropertiesPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="ControlPropertiesViewModel.cs" />
+    <Compile Include="Converters\IncreasementConverter.cs" />
     <Compile Include="Converters\PixelToCentimeterConverter.cs" />
     <Compile Include="Converters\PixelToMeterConverter.cs" />
     <Compile Include="Converters\PixelToMillimeterConverter.cs" />
     <Compile Include="Converters\UnitConverter.cs" />
+    <Compile Include="Converters\UnitToDecimalConverter.cs" />
+    <Compile Include="Converters\UnitToStringConverter.cs" />
+    <Compile Include="Converters\UnitTypeToStringConverter.cs" />
     <Compile Include="ExtensionMethods\EnumExtensions.cs" />
     <Compile Include="UnitOfMeasure\UnitOfMeasure.cs" />
     <Compile Include="Converters\PixelConverter.cs" />

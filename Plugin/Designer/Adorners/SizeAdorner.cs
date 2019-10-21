@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Designer.Converters;
 using Xceed.Wpf.Toolkit.Core.Converters;
 
 namespace Designer.Adorners
@@ -71,9 +72,10 @@ namespace Designer.Adorners
                 Padding = new Thickness(TextPadding, 0, TextPadding, 0)
             };
 
-            var textBinding = new Binding("Width");
-            textBinding.Source = AdornedElement;
-            textBinding.Converter = new RoundedValueConverter() { Precision = 0 };
+            var textBinding = new MultiBinding();
+            textBinding.Converter = new UnitToStringConverter();
+            textBinding.Bindings.Add(new Binding("Width") {Source = AdornedElement});
+            textBinding.Bindings.Add(new Binding("UnitType") {Source = UnitOfMeasure.Current});
 
             _adornerTextBlock.SetBinding(TextBlock.TextProperty, textBinding);
             Children.Add(_adornerTextBlock);
@@ -148,9 +150,10 @@ namespace Designer.Adorners
 
             _adornerTextBlock.LayoutTransform = new RotateTransform(90);
 
-            var textBinding = new Binding("Height");
-            textBinding.Source = AdornedElement;
-            textBinding.Converter = new RoundedValueConverter() { Precision = 0 };
+            var textBinding = new MultiBinding();
+            textBinding.Converter = new UnitToStringConverter();
+            textBinding.Bindings.Add(new Binding("Height") { Source = AdornedElement });
+            textBinding.Bindings.Add(new Binding("UnitType") { Source = UnitOfMeasure.Current });
 
             _adornerTextBlock.SetBinding(TextBlock.TextProperty, textBinding);
             Children.Add(_adornerTextBlock);

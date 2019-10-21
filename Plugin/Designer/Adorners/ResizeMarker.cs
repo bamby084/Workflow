@@ -11,6 +11,8 @@ namespace Designer.Adorners
     {
         private new const double MinWidth = 30.0;
         private new const double MinHeight = 30.0;
+        protected const double OffsetX = 2;
+        protected const double OffsetY = 2;
 
         protected ResizeMarker(UIElement adornedElement)
             :base(adornedElement)
@@ -78,7 +80,7 @@ namespace Designer.Adorners
             var width = this.DesiredSize.Width;
             var height = this.DesiredSize.Height;
 
-            return new Rect(-width / 2, -height / 2, width, height);
+            return new Rect(-width / 2 + OffsetX, -height / 2 + OffsetY, width, height);
         }
     }
 
@@ -111,7 +113,7 @@ namespace Designer.Adorners
             var width = this.DesiredSize.Width;
             var height = this.DesiredSize.Height;
 
-            return new Rect(AdornedElement.DesiredSize.Width - width / 2, -height / 2, width, height);
+            return new Rect(AdornedElement.DesiredSize.Width - width / 2 - OffsetX, -height / 2 + OffsetY, width, height);
         }
     }
 
@@ -144,7 +146,7 @@ namespace Designer.Adorners
             var width = this.DesiredSize.Width;
             var height = this.DesiredSize.Height;
 
-            return new Rect(-width / 2, AdornedElement.DesiredSize.Height - height / 2, width, height);
+            return new Rect(-width / 2 + OffsetX, AdornedElement.DesiredSize.Height - height / 2 - OffsetY, width, height);
         }
     }
 
@@ -177,7 +179,7 @@ namespace Designer.Adorners
             var width = this.DesiredSize.Width;
             var height = this.DesiredSize.Height;
 
-            return new Rect(AdornedElement.DesiredSize.Width - width / 2, AdornedElement.DesiredSize.Height - height / 2, width, height);
+            return new Rect(AdornedElement.DesiredSize.Width - width / 2 - OffsetX, AdornedElement.DesiredSize.Height - height / 2 - OffsetY, width, height);
         }
     }
 
@@ -208,7 +210,7 @@ namespace Designer.Adorners
             var width = this.DesiredSize.Width;
             var height = this.DesiredSize.Height;
 
-            return new Rect(-width / 2, (AdornedElement.DesiredSize.Height - height) / 2, width, height);
+            return new Rect(-width / 2 + OffsetX, (AdornedElement.DesiredSize.Height - height) / 2, width, height);
         }
     }
 
@@ -239,7 +241,7 @@ namespace Designer.Adorners
             var width = this.DesiredSize.Width;
             var height = this.DesiredSize.Height;
 
-            return new Rect(AdornedElement.DesiredSize.Width - width / 2, (AdornedElement.DesiredSize.Height - height) / 2, width, height);
+            return new Rect(AdornedElement.DesiredSize.Width - width / 2 - OffsetX, (AdornedElement.DesiredSize.Height - height) / 2, width, height);
         }
     }
 
@@ -256,7 +258,7 @@ namespace Designer.Adorners
             var width = this.DesiredSize.Width;
             var height = this.DesiredSize.Height;
 
-            return new Rect((AdornedElement.DesiredSize.Width - width) / 2, -height / 2, width, height);
+            return new Rect((AdornedElement.DesiredSize.Width - width) / 2, -height / 2 + OffsetY, width, height);
         }
 
         protected override void OnDrag(object sender, DragDeltaEventArgs e)
@@ -301,7 +303,7 @@ namespace Designer.Adorners
             var width = this.DesiredSize.Width;
             var height = this.DesiredSize.Height;
 
-            return new Rect((AdornedElement.DesiredSize.Width - width) / 2, AdornedElement.DesiredSize.Height - height / 2, width, height);
+            return new Rect((AdornedElement.DesiredSize.Width - width) / 2, AdornedElement.DesiredSize.Height - height / 2 - OffsetY, width, height);
         }
     }
 }
