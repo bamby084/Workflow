@@ -23,6 +23,7 @@ using JdSuite.Common.Logging.Enums;
 using JdSuite.Common.Module;
 using System.Collections.ObjectModel;
 using Designer.DesignerTools;
+using System.Runtime.CompilerServices;
 
 namespace Designer
 {
@@ -50,7 +51,7 @@ namespace Designer
     /// <summary>
     /// Interaction logic for Designer.xaml
     /// </summary>
-    public partial class DesignerPage : UserControl
+    public partial class DesignerPage : UserControl, INotifyPropertyChanged
     {
         public const string DRAGDROP_FORMAT = "JohnDeiuliis.Designer.LayoutTreeItem";
         public LibraryTreeItem DraggedItem = null;
@@ -634,6 +635,7 @@ namespace Designer
                 page.Canvas.PreviewMouseMove -= Canvas_PreviewMouseMove;
                 page.Canvas.MouseLeftButtonUp -= Canvas_MouseLeftButtonUp;
                 page.Canvas.Drop -= Canvas_Drop;
+                page.Canvas.SelectedItemsChanged -= OnPageCanvasSelectedItemsChanged;
                 page.CanvasControls.CollectionChanged -= CanvasControls_CollectionChanged;
             }
 
@@ -641,11 +643,9 @@ namespace Designer
             page.CanvasControls.CollectionChanged += CanvasControls_CollectionChanged;
             page.Canvas.Loaded += Canvas_Loaded;
             page.Canvas.SizeChanged += Canvas_Loaded;
-            //page.Canvas.MouseLeftButtonDown += Canvas_MouseLeftButtonDown;
-            //page.Canvas.MouseMove += Canvas_MouseMove;
-            //page.Canvas.MouseLeftButtonUp += Canvas_MouseLeftButtonUp;
             page.Canvas.PreviewMouseMove += Canvas_PreviewMouseMove;
             page.Canvas.Drop += Canvas_Drop;
+            page.Canvas.SelectedItemsChanged += OnPageCanvasSelectedItemsChanged;
 
             var binding = new Binding("SelectedTool");
             binding.ElementName = "DesignerToolBar";
@@ -663,6 +663,17 @@ namespace Designer
                 this
             );
             RefreshLayoutTree();
+        }
+
+        private void OnPageCanvasSelectedItemsChanged(object sender, ItemsChangedEventArgs e)
+        {
+            if (e.Items.Count != 1)
+            {
+                SelectedControlProperties = null;
+                return;
+            }
+
+            SelectedControlProperties = e.Items[0].Properties;
         }
 
         private void TreeViewPages_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -2328,6 +2339,14 @@ namespace Designer
         }
 
         public XDocument Document;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         private void menuFileOpen_Click(object sender, RoutedEventArgs e)
         {
             // Create OpenFileDialog
@@ -2437,6 +2456,17 @@ namespace Designer
         private void menuFileSaveAs_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private ControlPropertiesViewModel _selectedControlProperties;
+        public ControlPropertiesViewModel SelectedControlProperties
+        {
+            get => _selectedControlProperties;
+            set
+            {
+                _selectedControlProperties = value;
+                NotifyPropertyChanged();
+            }
         }
     }
 

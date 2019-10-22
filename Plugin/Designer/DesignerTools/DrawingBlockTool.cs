@@ -69,11 +69,10 @@ namespace Designer.DesignerTools
                 block.Properties.Height = Math.Abs(_mouseDownPos.Y - mouseUpPos.Y);
                 block.Properties.Left = left;
                 block.Properties.Top = top;
-                //block.SetValue(System.Windows.Controls.Canvas.LeftProperty, left);
-                //block.SetValue(System.Windows.Controls.Canvas.TopProperty, top);
                 block.SetValue(DesignerCanvas.IsSelectableProperty, true);
 
                 Canvas.Children.Add(block);
+                Canvas.NotifyItemAdded(block);
             }
 
             _isDragging = false;

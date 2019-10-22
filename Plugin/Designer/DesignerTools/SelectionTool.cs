@@ -136,11 +136,15 @@ namespace Designer.DesignerTools
         {
             if (e.Key == Key.Delete)
             {
+                if (SelectedItems.Count == 0)
+                    return;
+
                 foreach (var item in SelectedItems)
                 {
                     Canvas.Children.Remove(item);
                 }
 
+                Canvas.NotifyItemsDeleted(SelectedItems);
                 SelectedItems.Clear();
             }
         }

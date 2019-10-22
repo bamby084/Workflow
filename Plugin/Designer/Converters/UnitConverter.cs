@@ -14,6 +14,9 @@ namespace Designer.Converters
             PixelConverters.Add(UnitType.Meter, new PixelToMeterConverter());
             PixelConverters.Add(UnitType.Centimeter, new PixelToCentimeterConverter());
             PixelConverters.Add(UnitType.Millimeter, new PixelToMillimeterConverter());
+            PixelConverters.Add(UnitType.Inch, new PixelToInchConverter());
+            PixelConverters.Add(UnitType.Point, new PixelToPointConverter());
+            PixelConverters.Add(UnitType.Pixel, new PixelConverter());
         }
 
         public virtual object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)

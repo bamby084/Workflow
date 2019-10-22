@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 
 namespace Designer.Converters
 {
-    public class UnitToDecimalConverter: UnitConverter
+    public class UnitToDecimalConverter : UnitConverter
     {
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            if (values[0] == DependencyProperty.UnsetValue)
+                return Binding.DoNothing;
+
             decimal value = System.Convert.ToDecimal(values[0]);
             UnitType unitType = (UnitType)values[1];
 
@@ -25,7 +29,7 @@ namespace Designer.Converters
             if (!PixelConverters.ContainsKey(unitType))
                 return new[] { Binding.DoNothing, Binding.DoNothing };
 
-            return new[] {(double) PixelConverters[unitType].ConvertBack(val), Binding.DoNothing};
+            return new[] { (double)PixelConverters[unitType].ConvertBack(val), Binding.DoNothing };
         }
     }
 }

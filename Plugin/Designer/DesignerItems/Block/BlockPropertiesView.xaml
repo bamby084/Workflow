@@ -49,7 +49,7 @@
                                 </Grid.RowDefinitions>
                                 
                                 <Label Content="Left" Grid.Row="0" Grid.Column="0"/>
-                                <xceed:PropertyGridEditorDecimalUpDown 
+                                <xceed:PropertyGridEditorDecimalUpDown Minimum="0"
                                     Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="1" FormatString="F2" Increment="0.1" >
                                     <xceed:PropertyGridEditorDecimalUpDown.Value>
                                         <MultiBinding Converter="{StaticResource UnitConverter}" Mode="TwoWay">
@@ -61,7 +61,7 @@
                                 <Label Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType, Converter={StaticResource UnitTypeToStringConverter}}" Grid.Row="0" Grid.Column="2"/>
 
                                 <Label Content="Top" Grid.Row="1" Grid.Column="0"/>
-                                <xceed:PropertyGridEditorDecimalUpDown  
+                                <xceed:PropertyGridEditorDecimalUpDown Minimum="0" 
                                     Margin="0, 2, 0, 2" Grid.Row="1" Grid.Column="1" FormatString="F2" Increment="0.1" >
                                     <xceed:PropertyGridEditorDecimalUpDown.Value>
                                         <MultiBinding Converter="{StaticResource UnitConverter}" Mode="TwoWay">
@@ -92,7 +92,7 @@
                                 </Grid.ColumnDefinitions>
                                 
                                 <Label Content="Width" Grid.Column="0" Grid.Row="0"/>
-                                <xceed:PropertyGridEditorDecimalUpDown 
+                                <xceed:PropertyGridEditorDecimalUpDown Minimum="0"
                                     Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="1" FormatString="F2" Increment="0.1" >
                                     <xceed:PropertyGridEditorDecimalUpDown.Value>
                                         <MultiBinding Converter="{StaticResource UnitConverter}" Mode="TwoWay">
@@ -114,7 +114,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Label Content="Height" Grid.Column="0" Grid.Row="0"/>
-                                <xceed:PropertyGridEditorDecimalUpDown 
+                                <xceed:PropertyGridEditorDecimalUpDown Minimum="0"
                                     Margin="0, 2, 0, 2" Grid.Row="0" Grid.Column="1" FormatString="F2" Increment="0.1">
                                     <xceed:PropertyGridEditorDecimalUpDown.Value>
                                         <MultiBinding Converter="{StaticResource UnitConverter}" Mode="TwoWay">

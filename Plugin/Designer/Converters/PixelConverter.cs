@@ -1,12 +1,13 @@
-﻿
+﻿using Designer.ExtensionMethods;
+
 namespace Designer.Converters
 {
-    public abstract class PixelConverter
+    public class PixelConverter
     {
         protected const double DotsPerInch = 96d;
         protected const double MillimetersPerInch = 25.4d;
 
-        public abstract string Unit { get; }
+        public virtual string Unit { get; } = UnitType.Pixel.GetDescription();
 
         public virtual decimal Factor { get; } = 1;
 
