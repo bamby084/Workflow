@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace Designer.DesignerItems
 {
-    public class DesignerItem: ContentControl, IControlPropertyProvider
+    public abstract class DesignerItem: ContentControl, IControlPropertyProvider
     {
         public DesignerItem()
         {

@@ -2,11 +2,12 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using Designer;
 using Designer.Adorners;
 using Designer.DesignerTools;
-
+using Designer.DesignerTreeViewItems;
 
 namespace TestHarness
 {
@@ -44,6 +45,16 @@ namespace TestHarness
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             Tools[0].IsSelected = true;
+            Canvas.ItemAdded += OnItemAdded;
+        }
+
+        private void OnItemAdded(object sender, ItemAddedEventArgs e)
+        {
+            var firstPage = Pages.Items[0] as TreeViewItem;
+            var block = new BlockTreeViewItem();
+            block.AssociatedItem = e.Item;
+
+            firstPage.Items.Add(block);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

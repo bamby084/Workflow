@@ -24,6 +24,7 @@ using JdSuite.Common.Module;
 using System.Collections.ObjectModel;
 using Designer.DesignerTools;
 using System.Runtime.CompilerServices;
+using Designer.DesignerTreeViewItems;
 
 namespace Designer
 {
@@ -635,8 +636,10 @@ namespace Designer
                 page.Canvas.PreviewMouseMove -= Canvas_PreviewMouseMove;
                 page.Canvas.MouseLeftButtonUp -= Canvas_MouseLeftButtonUp;
                 page.Canvas.Drop -= Canvas_Drop;
-                page.Canvas.SelectedItemsChanged -= OnPageCanvasSelectedItemsChanged;
                 page.CanvasControls.CollectionChanged -= CanvasControls_CollectionChanged;
+                page.Canvas.SelectedItemsChanged -= OnPageCanvasSelectedItemsChanged;
+                page.Canvas.ItemAdded -= OnPageCanvasItemAdded;
+                page.Canvas.ItemsDeleted -= OnPageCanvasItemsDeleted;
             }
 
             page.PropertyChanged += Page_PropertyChanged;
@@ -646,6 +649,8 @@ namespace Designer
             page.Canvas.PreviewMouseMove += Canvas_PreviewMouseMove;
             page.Canvas.Drop += Canvas_Drop;
             page.Canvas.SelectedItemsChanged += OnPageCanvasSelectedItemsChanged;
+            page.Canvas.ItemAdded += OnPageCanvasItemAdded;
+            page.Canvas.ItemsDeleted += OnPageCanvasItemsDeleted;
 
             var binding = new Binding("SelectedTool");
             binding.ElementName = "DesignerToolBar";
@@ -674,6 +679,26 @@ namespace Designer
             }
 
             SelectedControlProperties = e.Items[0].Properties;
+        }
+
+        private void OnPageCanvasItemAdded(object sender, ItemAddedEventArgs e)
+        {
+            //foreach(Tree item in TreeViewPages.Items)
+            //{
+            //    item[0]
+            //}
+
+            var page = TreeViewPages.Items[0] as TreeViewItem;
+            var block = new BlockTreeViewItem();
+            block.AssociatedItem = e.Item;
+            
+            page.Items.Add(block);
+            page.IsExpanded = true;
+        }
+
+        private void OnPageCanvasItemsDeleted(object sender, ItemsChangedEventArgs e)
+        {
+
         }
 
         private void TreeViewPages_MouseDoubleClick(object sender, MouseButtonEventArgs e)

@@ -159,7 +159,7 @@ namespace Designer
 
         public void NotifyItemsDeleted(IList<DesignerItem> items)
         {
-            ItemsDeleted?.Invoke(this, new ItemsChangedEventArgs() { Items = items);
+            ItemsDeleted?.Invoke(this, new ItemsChangedEventArgs() { Items = items });
         }
     }
 }

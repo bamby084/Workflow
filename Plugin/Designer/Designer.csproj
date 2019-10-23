@@ -161,6 +161,8 @@
     <Compile Include="Converters\UnitToDecimalConverter.cs" />
     <Compile Include="Converters\UnitToStringConverter.cs" />
     <Compile Include="Converters\UnitTypeToStringConverter.cs" />
+    <Compile Include="DesignerTreeViewItems\BlockTreeViewItem.cs" />
+    <Compile Include="DesignerTreeViewItems\DesignerTreeViewItem.cs" />
     <Compile Include="ExtensionMethods\EnumExtensions.cs" />
     <Compile Include="UnitOfMeasure\UnitOfMeasure.cs" />
     <Compile Include="Converters\PixelConverter.cs" />
@@ -423,6 +425,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Thumb.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\TreeViewItems.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

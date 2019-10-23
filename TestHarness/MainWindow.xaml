@@ -70,14 +70,26 @@
         <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
             <ComboBox Grid.Row="0" Width="100" HorizontalAlignment="Left" 
                       SelectedItem="{Binding Path=SelectedUnit}"
                       ItemsSource="{Binding Source={StaticResource UnitTypeEnum}}"/>
-
-            <Border Grid.Row="1" BorderThickness="1" BorderBrush="Gray" Margin="0 5 0 0">
+            <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" Margin="0 5 0 0">
+                <TreeView>
+                    <TreeViewItem Name="Pages" Header="Pages">
+                        <TreeViewItem Header="Page1"/>
+                        <TreeViewItem Header="Page2">
+                            <TreeViewItem Header="Page2.1"/>
+                            <TreeViewItem Header="Page2.2"/>
+                        </TreeViewItem>
+                    </TreeViewItem>
+                </TreeView>
+            </Border>
+            
+            <Border Grid.Row="2" BorderThickness="1" BorderBrush="Gray" Margin="0 5 0 0">
                 <ContentControl Content="{Binding Path=SelectedControlProperties}"  />
             </Border>
         </Grid>
