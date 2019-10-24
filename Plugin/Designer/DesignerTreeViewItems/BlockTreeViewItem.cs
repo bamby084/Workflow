@@ -9,7 +9,7 @@ namespace Designer.DesignerTreeViewItems
     {
         static BlockTreeViewItem()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(BlockTreeViewItem), new FrameworkPropertyMetadata(typeof(BlockTreeViewItem)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(BlockTreeViewItem), new FrameworkPropertyMetadata(typeof(DesignerTreeViewItem)));
         }
 
         public override ImageSource Image => new BitmapImage(new Uri("pack://application:,,,/Designer;component/Resources/Toolbar/block.png"));

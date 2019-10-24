@@ -69,17 +69,12 @@ namespace Designer.DesignerTools
             else
             {
                 var designerItem = TreeHelperExtensions.FindVisualParent<DesignerItem>(hitObject);
-                if (designerItem == null)
-                    return;
-
-                var isSelectable = DesignerCanvas.GetIsSelectable(designerItem);
-                if (!isSelectable)
+                if (designerItem == null || !designerItem.IsSelectable)
                     return;
 
                 if (IsCtrlKeyDown())
                 {
-                    bool isSelected = DesignerCanvas.GetIsSelected(designerItem);
-                    if (isSelected)
+                    if (designerItem.IsSelected)
                         DeselectItem(designerItem);
                     else
                         SelectItem(designerItem);
@@ -151,24 +146,24 @@ namespace Designer.DesignerTools
 
         private void ClearSelectedItems()
         {
-            foreach (var item in SelectedItems)
+            foreach (var designerItem in SelectedItems)
             {
-                DesignerCanvas.SetIsSelected(item, false);
+                designerItem.IsSelected = false;
             }
 
             SelectedItems.Clear();
         }
 
-        private void SelectItem(DesignerItem item)
+        private void SelectItem(DesignerItem designerItem)
         {
-            DesignerCanvas.SetIsSelected(item, true);
-            SelectedItems.Add(item);
+            designerItem.IsSelected = true;
+            SelectedItems.Add(designerItem);
         }
 
-        private void DeselectItem(DesignerItem item)
+        private void DeselectItem(DesignerItem designerItem)
         {
-            DesignerCanvas.SetIsSelected(item, false);
-            SelectedItems.Remove(item);
+            designerItem.IsSelected = false;
+            SelectedItems.Remove(designerItem);
         }
 
         private bool IsCtrlKeyDown()
