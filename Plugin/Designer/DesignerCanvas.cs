@@ -5,6 +5,9 @@ using Designer.DesignerTools;
 using Designer.DesignerItems;
 using System.Collections.Generic;
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Collections.Specialized;
 
 namespace Designer
 {
@@ -29,9 +32,18 @@ namespace Designer
             typeof(DesignerCanvas),
             new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnActiveToolChanged)));
 
-        public ItemsChangedEventHandler SelectedItemsChanged;
-        public ItemAddedEventHandler ItemAdded;
-        public ItemsChangedEventHandler ItemsDeleted;
+        public static readonly DependencyProperty AllowMultipleSelectionProperty = DependencyProperty.Register(
+            "AllowMultipleSelection",
+            typeof(bool),
+            typeof(DesignerCanvas),
+            new FrameworkPropertyMetadata(false)
+            );
+
+        public ObservableCollection<DesignerItem> SelectedItems { get; private set; }
+
+        public event ItemsChangedEventHandler SelectedItemsChanged;
+        public event ItemAddedEventHandler ItemAdded;
+        public event ItemsChangedEventHandler ItemsDeleted;
 
         public static void OnActiveToolChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
@@ -43,11 +55,24 @@ namespace Designer
         public DesignerCanvas()
         {
             Focusable = true;
+            SelectedItems = new ObservableCollection<DesignerItem>();
+            SelectedItems.CollectionChanged += OnSelectedItemsChanged;
+        }
+
+        private void OnSelectedItemsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            NotifySelectedItemsChanged(SelectedItems);
         }
 
         public DesignerTool ActiveTool {
             get => (DesignerTool)GetValue(ActiveToolProperty);
             set => SetValue(ActiveToolProperty, value);
+        }
+
+        public bool AllowMultipleSelection
+        {
+            get => (bool)GetValue(AllowMultipleSelectionProperty);
+            set => SetValue(AllowMultipleSelectionProperty, value);
         }
 
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
@@ -97,6 +122,50 @@ namespace Designer
         public void NotifyItemsDeleted(IList<DesignerItem> items)
         {
             ItemsDeleted?.Invoke(this, new ItemsChangedEventArgs() { Items = items });
+        }
+
+        public void AddItem(DesignerItem item)
+        {
+            item.SelectedChanged += OnItemSelectedChanged;
+            Children.Add(item);
+        }
+
+        public void RemoveItem(DesignerItem item)
+        {
+            item.SelectedChanged -= OnItemSelectedChanged;
+            Children.Remove(item);
+        }
+
+        public void ClearSelectedItems(bool remove = false)
+        {
+            List<DesignerItem> items = SelectedItems.ToList();
+            foreach(var item in items)
+            {
+                item.IsSelected = false;
+                if (remove)
+                    RemoveItem(item);
+            }
+            
+            if (remove)
+                NotifyItemsDeleted(items);
+        }
+
+        private void OnItemSelectedChanged(object sender, SelectedChangedEventArgs e)
+        {
+            var designerItem = sender as DesignerItem;
+            if(e.IsSelected)
+            {
+                if(!AllowMultipleSelection || SelectionTool.SelectionType == SelectionType.Single)
+                {
+                    ClearSelectedItems();
+                }
+
+                SelectedItems.Add(designerItem);
+            }
+            else
+            {
+                SelectedItems.Remove(designerItem);
+            }
         }
     }
 }

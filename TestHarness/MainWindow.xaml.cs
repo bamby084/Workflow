@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -6,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using Designer;
 using Designer.Adorners;
+using Designer.DesignerItems;
 using Designer.DesignerTools;
 using Designer.DesignerTreeViewItems;
 
@@ -29,6 +31,8 @@ namespace TestHarness
 
             this.Loaded += MainWindow_Loaded;
             Canvas.SelectedItemsChanged += SelectedItemsChanged;
+            Canvas.ItemAdded += OnItemAdded;
+            Canvas.ItemsDeleted += OnItemsDeleted;
         }
 
         private void SelectedItemsChanged(object sender, ItemsChangedEventArgs e)
@@ -45,7 +49,28 @@ namespace TestHarness
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             Tools[0].IsSelected = true;
-            Canvas.ItemAdded += OnItemAdded;
+        }
+
+        private void OnItemsDeleted(object sender, ItemsChangedEventArgs e)
+        {
+            var firstPage = Pages.Items[0] as TreeViewItem;
+            List<BlockTreeViewItem> itemsToRemove = new List<BlockTreeViewItem>();
+
+            foreach(DesignerItem item in e.Items)
+            {
+                foreach(BlockTreeViewItem block in firstPage.Items)
+                {
+                    if(block.AssociatedItem.Equals(item))
+                    {
+                        itemsToRemove.Add(block);
+                    }
+                }
+            }
+
+            foreach(var item in itemsToRemove)
+            {
+                firstPage.Items.Remove(item);
+            }
         }
 
         private void OnItemAdded(object sender, ItemAddedEventArgs e)
@@ -53,8 +78,17 @@ namespace TestHarness
             var firstPage = Pages.Items[0] as TreeViewItem;
             var block = new BlockTreeViewItem();
             block.AssociatedItem = e.Item;
-
+            block.OnDeleted += OnBlockDeleted;
             firstPage.Items.Add(block);
+        }
+
+        private void OnBlockDeleted(object sender, EventArgs e)
+        {
+            var block = sender as BlockTreeViewItem;
+            var firstPage = Pages.Items[0] as TreeViewItem;
+
+            Canvas.RemoveItem(block.AssociatedItem);
+            firstPage.Items.Remove(block);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

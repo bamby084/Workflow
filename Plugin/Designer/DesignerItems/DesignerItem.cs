@@ -1,4 +1,5 @@
 ﻿using Designer.Adorners;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -6,6 +7,23 @@ using System.Windows.Documents;
 
 namespace Designer.DesignerItems
 {
+    public class SelectedChangedEventArgs: EventArgs
+    {
+        public SelectedChangedEventArgs()
+        {
+
+        }
+
+        public SelectedChangedEventArgs(bool isSelected)
+        {
+            IsSelected = isSelected;
+        }
+
+        public bool IsSelected { get; set; }
+    }
+
+    public delegate void SelectedChangedEventHandler(object sender, SelectedChangedEventArgs e);
+
     public abstract class DesignerItem: ContentControl, IControlPropertyProvider
     {
         public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(
@@ -21,6 +39,8 @@ namespace Designer.DesignerItems
             typeof(DesignerItem),
             new FrameworkPropertyMetadata(true)
             );
+
+        public event SelectedChangedEventHandler SelectedChanged;
 
         public bool IsSelected
         {
@@ -40,12 +60,15 @@ namespace Designer.DesignerItems
 
         public virtual ControlPropertiesViewModel Properties => null;
 
-        private void SetSelected(bool isSelected)
+        private void ShowAdorner(bool value)
         {
             var adornerLayer = AdornerLayer.GetAdornerLayer(this);
+            if (adornerLayer == null)
+                return;
+            
             var adorners = adornerLayer.GetAdorners(this);
 
-            if(isSelected)
+            if(value)
             {
                 if (adorners == null || !adorners.Any(adorner => adorner.GetType() == typeof(DesignerItemAdorner)))
                 {
@@ -63,11 +86,21 @@ namespace Designer.DesignerItems
             }
         }
 
+        private void NotifySelectedChanged(bool isSelected)
+        {
+            if (SelectedChanged != null)
+                SelectedChanged(this, new SelectedChangedEventArgs(isSelected));
+        }
+
         private static void OnPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             if(e.Property.Name == "IsSelected")
             {
-                ((DesignerItem)sender).SetSelected((bool)e.NewValue);
+                var designerItem = sender as DesignerItem;
+                bool isSelected = (bool)e.NewValue;
+
+                designerItem.ShowAdorner(isSelected);
+                designerItem.NotifySelectedChanged(isSelected);
             }
         }
     }

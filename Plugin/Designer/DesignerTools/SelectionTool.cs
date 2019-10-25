@@ -14,13 +14,17 @@ using Designer.ExtensionMethods;
 
 namespace Designer.DesignerTools
 {
+    public enum SelectionType
+    {
+        Single,
+        Multiple
+    }
+
     public class SelectionTool: DesignerTool
     {
         private bool _isMouseDown;
         private Point _mouseDownPos;
         private bool _isDragging;
-
-        private ObservableCollection<DesignerItem> SelectedItems { get; }
 
         private CanvasSelectionAdorner _selectionAdorner;
         private CanvasSelectionAdorner SelectionAdorner {
@@ -39,14 +43,10 @@ namespace Designer.DesignerTools
 
         public SelectionTool()
         {
-            SelectedItems = new ObservableCollection<DesignerItem>();
-            SelectedItems.CollectionChanged += OnSelectedItemsChanged;
+            
         }
 
-        private void OnSelectedItemsChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            Canvas.NotifySelectedItemsChanged(SelectedItems);
-        }
+        public static SelectionType SelectionType { get; set; } = SelectionType.Single;
 
         public override ImageSource Image => new BitmapImage(
             new Uri("pack://application:,,,/Designer;component/Resources/Toolbar/cursor.png"));
@@ -60,11 +60,12 @@ namespace Designer.DesignerTools
             //click on the canvas?
             if (hitObject.Equals(Canvas))
             {
-                ClearSelectedItems();
                 _isMouseDown = true;
-                Canvas.CaptureMouse();
                 _mouseDownPos = e.GetPosition(Canvas);
                 SelectionAdorner.Update(_mouseDownPos.X, _mouseDownPos.Y, 0, 0);
+
+                Canvas.ClearSelectedItems();
+                Canvas.CaptureMouse();
             }
             else
             {
@@ -72,24 +73,21 @@ namespace Designer.DesignerTools
                 if (designerItem == null || !designerItem.IsSelectable)
                     return;
 
-                if (IsCtrlKeyDown())
+                if(IsCtrlKeyDown())
                 {
-                    if (designerItem.IsSelected)
-                        DeselectItem(designerItem);
-                    else
-                        SelectItem(designerItem);
+                    SelectionType = SelectionType.Multiple;
+                    designerItem.IsSelected = !designerItem.IsSelected;
                 }
                 else
                 {
-                    ClearSelectedItems();
-                    SelectItem(designerItem);
+                    designerItem.IsSelected = true;
                 }
             }
         }
 
         public override void HandleMouseMove(MouseEventArgs e)
         {
-            if (!_isMouseDown)
+            if (!_isMouseDown || !Canvas.AllowMultipleSelection)
                 return;
 
             Point mousePos = e.GetPosition(Canvas);
@@ -107,6 +105,8 @@ namespace Designer.DesignerTools
             {
                 var mouseUpPos = e.GetPosition(Canvas);
                 var selectionRect = new Rect(_mouseDownPos, mouseUpPos);
+                SelectionType = SelectionType.Multiple;
+
                 foreach (UIElement child in Canvas.Children)
                 {
                     if (child is DesignerItem designerItem)
@@ -116,7 +116,7 @@ namespace Designer.DesignerTools
 
                         if (selectionRect.IntersectsWith(childRect))
                         {
-                            SelectItem(designerItem);
+                            designerItem.IsSelected = true;
                         }
                     }
                 }
@@ -125,45 +125,15 @@ namespace Designer.DesignerTools
             Keyboard.Focus(Canvas);
             _isMouseDown = false;
             _isDragging = false;
+            SelectionType = SelectionType.Single;
         }
 
         public override void HandleKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Delete)
             {
-                if (SelectedItems.Count == 0)
-                    return;
-
-                foreach (var item in SelectedItems)
-                {
-                    Canvas.Children.Remove(item);
-                }
-
-                Canvas.NotifyItemsDeleted(SelectedItems);
-                SelectedItems.Clear();
+                Canvas.ClearSelectedItems(true);
             }
-        }
-
-        private void ClearSelectedItems()
-        {
-            foreach (var designerItem in SelectedItems)
-            {
-                designerItem.IsSelected = false;
-            }
-
-            SelectedItems.Clear();
-        }
-
-        private void SelectItem(DesignerItem designerItem)
-        {
-            designerItem.IsSelected = true;
-            SelectedItems.Add(designerItem);
-        }
-
-        private void DeselectItem(DesignerItem designerItem)
-        {
-            designerItem.IsSelected = false;
-            SelectedItems.Remove(designerItem);
         }
 
         private bool IsCtrlKeyDown()

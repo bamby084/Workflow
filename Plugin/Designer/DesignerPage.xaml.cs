@@ -655,6 +655,7 @@ namespace Designer
             var binding = new Binding("SelectedTool");
             binding.ElementName = "DesignerToolBar";
             page.Canvas.SetBinding(DesignerCanvas.ActiveToolProperty, binding);
+            DesignerToolBar.SelectedTool = DesignerToolBar.SelectedTool;
 
             ActivePage = page;
             SetActiveProperties(ActivePage.GetPropertyLayout());
@@ -683,17 +684,26 @@ namespace Designer
 
         private void OnPageCanvasItemAdded(object sender, ItemAddedEventArgs e)
         {
-            //foreach(Tree item in TreeViewPages.Items)
-            //{
-            //    item[0]
-            //}
+            var page = ActivePage as Page;
+            if (page == null)
+                return;
 
-            var page = TreeViewPages.Items[0] as TreeViewItem;
-            var block = new BlockTreeViewItem();
-            block.AssociatedItem = e.Item;
-            
-            page.Items.Add(block);
-            page.IsExpanded = true;
+            foreach(TreeViewItem treeItem in TreeViewPages.Items)
+            {
+                if(treeItem is TvItemElement<Page> pageTreeItem)
+                {
+                    var p = pageTreeItem.Resources["PageRef"] as Page;
+                    if (page.Equals(p))
+                    {
+                        var block = new BlockTreeViewItem();
+                        block.AssociatedItem = e.Item;
+
+                        treeItem.Items.Add(block);
+                        treeItem.IsExpanded = true;
+                        return;
+                    }
+                }
+            }
         }
 
         private void OnPageCanvasItemsDeleted(object sender, ItemsChangedEventArgs e)

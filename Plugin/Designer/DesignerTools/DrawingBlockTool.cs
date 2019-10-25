@@ -70,7 +70,7 @@ namespace Designer.DesignerTools
                 block.Properties.Left = left;
                 block.Properties.Top = top;
 
-                Canvas.Children.Add(block);
+                Canvas.AddItem(block);
                 Canvas.NotifyItemAdded(block);
             }
 
