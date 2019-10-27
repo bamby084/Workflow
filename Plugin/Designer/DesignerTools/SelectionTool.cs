@@ -132,8 +132,13 @@ namespace Designer.DesignerTools
         {
             if (e.Key == Key.Delete)
             {
-                Canvas.ClearSelectedItems(true);
+                Canvas.RemoveSelectedItems();
             }
+        }
+
+        public override void ResetAdorner()
+        {
+            _selectionAdorner = null;
         }
 
         private bool IsCtrlKeyDown()

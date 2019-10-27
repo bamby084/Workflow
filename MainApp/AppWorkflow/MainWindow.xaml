@@ -6,10 +6,10 @@
     xmlns:local="clr-namespace:AppWorkflow.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="AppWorkflow"
-    Width="600"
-    Height="400"
-    Left="500"
-    Top="500"
+    Width="800"
+    Height="450"
+    Left="200"
+    Top="200"
     WindowState="Normal"
     mc:Ignorable="d">
 

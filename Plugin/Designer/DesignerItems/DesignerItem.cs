@@ -41,6 +41,7 @@ namespace Designer.DesignerItems
             );
 
         public event SelectedChangedEventHandler SelectedChanged;
+        public event EventHandler OnDisposed;
 
         public bool IsSelected
         {
@@ -59,6 +60,11 @@ namespace Designer.DesignerItems
         }
 
         public virtual ControlPropertiesViewModel Properties => null;
+
+        public virtual void Dispose()
+        {
+            OnDisposed?.Invoke(this, new EventArgs());
+        }
 
         private void ShowAdorner(bool value)
         {

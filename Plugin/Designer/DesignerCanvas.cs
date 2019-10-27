@@ -36,7 +36,7 @@ namespace Designer
             "AllowMultipleSelection",
             typeof(bool),
             typeof(DesignerCanvas),
-            new FrameworkPropertyMetadata(false)
+            new FrameworkPropertyMetadata(true)
             );
 
         public ObservableCollection<DesignerItem> SelectedItems { get; private set; }
@@ -47,9 +47,6 @@ namespace Designer
 
         public static void OnActiveToolChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            var tool = e.NewValue as DesignerTool;
-            if (tool != null)
-                tool.Canvas = (DesignerCanvas)sender;
         }
 
         public DesignerCanvas()
@@ -80,9 +77,10 @@ namespace Designer
             if (ActiveTool != null)
             {
                 ActiveTool.HandleMouseLeftButtonDown(e);
-                e.Handled = true;
                 Keyboard.Focus(this);
             }
+
+            e.Handled = true;
         }
 
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
@@ -90,8 +88,9 @@ namespace Designer
             if (ActiveTool != null)
             {
                 ActiveTool.HandleMouseLeftButtonUp(e);
-                e.Handled = true;
             }
+
+            e.Handled = true;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -99,14 +98,19 @@ namespace Designer
             if (ActiveTool != null)
             {
                 ActiveTool.HandleMouseMove(e);
-                e.Handled = true;
             }
+
+            e.Handled = true;
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (ActiveTool != null)
+            {
                 ActiveTool.HandleKeyDown(e);
+            }
+
+            e.Handled = true;
         }
 
         public void NotifySelectedItemsChanged(IList<DesignerItem> items)
@@ -127,27 +131,43 @@ namespace Designer
         public void AddItem(DesignerItem item)
         {
             item.SelectedChanged += OnItemSelectedChanged;
+            item.OnDisposed += OnItemDisposed;
             Children.Add(item);
+        }
+
+        private void OnItemDisposed(object sender, EventArgs e)
+        {
+            var designerItem = sender as DesignerItem;
+            if (designerItem == null)
+                return;
+
+            designerItem.IsSelected = false;
+            RemoveItem(designerItem);
         }
 
         public void RemoveItem(DesignerItem item)
         {
             item.SelectedChanged -= OnItemSelectedChanged;
+            item.OnDisposed -= OnItemDisposed;
             Children.Remove(item);
         }
 
-        public void ClearSelectedItems(bool remove = false)
+        public void ClearSelectedItems()
         {
             List<DesignerItem> items = SelectedItems.ToList();
             foreach(var item in items)
             {
-                item.IsSelected = false;
-                if (remove)
-                    RemoveItem(item);
+                item.IsSelected = false;        
             }
-            
-            if (remove)
-                NotifyItemsDeleted(items);
+        }
+
+        public void RemoveSelectedItems()
+        {
+            var items = SelectedItems.ToList();
+            foreach (var item in items)
+                item.Dispose();
+
+            NotifyItemsDeleted(items);
         }
 
         private void OnItemSelectedChanged(object sender, SelectedChangedEventArgs e)

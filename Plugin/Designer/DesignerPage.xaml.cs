@@ -109,7 +109,6 @@ namespace Designer
         }
 
         public ObservableCollection<DesignerTool> DesignerTools { get; private set; }
-
         private void InitDesignerTools()
         {
             DesignerTools = new ObservableCollection<DesignerTool>()
@@ -117,6 +116,25 @@ namespace Designer
                 new SelectionTool(),
                 new DrawingBlockTool()
             };
+        }
+
+        private DesignerTool _selectedTool;
+
+        public DesignerTool SelectedTool
+        {
+            get => _selectedTool;
+            set
+            {
+                _selectedTool = value;
+                if (_selectedTool != null)
+                {
+                    _selectedTool.Canvas = ActivePage.Canvas;
+                    _selectedTool.ResetAdorner();
+                }
+
+                NotifyPropertyChanged();
+            }
+
         }
 
         private void OnFlowTableAdded(object sender, TableEventEventArgs e)
@@ -655,7 +673,12 @@ namespace Designer
             var binding = new Binding("SelectedTool");
             binding.ElementName = "DesignerToolBar";
             page.Canvas.SetBinding(DesignerCanvas.ActiveToolProperty, binding);
-            DesignerToolBar.SelectedTool = DesignerToolBar.SelectedTool;
+
+            if (DesignerToolBar.SelectedTool != null)
+            {
+                DesignerToolBar.SelectedTool.Canvas = page.Canvas;
+                DesignerToolBar.SelectedTool.ResetAdorner();
+            }
 
             ActivePage = page;
             SetActiveProperties(ActivePage.GetPropertyLayout());
@@ -697,6 +720,11 @@ namespace Designer
                     {
                         var block = new BlockTreeViewItem();
                         block.AssociatedItem = e.Item;
+                        block.OnDeleted += OnBlockDeleted;
+                        e.Item.OnDisposed += delegate
+                        {
+                            treeItem.Items.Remove(block);
+                        };
 
                         treeItem.Items.Add(block);
                         treeItem.IsExpanded = true;
@@ -704,6 +732,19 @@ namespace Designer
                     }
                 }
             }
+        }
+
+        private void OnBlockDeleted(object sender, EventArgs e)
+        {
+            var block = sender as BlockTreeViewItem;
+            if (block == null)
+                return;
+            var page = block.Parent as TreeViewItem;
+            if (page == null)
+                return;
+
+            page.Items.Remove(block);
+            block.AssociatedItem.Dispose();
         }
 
         private void OnPageCanvasItemsDeleted(object sender, ItemsChangedEventArgs e)

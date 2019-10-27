@@ -27,7 +27,7 @@ namespace Designer.DesignerTools
             }
         }
 
-        public DesignerTool()
+        protected DesignerTool()
         {
 
         }
@@ -55,6 +55,11 @@ namespace Designer.DesignerTools
         public virtual void HandleKeyDown(KeyEventArgs e)
         {
 
+        }
+
+        public virtual void ResetAdorner()
+        {
+            
         }
     }
 }

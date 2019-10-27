@@ -79,8 +79,6 @@ namespace Designer.DesignerTools
 
         public override void HandleMouseMove(MouseEventArgs e)
         {
-            Debug.WriteLine(Keyboard.FocusedElement);
-
             if (!_isMouseDown)
                 return;
 
@@ -99,6 +97,11 @@ namespace Designer.DesignerTools
                 _isDragging = false;
                 Canvas.ReleaseMouseCapture();
             }
+        }
+
+        public override void ResetAdorner()
+        {
+            _drawingAdorner = null;
         }
     }
 }

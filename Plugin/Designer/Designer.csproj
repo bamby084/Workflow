@@ -152,6 +152,7 @@
       <DependentUpon>BorderStylePropertiesPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="ControlPropertiesViewModel.cs" />
+    <Compile Include="Converters\PercentageConverter.cs" />
     <Compile Include="Converters\PixelToCentimeterConverter.cs" />
     <Compile Include="Converters\PixelToInchConverter.cs" />
     <Compile Include="Converters\PixelToMeterConverter.cs" />

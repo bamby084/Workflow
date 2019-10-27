@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Designer.Converters;
 using iText.Layout.Element;
 using WPFCanvasTable;
 
@@ -103,7 +104,12 @@ namespace Designer
 
         public void AddTablePresenter(FlowTablePresenter presenter, FlowTableSettings tableSettings, Point position)
         {
-            presenter.Width = tableSettings.WidthPercentage * Container.ActualWidth;
+            var widthBinding = new System.Windows.Data.Binding("ActualWidth");
+            widthBinding.Source = Container;
+            widthBinding.Converter = new PercentageConverter();
+            widthBinding.ConverterParameter = tableSettings.WidthPercentage;
+            presenter.SetBinding(WidthProperty, widthBinding);
+            
             Canvas.SetLeft(presenter, tableSettings.Alignment == FlowTableAlignment.Left
                 ? 0
                 : Container.ActualWidth - presenter.Width);
