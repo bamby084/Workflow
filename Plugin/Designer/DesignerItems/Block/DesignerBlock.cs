@@ -64,6 +64,8 @@ namespace Designer.DesignerItems
                 Padding = new Thickness(0)
             };
             container.Inlines.Add(figure);
+
+            DesignerTableManager.Instance.NotifyTableAdded(table);
         }
 
         private void OnContextMenuOpened(object sender, RoutedEventArgs routedEventArgs)

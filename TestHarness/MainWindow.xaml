@@ -79,7 +79,6 @@
                 
                 <RichTextBox Visibility="Collapsed">
                     <FlowDocument>
-                        
                         <Table>
                             <TableRowGroup>
                                 <TableRow>

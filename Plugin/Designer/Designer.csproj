@@ -165,6 +165,7 @@
     <Compile Include="DesignerItems\Block\BlockDocument.cs" />
     <Compile Include="DesignerItems\Table\DesignerTable.cs" />
     <Compile Include="DesignerItems\Table\DesignerTableAlignment.cs" />
+    <Compile Include="DesignerItems\Table\DesignerTableManager.cs" />
     <Compile Include="DesignerItems\Table\DesignerTablePropertiesViewModel.cs" />
     <Compile Include="DesignerTreeViewItems\BlockTreeViewItem.cs" />
     <Compile Include="DesignerTreeViewItems\DesignerTreeViewItem.cs" />

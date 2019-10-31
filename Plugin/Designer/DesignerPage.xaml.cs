@@ -24,6 +24,7 @@ using JdSuite.Common.Module;
 using System.Collections.ObjectModel;
 using Designer.DesignerTools;
 using System.Runtime.CompilerServices;
+using Designer.DesignerItems;
 using Designer.DesignerTreeViewItems;
 
 namespace Designer
@@ -105,7 +106,13 @@ namespace Designer
             InitColorComboBox();
             InitDesignerTools();
             FlowTableManager.Instance().TableAdded += OnFlowTableAdded;
+            DesignerTableManager.Instance.TableAdded += OnDesignerTableAdded;
             this.DataContext = this;
+        }
+
+        private void OnDesignerTableAdded(object sender, DesignerTableEventArgs e)
+        {
+            AddNewTableStyle(new Guid());
         }
 
         public ObservableCollection<DesignerTool> DesignerTools { get; private set; }
