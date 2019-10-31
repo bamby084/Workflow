@@ -162,8 +162,13 @@
     <Compile Include="Converters\UnitToDecimalConverter.cs" />
     <Compile Include="Converters\UnitToStringConverter.cs" />
     <Compile Include="Converters\UnitTypeToStringConverter.cs" />
+    <Compile Include="DesignerItems\Block\BlockDocument.cs" />
+    <Compile Include="DesignerItems\Table\DesignerTable.cs" />
+    <Compile Include="DesignerItems\Table\DesignerTableAlignment.cs" />
+    <Compile Include="DesignerItems\Table\DesignerTablePropertiesViewModel.cs" />
     <Compile Include="DesignerTreeViewItems\BlockTreeViewItem.cs" />
     <Compile Include="DesignerTreeViewItems\DesignerTreeViewItem.cs" />
+    <Compile Include="ExtensionMethods\ContextMenuExtensions.cs" />
     <Compile Include="ExtensionMethods\EnumExtensions.cs" />
     <Compile Include="UnitOfMeasure\UnitOfMeasure.cs" />
     <Compile Include="Converters\PixelConverter.cs" />
@@ -417,6 +422,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\DesignerTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\DesignerToolBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -582,9 +591,7 @@
       <Name>JdSuite.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DesignerItems\Table\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\Toolbar\select.png" />
   </ItemGroup>

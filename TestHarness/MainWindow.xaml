@@ -7,40 +7,15 @@
         xmlns:designer="clr-namespace:Designer;assembly=Designer"
         xmlns:designerTools="clr-namespace:Designer.DesignerTools;assembly=Designer"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:designerItems="clr-namespace:Designer.DesignerItems;assembly=Designer"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="825">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Designer;component/Themes/ControlPropertiesViewDictionary.xaml"/>
+                <ResourceDictionary Source="/Designer;component/Themes/DesignerTable.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-            <Style TargetType="{x:Type designer:FlowTableCell}">
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="BorderBrush">
-                    <Setter.Value>
-                        <DrawingBrush Viewport="0,0,4,4" ViewportUnits="Absolute" TileMode="Tile">
-                            <DrawingBrush.Drawing>
-                                <DrawingGroup>
-                                    <GeometryDrawing Brush="Black">
-                                        <GeometryDrawing.Geometry>
-                                            <GeometryGroup>
-                                                <RectangleGeometry Rect="0,0,50,50" />
-                                                <RectangleGeometry Rect="50,50,50,50" />
-                                            </GeometryGroup>
-                                        </GeometryDrawing.Geometry>
-                                    </GeometryDrawing>
-                                </DrawingGroup>
-                            </DrawingBrush.Drawing>
-                        </DrawingBrush>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Background" Value="{x:Static SystemColors.GradientInactiveCaptionBrush}"></Setter>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
 
             <ObjectDataProvider x:Key="UnitTypeEnum" MethodName="GetValues"
                                 ObjectType="{x:Type System:Enum}">
@@ -62,8 +37,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <designerTools:DesignerToolBar Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
-                                       Orientation="Vertical" x:Name="Toolbar" ItemsSource="{Binding Path=Tools}">
+        <designerTools:DesignerToolBar Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+            Orientation="Vertical" x:Name="Toolbar" ItemsSource="{Binding Path=Tools}"
+            SelectedTool="{Binding Path=SelectedTool, Mode=OneWayToSource}">
         </designerTools:DesignerToolBar>
 
 
@@ -96,9 +72,40 @@
 
 
         <Border Grid.Row="1" Grid.Column="2" BorderThickness="1" BorderBrush="Gray" Margin="5 0 0 0">
-            <designer:DesignerCanvas Background="White" x:Name="Canvas"
+            <Grid>
+                <designer:DesignerCanvas Background="White" x:Name="Canvas"
                                  ActiveTool="{Binding Path=SelectedTool, ElementName=Toolbar}">
-            </designer:DesignerCanvas>
+                </designer:DesignerCanvas>
+                
+                <RichTextBox Visibility="Collapsed">
+                    <FlowDocument>
+                        
+                        <Table>
+                            <TableRowGroup>
+                                <TableRow>
+                                    <TableCell>
+                                        <Paragraph>Hello</Paragraph>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Paragraph>Hello</Paragraph>
+                                    </TableCell>
+                                </TableRow>
+                            </TableRowGroup>
+                        </Table>
+
+                        <Paragraph>
+                            
+                            <Run>Paragraph 1</Run>
+                        </Paragraph>
+                        <Paragraph>
+                            <Run>Paragraph 2</Run>
+                        </Paragraph>
+                        <Paragraph>
+                            <Run>Paragraph 3</Run>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+            </Grid>
         </Border>
     </Grid>
 </Window>

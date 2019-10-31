@@ -7,8 +7,26 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type designerItems:DesignerBlock}" >
                     <Border BorderThickness="2.5" BorderBrush="Blue">
-                        <!--<designer:DesignerCanvas Background="White"/>-->
-                        <designer:FlowControl/>
+                        <designerItems:BlockDocument x:Name="PART_Document"
+                             FontSize="{Binding Path=FontSize, RelativeSource={RelativeSource TemplatedParent}}"
+                             FontWeight="{Binding Path=FontWeight, RelativeSource={RelativeSource TemplatedParent}}"
+                             FontStyle="{Binding Path=FontStyle, RelativeSource={RelativeSource TemplatedParent}}"
+                             FontFamily="{Binding Path=FontFamily, RelativeSource={RelativeSource TemplatedParent}}">
+
+                            <designerItems:BlockDocument.ContextMenu>
+                                <ContextMenu x:Name="PART_ContextMenu">
+                                    <MenuItem Header="Cut" x:Name="cmiCut"/>
+                                    <MenuItem Header="Copy" x:Name="cmiCopy"/>
+                                    <MenuItem Header="Paste" x:Name="cmiPaste"/>
+                                    <Separator/>
+                                    <MenuItem Header="Insert">
+                                        <MenuItem Header="Flow" IsEnabled="False"/>
+                                        <MenuItem Header="Table" x:Name="cmiInsertTable"/>
+                                        <MenuItem Header="Image" IsEnabled="False"/>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </designerItems:BlockDocument.ContextMenu>
+                        </designerItems:BlockDocument>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

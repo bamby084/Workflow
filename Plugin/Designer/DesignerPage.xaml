@@ -13,6 +13,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="styles.xaml"/>
                 <ResourceDictionary Source="/Designer;component/Themes/ControlPropertiesViewDictionary.xaml"/>
+                <ResourceDictionary Source="/Designer;component/Themes/DesignerTable.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             
             <RotateTransform x:Key="LeftToolBarTransform" Angle="-90" />

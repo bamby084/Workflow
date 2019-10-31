@@ -18,7 +18,6 @@ namespace TestHarness
     /// </summary>
     public partial class MainWindow : INotifyPropertyChanged
     {
-        private FlowTablePresenter _table;
         public MainWindow()
         {
             InitializeComponent();
@@ -33,6 +32,24 @@ namespace TestHarness
             Canvas.SelectedItemsChanged += SelectedItemsChanged;
             Canvas.ItemAdded += OnItemAdded;
             Canvas.ItemsDeleted += OnItemsDeleted;
+        }
+
+        private DesignerTool _selectedTool;
+
+        public DesignerTool SelectedTool
+        {
+            get => _selectedTool;
+            set
+            {
+                _selectedTool = value;
+                if (_selectedTool != null)
+                {
+                    _selectedTool.Canvas = Canvas;
+                    _selectedTool.ResetAdorner();
+                }
+
+                NotifyPropertyChanged();
+            }
         }
 
         private void SelectedItemsChanged(object sender, ItemsChangedEventArgs e)

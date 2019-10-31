@@ -109,8 +109,6 @@ namespace Designer
             {
                 ActiveTool.HandleKeyDown(e);
             }
-
-            e.Handled = true;
         }
 
         public void NotifySelectedItemsChanged(IList<DesignerItem> items)
