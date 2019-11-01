@@ -751,7 +751,7 @@ namespace Designer
                 return;
 
             page.Items.Remove(block);
-            block.AssociatedItem.Dispose();
+            ((IDisposable)block.AssociatedItem).Dispose();
         }
 
         private void OnPageCanvasItemsDeleted(object sender, ItemsChangedEventArgs e)

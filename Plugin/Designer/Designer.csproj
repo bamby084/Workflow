@@ -163,10 +163,15 @@
     <Compile Include="Converters\UnitToStringConverter.cs" />
     <Compile Include="Converters\UnitTypeToStringConverter.cs" />
     <Compile Include="DesignerItems\Block\BlockDocument.cs" />
+    <Compile Include="DesignerItems\ISelectable.cs" />
+    <Compile Include="DesignerItems\ITreeViewItem.cs" />
     <Compile Include="DesignerItems\Table\DesignerTable.cs" />
     <Compile Include="DesignerItems\Table\DesignerTableAlignment.cs" />
     <Compile Include="DesignerItems\Table\DesignerTableManager.cs" />
-    <Compile Include="DesignerItems\Table\DesignerTablePropertiesViewModel.cs" />
+    <Compile Include="DesignerItems\Table\TableProperties.cs" />
+    <Compile Include="DesignerItems\Table\TablePropertiesView.xaml.cs">
+      <DependentUpon>TablePropertiesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DesignerTreeViewItems\BlockTreeViewItem.cs" />
     <Compile Include="DesignerTreeViewItems\DesignerTreeViewItem.cs" />
     <Compile Include="ExtensionMethods\ContextMenuExtensions.cs" />
@@ -296,6 +301,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="DesignerItems\Block\BlockPropertiesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DesignerItems\Table\TablePropertiesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

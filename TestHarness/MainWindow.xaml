@@ -23,6 +23,23 @@
                     <x:Type TypeName="designer:UnitType"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
+
+            <HierarchicalDataTemplate DataType="{x:Type local:TableTreeViewItem}" ItemsSource="{Binding Path=RowSets}">
+                <TextBlock Text="{Binding Path=Name}"/>
+            </HierarchicalDataTemplate>
+
+            <HierarchicalDataTemplate DataType="{x:Type local:RowSetTreeViewItem}" ItemsSource="{Binding Path=Rows}">
+                <TextBlock Text="{Binding Path=Name}"/>
+            </HierarchicalDataTemplate>
+
+            <HierarchicalDataTemplate DataType="{x:Type local:RowTreeViewItem}" ItemsSource="{Binding Path=Cells}">
+                <TextBlock Text="{Binding Path=Name}"/>
+            </HierarchicalDataTemplate>
+
+            <HierarchicalDataTemplate DataType="{x:Type local:CellTreeViewItem}">
+                <TextBlock Text="{Binding Path=Name}"/>
+            </HierarchicalDataTemplate>
+
         </ResourceDictionary>
     </Window.Resources>
 
@@ -54,13 +71,17 @@
                       SelectedItem="{Binding Path=SelectedUnit}"
                       ItemsSource="{Binding Source={StaticResource UnitTypeEnum}}"/>
             <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" Margin="0 5 0 0">
-                <TreeView>
+                <TreeView SelectedItemChanged="TreeView_SelectedItemChanged">
                     <TreeViewItem Name="Pages" Header="Pages">
                         <TreeViewItem Header="Page1"/>
                         <TreeViewItem Header="Page2">
                             <TreeViewItem Header="Page2.1"/>
                             <TreeViewItem Header="Page2.2"/>
                         </TreeViewItem>
+                    </TreeViewItem>
+                    <TreeViewItem Name="Table" Header="Tables" 
+                                  ItemsSource="{Binding Path=Tables, Source={x:Static designerItems:DesignerTableManager.Instance}}">
+                       
                     </TreeViewItem>
                 </TreeView>
             </Border>
@@ -93,7 +114,6 @@
                         </Table>
 
                         <Paragraph>
-                            
                             <Run>Paragraph 1</Run>
                         </Paragraph>
                         <Paragraph>

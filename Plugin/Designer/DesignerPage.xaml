@@ -1888,7 +1888,9 @@
                                 </TreeViewItem.Header>
                             </TreeViewItem>
                             -->
-                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewTables" Style="{DynamicResource treeLibraryTables}" FontSize="12" Header="Tables" IsExpanded="True" Expanded="TreeViewPS_Expanded" Collapsed="TreeViewPS_Collapsed" KeyUp="TreeViewPS_KeyUp">
+                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewTables" Style="{DynamicResource treeLibraryTables}" FontSize="12" 
+                                          Header="Tables" IsExpanded="True" Expanded="TreeViewPS_Expanded" Collapsed="TreeViewPS_Collapsed" KeyUp="TreeViewPS_KeyUp"
+                                          ItemsSource="{Binding Path=Desi}">
                             </TreeViewItem>
                             <!--
                             <TreeViewItem Name="TreeViewTables">

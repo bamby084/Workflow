@@ -22,6 +22,7 @@ namespace TestHarness
         {
             InitializeComponent();
             UnitOfMeasure.Current.UnitType = UnitType.Centimeter;
+            InitTables();
             this.DataContext = this;
 
             Tools = new ObservableCollection<DesignerTool>();
@@ -104,7 +105,7 @@ namespace TestHarness
             var block = sender as BlockTreeViewItem;
             var firstPage = Pages.Items[0] as TreeViewItem;
 
-            Canvas.RemoveItem(block.AssociatedItem);
+            Canvas.RemoveItem((DesignerItem)block.AssociatedItem);
             firstPage.Items.Remove(block);
         }
 
@@ -138,5 +139,98 @@ namespace TestHarness
                 UnitOfMeasure.Current.UnitType = value;
             }
         }
+
+
+        private void InitTables()
+        {
+            Tables = new ObservableCollection<TableTreeViewItem>();
+            var table1 = new TableTreeViewItem();
+            table1.Name = "Table 1";
+            table1.RowSets.Add(new RowSetTreeViewItem() { Name = "Header RowSet" });
+            table1.RowSets.Add(new RowSetTreeViewItem() { Name = "Body RowSet" });
+
+            table1.RowSets[0].Rows.Add(new RowTreeViewItem() { Name = "Row 1" });
+            table1.RowSets[0].Rows.Add(new RowTreeViewItem() { Name = "Row 2" });
+            table1.RowSets[0].Rows.Add(new RowTreeViewItem() { Name = "Row 3" });
+            table1.RowSets[0].Rows[0].Cells.Add(new CellTreeViewItem() { Name = "Cell 1" });
+            table1.RowSets[0].Rows[0].Cells.Add(new CellTreeViewItem() { Name = "Cell 2" });
+            table1.RowSets[0].Rows[0].Cells.Add(new CellTreeViewItem() { Name = "Cell 3" });
+            table1.RowSets[0].Rows[1].Cells.Add(new CellTreeViewItem() { Name = "Cell 4" });
+            table1.RowSets[0].Rows[1].Cells.Add(new CellTreeViewItem() { Name = "Cell 5" });
+            table1.RowSets[0].Rows[1].Cells.Add(new CellTreeViewItem() { Name = "Cell 6" });
+
+            var table2 = new TableTreeViewItem();
+            table2.Name = "Table 2";
+            table2.RowSets.Add(new RowSetTreeViewItem() { Name = "Header RowSet" });
+            table2.RowSets.Add(new RowSetTreeViewItem() { Name = "Body RowSet" });
+
+            table2.RowSets[0].Rows.Add(new RowTreeViewItem() { Name = "Row 4" });
+            table2.RowSets[0].Rows.Add(new RowTreeViewItem() { Name = "Row 5" });
+            table2.RowSets[0].Rows.Add(new RowTreeViewItem() { Name = "Row 6" });
+            table2.RowSets[0].Rows[0].Cells.Add(new CellTreeViewItem() { Name = "Cell 1" });
+            table2.RowSets[0].Rows[0].Cells.Add(new CellTreeViewItem() { Name = "Cell 2" });
+            table2.RowSets[0].Rows[0].Cells.Add(new CellTreeViewItem() { Name = "Cell 3" });
+            table2.RowSets[0].Rows[1].Cells.Add(new CellTreeViewItem() { Name = "Cell 4" });
+            table2.RowSets[0].Rows[1].Cells.Add(new CellTreeViewItem() { Name = "Cell 5" });
+            table2.RowSets[0].Rows[1].Cells.Add(new CellTreeViewItem() { Name = "Cell 6" });
+
+            Tables.Add(table1);
+            Tables.Add(table2);
+        }
+
+        public ObservableCollection<TableTreeViewItem> Tables
+        {
+            get; set;
+        }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if(e.NewValue is DesignerTable table)
+            {
+                SelectedControlProperties = table.Properties;
+            }
+        }
     }
+
+    public class TableTreeViewItem
+    {
+        public string Name { get; set; }
+        public string Icon { get; set; }
+        public ObservableCollection<RowSetTreeViewItem> RowSets { get; set; }
+
+        public TableTreeViewItem()
+        {
+            RowSets = new ObservableCollection<RowSetTreeViewItem>();
+        }
+    }
+
+    public class RowSetTreeViewItem
+    {
+        public string Name { get; set; }
+        public string Icon { get; set; }
+
+        public ObservableCollection<RowTreeViewItem> Rows { get; set; }
+
+        public RowSetTreeViewItem()
+        {
+            Rows = new ObservableCollection<RowTreeViewItem>();
+        }
+    }
+
+    public class RowTreeViewItem
+    {
+        public string Name { get; set; }
+        public ObservableCollection<CellTreeViewItem> Cells { get; set; }
+
+        public RowTreeViewItem()
+        {
+            Cells = new ObservableCollection<CellTreeViewItem>();
+        }
+    }
+
+    public class CellTreeViewItem
+    {
+        public string Name { get; set; }
+    }
+
 }

@@ -53,19 +53,25 @@ namespace Designer.DesignerItems
 
             Paragraph container = Editor.GetNearestParagraphFromCurrentCaret(LogicalDirection.Forward);
             if (container == null)
-            {
                 Editor.Document.Blocks.Add(table);
-                return;
+            else
+            {
+                try
+                {
+                    Editor.Document.Blocks.InsertAfter(container, table);
+                }
+                catch
+                {
+                    var figure = new Figure(table)
+                    {
+                        Margin = new Thickness(0),
+                        Padding = new Thickness(0)
+                    };
+                    container.Inlines.Add(figure);
+                }
             }
 
-            var figure = new Figure(table)
-            {
-                Margin = new Thickness(0),
-                Padding = new Thickness(0)
-            };
-            container.Inlines.Add(figure);
-
-            DesignerTableManager.Instance.NotifyTableAdded(table);
+            DesignerTableManager.Instance.AddTable(table);
         }
 
         private void OnContextMenuOpened(object sender, RoutedEventArgs routedEventArgs)

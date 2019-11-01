@@ -29,4 +29,16 @@
         </Style.Triggers>
     </Style>
 
+    <HierarchicalDataTemplate DataType="{x:Type designerItems:DesignerTable}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="0"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Image Source="{Binding Path=Image}" Grid.Column="0"/>
+            <TextBlock Text="{Binding Path=Properties.Name}" Grid.Column="2"/>
+        </Grid>
+    </HierarchicalDataTemplate>
 </ResourceDictionary>

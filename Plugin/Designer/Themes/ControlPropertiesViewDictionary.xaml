@@ -4,4 +4,8 @@
     <DataTemplate DataType="{x:Type designerItems:BlockProperties}">
         <designerItems:BlockPropertiesView/>
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type designerItems:TableProperties}">
+        <designerItems:TablePropertiesView/>
+    </DataTemplate>
 </ResourceDictionary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 
 namespace Designer.DesignerItems
 {
@@ -17,14 +18,19 @@ namespace Designer.DesignerItems
         private static object _lockObject = new object();
         private static DesignerTableManager _designerTableManager;
 
+        public ObservableCollection<DesignerTable> Tables { get; set; }
+
         private DesignerTableManager()
         {
-            
+            Tables = new ObservableCollection<DesignerTable>();
         }
 
-        public void NotifyTableAdded(DesignerTable table)
+        public void AddTable(DesignerTable table, bool fireEvent = true)
         {
-            TableAdded?.Invoke(this, new DesignerTableEventArgs() { Table = table });
+            Tables.Add(table);
+
+            if (TableAdded != null && fireEvent)
+                TableAdded(this, new DesignerTableEventArgs() { Table = table });
         }
 
         public void NotifyTableRemove(DesignerTable table)

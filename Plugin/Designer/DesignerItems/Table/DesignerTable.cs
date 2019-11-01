@@ -5,25 +5,71 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace Designer.DesignerItems
 {
-    public class DesignerTable: Table
+    public class DesignerTable: Table, ISelectable, IDisposable, ITreeViewItem
     {
+        private static readonly object LockObject = new object();
+        private static int CurrentIndex;
+
         public event EventHandler SelectedCellChange;
         private ContextMenu SingleCellContextMenu { get; set; }
         private ContextMenu MultipleCellsContextMenu { get; set; }
         private ContextMenu CellContextMenu => SelectedCells.Count == 1 ? SingleCellContextMenu : MultipleCellsContextMenu;
 
+        public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(
+           "IsSelected",
+           typeof(bool),
+           typeof(DesignerTable),
+           new FrameworkPropertyMetadata(false)
+           );
+
+        public static readonly DependencyProperty IsSelectableProperty = DependencyProperty.Register(
+           "IsSelectable",
+           typeof(bool),
+           typeof(DesignerTable),
+           new FrameworkPropertyMetadata(true)
+           );
+
+        public bool IsSelected
+        {
+            get => (bool)GetValue(IsSelectedProperty);
+            set => SetValue(IsSelectedProperty, value);
+        }
+
+        public bool IsSelectable
+        {
+            get => (bool)GetValue(IsSelectableProperty);
+            set => SetValue(IsSelectableProperty, value);
+        }
+
+        public virtual void Dispose()
+        {
+
+        }
+
         public DesignerTable()
         {
             SelectedCells = new List<DesignerTableCell>();
-            Properties = new DesignerTablePropertiesViewModel();
+            Properties = new TableProperties();
+
+            Properties.Name = $"Table {GetNextIndex()}";
         }
 
         public List<DesignerTableCell> SelectedCells { get; }
 
-        public DesignerTablePropertiesViewModel Properties { get; set; }
+        public TableProperties Properties { get; set; }
+
+        public ImageSource Image
+        {
+            get
+            {
+                return null;
+            }
+        }
 
         public void Build()
         {
@@ -225,6 +271,15 @@ namespace Designer.DesignerItems
             }
 
             return true;
+        }
+
+        private int GetNextIndex()
+        {
+            lock (LockObject)
+            {
+                CurrentIndex++;
+                return CurrentIndex;
+            }
         }
     }
 

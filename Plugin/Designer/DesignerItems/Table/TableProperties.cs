@@ -1,7 +1,7 @@
 ﻿
 namespace Designer.DesignerItems
 {
-    public class DesignerTablePropertiesViewModel: ControlPropertiesViewModel
+    public class TableProperties: ControlPropertiesViewModel
     {
         public int Columns { get; set; }
         public int HeaderRows { get; set; }
