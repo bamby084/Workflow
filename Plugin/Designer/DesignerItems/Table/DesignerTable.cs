@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using GridLengthConverter = Designer.Converters.GridLengthConverter;
 
 namespace Designer.DesignerItems
 {
-    public class DesignerTable: Table, ISelectable, IDisposable, ITreeViewItem
+    public class DesignerTable: Table, ISelectable, IDisposable
     {
         private static readonly object LockObject = new object();
         private static int CurrentIndex;
@@ -63,25 +63,41 @@ namespace Designer.DesignerItems
 
         public TableProperties Properties { get; set; }
 
-        public ImageSource Image
-        {
-            get
-            {
-                return null;
-            }
-        }
-
-        public void Build()
+        public void Build(int columnCount, int headerRowCount, int bodyRowCount, int footerRowCount)
         {
             CreateContextMenus();
-            var headerGroup = CreateRowGroup(Properties.HeaderRows, Properties.Columns);
+            CreateColumns(columnCount);
+            
+            var headerGroup = CreateRowGroup(headerRowCount, columnCount);
             this.RowGroups.Add(headerGroup);
 
-            var bodyGroup = CreateRowGroup(Properties.BodyRows, Properties.Columns);
+            var bodyGroup = CreateRowGroup(bodyRowCount, columnCount);
             this.RowGroups.Add(bodyGroup);
 
-            var footerGroup = CreateRowGroup(Properties.FooterRows, Properties.Columns);
+            var footerGroup = CreateRowGroup(footerRowCount, columnCount);
             this.RowGroups.Add(footerGroup);
+        }
+
+        private void CreateColumns(int columnCount)
+        {
+            double defaultColumnWidthPercentage = 1.0 / columnCount;
+
+            for (int i = 0; i < columnCount; i++)
+            {
+                var column = new TableColumn();
+                var columnDefition = new ColumnDefinition();
+                columnDefition.Width = defaultColumnWidthPercentage;
+
+                var widthBinding = new Binding("Width");
+                widthBinding.Source = columnDefition;
+                widthBinding.Mode = BindingMode.TwoWay;
+                widthBinding.Converter = new GridLengthConverter();
+                widthBinding.ConverterParameter = GridUnitType.Star;
+                column.SetBinding(TableColumn.WidthProperty, widthBinding);
+
+                this.Properties.AddColumnDefition(columnDefition);
+                this.Columns.Add(column);
+            }
         }
 
         private TableRowGroup CreateRowGroup(int rows, int columns)

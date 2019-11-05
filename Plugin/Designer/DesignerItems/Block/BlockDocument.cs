@@ -11,13 +11,13 @@ namespace Designer.DesignerItems
         {
         }
 
-        public Paragraph GetNearestParagraphFromCurrentCaret(LogicalDirection direction)
+        public Paragraph GetCaretContainer(LogicalDirection direction)
         {
             FrameworkContentElement obj = CaretPosition.GetAdjacentElement(direction) as FrameworkContentElement;
             while (obj != null)
             {
-                if (obj is Paragraph paragraph)
-                    return paragraph;
+                if (obj is Paragraph container)
+                    return container;
 
                 obj = obj.Parent as FrameworkContentElement;
             }
