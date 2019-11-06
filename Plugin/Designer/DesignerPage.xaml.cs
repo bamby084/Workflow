@@ -1619,18 +1619,17 @@ namespace Designer
         {
             FontList = new Dictionary<string, TypographicFontFamily>();
             FontPath = new Dictionary<string, string>();
-            var fonts = TypographicFontFamily.InstalledFamilies;
-            foreach (var font in fonts)
-            {
-                if (font.Name.Equals("Arial"))
-                {
-                    FontList.Add(font.Name, font);
-                    FontPath.Add(font.Name, (font.Fonts[0].FileName));
-                    break;
-                }
-            }
-
-
+            //var fonts = TypographicFontFamily.InstalledFamilies;
+            //foreach (var font in fonts)
+            //{
+            //    if (font.Name.Equals("Arial"))
+            //    {
+            //        FontList.Add(font.Name, font);
+            //        FontPath.Add(font.Name, (font.Fonts[0].FileName));
+            //        break;
+            //    }
+            //}
+           
             RefreshFontComboBox();
 
             cmbFontSize.Items.Add("8");

@@ -161,6 +161,7 @@
     <Compile Include="Converters\PixelToMeterConverter.cs" />
     <Compile Include="Converters\PixelToMillimeterConverter.cs" />
     <Compile Include="Converters\PixelToPointConverter.cs" />
+    <Compile Include="Converters\ThicknessBindingConverter.cs" />
     <Compile Include="Converters\UnitConverter.cs" />
     <Compile Include="Converters\UnitToDecimalConverter.cs" />
     <Compile Include="Converters\UnitToStringConverter.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="DesignerItems\ISelectable.cs" />
     <Compile Include="DesignerItems\Table\DesignerTable.cs" />
     <Compile Include="DesignerItems\Table\DesignerTableAlignment.cs" />
+    <Compile Include="DesignerItems\Table\DesignerTableContainer.cs" />
     <Compile Include="DesignerItems\Table\DesignerTableManager.cs" />
     <Compile Include="DesignerItems\Table\TableProperties.cs" />
     <Compile Include="DesignerItems\Table\TablePropertiesView.xaml.cs">

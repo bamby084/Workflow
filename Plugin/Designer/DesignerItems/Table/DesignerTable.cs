@@ -67,7 +67,8 @@ namespace Designer.DesignerItems
         {
             CreateContextMenus();
             CreateColumns(columnCount);
-            
+            SetSpacings();
+
             var headerGroup = CreateRowGroup(headerRowCount, columnCount);
             this.RowGroups.Add(headerGroup);
 
@@ -85,20 +86,34 @@ namespace Designer.DesignerItems
             for (int i = 0; i < columnCount; i++)
             {
                 var column = new TableColumn();
-                var columnDefition = new ColumnDefinition();
+                var columnDefition = new TableColumnDefinition();
                 columnDefition.Width = defaultColumnWidthPercentage;
+                
 
                 var widthBinding = new Binding("Width");
+                //widthBinding.Mode = BindingMode.TwoWay;
                 widthBinding.Source = columnDefition;
-                widthBinding.Mode = BindingMode.TwoWay;
                 widthBinding.Converter = new GridLengthConverter();
                 widthBinding.ConverterParameter = GridUnitType.Star;
-                column.SetBinding(TableColumn.WidthProperty, widthBinding);
 
+                column.SetBinding(TableColumn.WidthProperty, widthBinding);
                 this.Properties.AddColumnDefition(columnDefition);
                 this.Columns.Add(column);
+                
+                //var properties = column.GetLocalValueEnumerator();
+                //while (properties.MoveNext())
+                //{
+                //    LocalValueEntry propertyEntry = properties.Current;
+                //    TableColumn newTableColumn = new TableColumn();
+                //    if (!propertyEntry.Property.ReadOnly)
+                //    {                        
+                //        newTableColumn.SetValue(propertyEntry.Property, propertyEntry.Value);
+                //    }
+                //}
             }
         }
+
+      
 
         private TableRowGroup CreateRowGroup(int rows, int columns)
         {
@@ -131,7 +146,7 @@ namespace Designer.DesignerItems
                 {
                     ParentRow = row,
                     ColumnIndex = i,
-                    RowIndex = row.Index
+                    RowIndex = row.Index,
                 };
 
                 cell.PreviewMouseLeftButtonDown += OnCellLeftMouseDown;
@@ -296,6 +311,14 @@ namespace Designer.DesignerItems
                 CurrentIndex++;
                 return CurrentIndex;
             }
+        }
+
+        private void SetSpacings()
+        {
+            var cellSpacingBinding = new Binding("CellSpacing");
+            cellSpacingBinding.Source = Properties;
+            cellSpacingBinding.Mode = BindingMode.TwoWay;
+            this.SetBinding(CellSpacingProperty, cellSpacingBinding);
         }
     }
 

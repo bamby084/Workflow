@@ -9,7 +9,8 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:designerItems="clr-namespace:Designer.DesignerItems;assembly=Designer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="825">
+        WindowStartupLocation="CenterScreen"
+        Title="MainWindow" Height="550" Width="825">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

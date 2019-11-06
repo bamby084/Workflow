@@ -3,6 +3,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace Designer.DesignerItems
 {
@@ -10,9 +11,10 @@ namespace Designer.DesignerItems
     {
         public TableProperties()
         {
-            _columnDefinitions = new ObservableCollection<ColumnDefinition>();
+            _columnDefinitions = new ObservableCollection<TableColumnDefinition>();
         }
 
+        #region General
         private double _widthPercentage = 100.0;
         public double WidthPercentage
         {
@@ -41,8 +43,8 @@ namespace Designer.DesignerItems
             }
         }
 
-        private ObservableCollection<ColumnDefinition> _columnDefinitions;
-        public ObservableCollection<ColumnDefinition> ColumnDefinitions
+        private ObservableCollection<TableColumnDefinition> _columnDefinitions;
+        public ObservableCollection<TableColumnDefinition> ColumnDefinitions
         {
             get => _columnDefinitions;
             set
@@ -68,8 +70,81 @@ namespace Designer.DesignerItems
                 }
             }
         }
+        #endregion
 
-        public void AddColumnDefition(ColumnDefinition column)
+        #region Spacing
+        private double _cellSpacing = 2;
+        public double CellSpacing
+        {
+            get => _cellSpacing;
+            set
+            {
+                if (value != _cellSpacing)
+                {
+                    _cellSpacing = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        
+        private double _spaceLeft;
+        public double SpaceLeft
+        {
+            get => _spaceLeft;
+            set
+            {
+                if (value != _spaceLeft)
+                {
+                    _spaceLeft = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private double _spaceTop;
+        public double SpaceTop
+        {
+            get => _spaceTop;
+            set
+            {
+                if (value != _spaceTop)
+                {
+                    _spaceTop = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private double _spaceRight;
+        public double SpaceRight
+        {
+            get => _spaceRight;
+            set
+            {
+                if (value != _spaceRight)
+                {
+                    _spaceRight = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private double _spaceBottom;
+        public double SpaceBottom
+        {
+            get => _spaceBottom;
+            set
+            {
+                if (value != _spaceBottom)
+                {
+                    _spaceBottom = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
+        public void AddColumnDefition(TableColumnDefinition column)
         {
             column.PropertyChanged += OnColumnPropertyChanged;
             ColumnDefinitions.Add(column);
@@ -77,7 +152,7 @@ namespace Designer.DesignerItems
 
         private void OnColumnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ColumnDefinition.Width))
+            if (e.PropertyName == nameof(TableColumnDefinition.Width))
             {
                 double remainingWidth = 1;
                 int index;
@@ -107,7 +182,7 @@ namespace Designer.DesignerItems
         }
     }
 
-    public class ColumnDefinition: INotifyPropertyChanged
+    public class TableColumnDefinition:  INotifyPropertyChanged
     {
         private double _width;
         public double Width

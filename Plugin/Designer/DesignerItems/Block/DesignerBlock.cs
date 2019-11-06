@@ -13,8 +13,7 @@ namespace Designer.DesignerItems
         private static readonly object LockObject = new object();
         private static int CurrentIndex;
         private ControlPropertiesViewModel _properties;
-        private ContextMenu _contextMenu;
-
+        
         public BlockDocument Editor { get; set; }
 
         static DesignerBlock()
@@ -55,35 +54,12 @@ namespace Designer.DesignerItems
                 Editor.Document.Blocks.Add(table);
             else
             {
-                var figure = new Figure(table)
-                {
-                    Margin = new Thickness(0),
-                    Padding = new Thickness(0),
-                };
-
-                var alignmentBinding = new Binding("Properties.Alignment");
-                alignmentBinding.Source = table;
-                alignmentBinding.Converter = new FigureHorizontalAnchorConverter();
-                alignmentBinding.Mode = BindingMode.TwoWay;
-                figure.SetBinding(Figure.HorizontalAnchorProperty, alignmentBinding);
-
-                var widthBinding = new Binding("Properties.WidthPercentage");
-                widthBinding.Converter = new FigureLengthConverter();
-                widthBinding.ConverterParameter = FigureUnitType.Page;
-                widthBinding.Source = table;
-                widthBinding.Mode = BindingMode.TwoWay;
-                figure.SetBinding(Figure.WidthProperty, widthBinding);
-                
-                //foreach(var column in table.Columns)
-                //{
-                //    var binding = new Binding("");
-                //    binding.Source = table;
-                //}
-
-
-                container.Inlines.Add(figure);
+                var tableContainer = new DesignerTableContainer(table);
+                container.Inlines.Add(tableContainer);
+                Editor.IsUndoEnabled = false;
+                Editor.IsUndoEnabled = true;
             }
-
+            
             DesignerTableManager.Instance.AddTable(table);
         }
 

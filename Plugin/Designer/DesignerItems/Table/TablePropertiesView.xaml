@@ -68,7 +68,8 @@
                     <CheckBox Grid.Column="0" Grid.Row="4" IsChecked="True">Percent Width</CheckBox>
                     <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="4" Grid.Column="2" FormatString="F2" 
                         Increment="10" Maximum="100" Minimum="10" Value="{Binding Path=WidthPercentage, Mode=TwoWay}" />
-
+                    <Label Grid.Column="3" Grid.Row="4">%</Label>
+                    
                     <CheckBox Grid.Column="0" Grid.Row="5" IsChecked="True">Min Width</CheckBox>
                     <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="5" Grid.Column="2" FormatString="F2" 
                         Increment="0.1" Value="{Binding Path=MinWidth, Mode=TwoWay}" Minimum="0.1"/>
@@ -77,6 +78,7 @@
                         Converter={StaticResource UnitTypeToStringConverter}}"/>
                 </Grid>
             </TabItem>
+            
             <TabItem Header="Columns" x:Name="TabColumns">
                 <DataGrid ItemsSource="{Binding Path=ColumnDefinitions}" AutoGenerateColumns="False"
                           VerticalGridLinesBrush="{StaticResource GridLineBrush}" 
@@ -111,7 +113,59 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
+            
             <TabItem Header="Spacing" x:Name="TabSpacing">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Content="Cell Spacing:" Grid.Row="0" Grid.Column="0"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="0" Grid.Column="1" FormatString="F2" Increment="0.1" Minimum="0">
+                        <xceed:PropertyGridEditorDecimalUpDown.Value>
+                            <MultiBinding Converter="{StaticResource UnitConverter}" Mode="TwoWay">
+                                <Binding Path="CellSpacing"/>
+                                <Binding Source="{x:Static designer:UnitOfMeasure.Current}" Path="UnitType"/>
+                            </MultiBinding>
+                        </xceed:PropertyGridEditorDecimalUpDown.Value>
+                    </xceed:PropertyGridEditorDecimalUpDown>
+                    <Label Grid.Row="0" Grid.Column="2" Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType, 
+                        Converter={StaticResource UnitTypeToStringConverter}}"/>
+
+                    <Label Content="Space Left:" Grid.Row="1" Grid.Column="0"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="1" Grid.Column="1" FormatString="F2" 
+                        Increment="0.1" Minimum="0" Value="{Binding Path=SpaceLeft, Mode=TwoWay}" />
+                    <Label Grid.Row="1" Grid.Column="2" Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType, 
+                        Converter={StaticResource UnitTypeToStringConverter}}"/>
+
+                    <Label Content="Space Top:" Grid.Row="2" Grid.Column="0"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="2" Grid.Column="1" FormatString="F2" 
+                        Increment="0.1" Minimum="0" Value="{Binding Path=SpaceTop, Mode=TwoWay}" />
+                    <Label Grid.Row="2" Grid.Column="2" Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType, 
+                        Converter={StaticResource UnitTypeToStringConverter}}"/>
+
+                    <Label Content="Space Right:" Grid.Row="3" Grid.Column="0"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="3" Grid.Column="1" FormatString="F2" 
+                        Increment="0.1" Minimum="0" Value="{Binding Path=SpaceRight, Mode=TwoWay}" />
+                    <Label Grid.Row="3" Grid.Column="2" Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType, 
+                        Converter={StaticResource UnitTypeToStringConverter}}"/>
+
+                    <Label Content="Space Bottom:" Grid.Row="4" Grid.Column="0"/>
+                    <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="4" Grid.Column="1" FormatString="F2" 
+                        Increment="0.1" Minimum="0" Value="{Binding Path=SpaceBottom, Mode=TwoWay}" />
+                    <Label Grid.Row="4" Grid.Column="2" Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType,
+                        Converter={StaticResource UnitTypeToStringConverter}}"/>
+                </Grid>
             </TabItem>
         </TabControl>
 
