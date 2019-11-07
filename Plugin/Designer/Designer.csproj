@@ -152,9 +152,11 @@
       <DependentUpon>BorderStylePropertiesPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="ControlPropertiesViewModel.cs" />
+    <Compile Include="Converters\BoolToThicknessConverter.cs" />
     <Compile Include="Converters\FigureHorizontalAnchorConverter.cs" />
     <Compile Include="Converters\FigureLengthConverter.cs" />
     <Compile Include="Converters\GridLengthConverter.cs" />
+    <Compile Include="Converters\IncreaseIntegerConverter.cs" />
     <Compile Include="Converters\PercentageConverter.cs" />
     <Compile Include="Converters\PixelToCentimeterConverter.cs" />
     <Compile Include="Converters\PixelToInchConverter.cs" />
@@ -240,7 +242,6 @@
       <DependentUpon>InsertTableWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="IControlPropertyProvider.cs" />
-    <Compile Include="ISelectable.cs" />
     <Compile Include="LineStyle.cs" />
     <Compile Include="LineStylePropertiesPanel.xaml.cs">
       <DependentUpon>LineStylePropertiesPanel.xaml</DependentUpon>
@@ -499,6 +500,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\rowset.png" />
     <Resource Include="res\icons\linkicon.png" />
   </ItemGroup>
   <ItemGroup>
@@ -605,7 +607,11 @@
       <Name>JdSuite.Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\table.png" />
+    <Resource Include="Resources\table_cell.png" />
+    <Resource Include="Resources\table_row.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Toolbar\select.png" />
   </ItemGroup>
@@ -614,6 +620,14 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Toolbar\cursor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\add_table.png" />
+    <Resource Include="Resources\category.png" />
+    <Resource Include="Resources\delete_table.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\refresh_table.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

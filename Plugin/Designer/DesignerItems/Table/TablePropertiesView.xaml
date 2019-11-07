@@ -143,26 +143,50 @@
                         Converter={StaticResource UnitTypeToStringConverter}}"/>
 
                     <Label Content="Space Left:" Grid.Row="1" Grid.Column="0"/>
-                    <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="1" Grid.Column="1" FormatString="F2" 
-                        Increment="0.1" Minimum="0" Value="{Binding Path=SpaceLeft, Mode=TwoWay}" />
+                    <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="1" Grid.Column="1" FormatString="F2" Increment="0.1" Minimum="0">
+                        <xceed:PropertyGridEditorDecimalUpDown.Value>
+                            <MultiBinding Converter="{StaticResource UnitConverter}" Mode="TwoWay">
+                                <Binding Path="SpaceLeft"/>
+                                <Binding Source="{x:Static designer:UnitOfMeasure.Current}" Path="UnitType"/>
+                            </MultiBinding>
+                        </xceed:PropertyGridEditorDecimalUpDown.Value>
+                    </xceed:PropertyGridEditorDecimalUpDown>
                     <Label Grid.Row="1" Grid.Column="2" Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType, 
                         Converter={StaticResource UnitTypeToStringConverter}}"/>
 
                     <Label Content="Space Top:" Grid.Row="2" Grid.Column="0"/>
-                    <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="2" Grid.Column="1" FormatString="F2" 
-                        Increment="0.1" Minimum="0" Value="{Binding Path=SpaceTop, Mode=TwoWay}" />
+                    <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="2" Grid.Column="1" FormatString="F2" Increment="0.1" Minimum="0">
+                        <xceed:PropertyGridEditorDecimalUpDown.Value>
+                            <MultiBinding Converter="{StaticResource UnitConverter}" Mode="TwoWay">
+                                <Binding Path="SpaceTop"/>
+                                <Binding Source="{x:Static designer:UnitOfMeasure.Current}" Path="UnitType"/>
+                            </MultiBinding>
+                        </xceed:PropertyGridEditorDecimalUpDown.Value>
+                    </xceed:PropertyGridEditorDecimalUpDown>
                     <Label Grid.Row="2" Grid.Column="2" Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType, 
                         Converter={StaticResource UnitTypeToStringConverter}}"/>
 
                     <Label Content="Space Right:" Grid.Row="3" Grid.Column="0"/>
-                    <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="3" Grid.Column="1" FormatString="F2" 
-                        Increment="0.1" Minimum="0" Value="{Binding Path=SpaceRight, Mode=TwoWay}" />
+                    <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="3" Grid.Column="1" FormatString="F2" Increment="0.1" Minimum="0">
+                        <xceed:PropertyGridEditorDecimalUpDown.Value>
+                            <MultiBinding Converter="{StaticResource UnitConverter}" Mode="TwoWay">
+                                <Binding Path="SpaceRight"/>
+                                <Binding Source="{x:Static designer:UnitOfMeasure.Current}" Path="UnitType"/>
+                            </MultiBinding>
+                        </xceed:PropertyGridEditorDecimalUpDown.Value>
+                    </xceed:PropertyGridEditorDecimalUpDown>
                     <Label Grid.Row="3" Grid.Column="2" Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType, 
                         Converter={StaticResource UnitTypeToStringConverter}}"/>
 
                     <Label Content="Space Bottom:" Grid.Row="4" Grid.Column="0"/>
-                    <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="4" Grid.Column="1" FormatString="F2" 
-                        Increment="0.1" Minimum="0" Value="{Binding Path=SpaceBottom, Mode=TwoWay}" />
+                    <xceed:PropertyGridEditorDecimalUpDown Margin="0, 2" Grid.Row="4" Grid.Column="1" FormatString="F2" Increment="0.1" Minimum="0">
+                        <xceed:PropertyGridEditorDecimalUpDown.Value>
+                            <MultiBinding Converter="{StaticResource UnitConverter}" Mode="TwoWay">
+                                <Binding Path="SpaceBottom"/>
+                                <Binding Source="{x:Static designer:UnitOfMeasure.Current}" Path="UnitType"/>
+                            </MultiBinding>
+                        </xceed:PropertyGridEditorDecimalUpDown.Value>
+                    </xceed:PropertyGridEditorDecimalUpDown>
                     <Label Grid.Row="4" Grid.Column="2" Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType,
                         Converter={StaticResource UnitTypeToStringConverter}}"/>
                 </Grid>

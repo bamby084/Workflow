@@ -6,11 +6,13 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using GridLengthConverter = Designer.Converters.GridLengthConverter;
 
 namespace Designer.DesignerItems
 {
-    public class DesignerTable: Table, ISelectable, IDisposable
+    public class DesignerTable: Table, ISelectable, IDisposable, IControlPropertyProvider
     {
         private static readonly object LockObject = new object();
         private static int CurrentIndex;
@@ -55,28 +57,26 @@ namespace Designer.DesignerItems
         {
             SelectedCells = new List<DesignerTableCell>();
             Properties = new TableProperties();
-
             Properties.Name = $"Table {GetNextIndex()}";
         }
 
         public List<DesignerTableCell> SelectedCells { get; }
 
-        public TableProperties Properties { get; set; }
+        public ControlPropertiesViewModel Properties { get; private set; }
+
+        public ImageSource Image
+        {
+            get => new BitmapImage(new Uri("pack://application:,,,/Designer;component/Resources/table.png"));
+        }
 
         public void Build(int columnCount, int headerRowCount, int bodyRowCount, int footerRowCount)
         {
             CreateContextMenus();
+            SetCellSpacing();
+            BindIsSelected();
+
             CreateColumns(columnCount);
-            SetSpacings();
-
-            var headerGroup = CreateRowGroup(headerRowCount, columnCount);
-            this.RowGroups.Add(headerGroup);
-
-            var bodyGroup = CreateRowGroup(bodyRowCount, columnCount);
-            this.RowGroups.Add(bodyGroup);
-
-            var footerGroup = CreateRowGroup(footerRowCount, columnCount);
-            this.RowGroups.Add(footerGroup);
+            CreateRows(columnCount, headerRowCount, bodyRowCount, footerRowCount);
         }
 
         private void CreateColumns(int columnCount)
@@ -88,41 +88,41 @@ namespace Designer.DesignerItems
                 var column = new TableColumn();
                 var columnDefition = new TableColumnDefinition();
                 columnDefition.Width = defaultColumnWidthPercentage;
-                
 
                 var widthBinding = new Binding("Width");
-                //widthBinding.Mode = BindingMode.TwoWay;
                 widthBinding.Source = columnDefition;
                 widthBinding.Converter = new GridLengthConverter();
                 widthBinding.ConverterParameter = GridUnitType.Star;
-
                 column.SetBinding(TableColumn.WidthProperty, widthBinding);
-                this.Properties.AddColumnDefition(columnDefition);
+
+                ((TableProperties)Properties).AddColumnDefition(columnDefition);
                 this.Columns.Add(column);
-                
-                //var properties = column.GetLocalValueEnumerator();
-                //while (properties.MoveNext())
-                //{
-                //    LocalValueEntry propertyEntry = properties.Current;
-                //    TableColumn newTableColumn = new TableColumn();
-                //    if (!propertyEntry.Property.ReadOnly)
-                //    {                        
-                //        newTableColumn.SetValue(propertyEntry.Property, propertyEntry.Value);
-                //    }
-                //}
             }
         }
 
-      
-
-        private TableRowGroup CreateRowGroup(int rows, int columns)
+        private void CreateRows(int columnCount, int headerRowCount, int bodyRowCount, int footerRowCount)
         {
+            var headerGroup = CreateRowGroup(headerRowCount, columnCount);
+            headerGroup.Header = "RowSet Header";
+            this.RowGroups.Add(headerGroup);
+
+            var bodyGroup = CreateRowGroup(bodyRowCount, columnCount);
+            bodyGroup.Header = "RowSet Body";
+            this.RowGroups.Add(bodyGroup);
+
+            var footerGroup = CreateRowGroup(footerRowCount, columnCount);
+            footerGroup.Header = "RowSet Footer";
+            this.RowGroups.Add(footerGroup);
+        }
+
+        private DesignerTableRowGroup CreateRowGroup(int rows, int columns)
+        {
+            var rowGroup = new DesignerTableRowGroup();
+            
             if (rows == 0)
-                return new TableRowGroup();
+                return rowGroup;
 
-            var rowGroup = new TableRowGroup();
             int index = this.GetNewRowGroupIndex();
-
             for (int i = 0; i < rows; i++)
             {
                 var row = new DesignerTableRow
@@ -313,12 +313,20 @@ namespace Designer.DesignerItems
             }
         }
 
-        private void SetSpacings()
+        private void SetCellSpacing()
         {
             var cellSpacingBinding = new Binding("CellSpacing");
             cellSpacingBinding.Source = Properties;
             cellSpacingBinding.Mode = BindingMode.TwoWay;
             this.SetBinding(CellSpacingProperty, cellSpacingBinding);
+        }
+
+        private void BindIsSelected()
+        {
+            var binding = new Binding("IsSelected");
+            binding.Source = this.Properties;
+            binding.Mode = BindingMode.TwoWay;
+            SetBinding(IsSelectedProperty, binding);
         }
     }
 
@@ -332,14 +340,24 @@ namespace Designer.DesignerItems
             get => (bool)GetValue(IsSelectedProperty);
             set => SetValue(IsSelectedProperty, value);
         }
+
         public int RowIndex { get; set; }
+
         public int ColumnIndex { get; set; }
+
         public bool IsMerged { get; set; }
+
         public DesignerTableRow ParentRow { get; set; }
+
+        public ImageSource Image
+        {
+            get => new BitmapImage(new Uri("pack://application:,,,/Designer;component/Resources/table_cell.png"));
+        }
+
+        public string Header => $"Cell {ColumnIndex + 1}";
 
         public DesignerTableCell()
         {
-            
         }
 
         public DesignerTableCell(Block item)
@@ -347,11 +365,37 @@ namespace Designer.DesignerItems
         {
             
         }
+
     }
 
     public class DesignerTableRow : TableRow
     {
+        public ImageSource Image
+        {
+            get => new BitmapImage(new Uri("pack://application:,,,/Designer;component/Resources/table_row.png"));
+        }
+
         public int Index { get; set; }
+
         public int GroupIndex { get; set; }
+
+        public string Header => $"Row {Index + 1}";
+    }
+
+    public class DesignerTableRowGroup: TableRowGroup
+    {
+        public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
+            "Header",
+            typeof(string),
+            typeof(DesignerTableRowGroup),
+            new PropertyMetadata(string.Empty));
+
+        public string Header
+        {
+            get { return (string)GetValue(HeaderProperty); }
+            set { SetValue(HeaderProperty, value); }
+        }
+
+        public ImageSource Image => new BitmapImage(new Uri("pack://application:,,,/Designer;component/Resources/rowset.png"));
     }
 }

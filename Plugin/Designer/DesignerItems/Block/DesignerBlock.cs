@@ -37,6 +37,9 @@ namespace Designer.DesignerItems
             var contextMenu = Editor.ContextMenu;
             contextMenu.Opened += OnContextMenuOpened;
             contextMenu.FindMenuItemByName("cmiInsertTable").Click += OnInsertTable;
+            contextMenu.FindMenuItemByName("cmiCut").Click += OnCut;
+            contextMenu.FindMenuItemByName("cmiCopy").Click += OnCopy;
+            contextMenu.FindMenuItemByName("cmiPaste").Click += OnPaste;
         }
 
         private void OnInsertTable(object sender, RoutedEventArgs routedEventArgs)
@@ -48,19 +51,36 @@ namespace Designer.DesignerItems
 
             var table = new DesignerTable();
             table.Build(tableDialog.Columns, tableDialog.HeaderRows, tableDialog.BodyRows, tableDialog.FooterRows);
+            var tableContainer = new DesignerTableContainer(table);
 
             var container = Editor.GetCaretContainer(LogicalDirection.Forward);
             if (container == null)
-                Editor.Document.Blocks.Add(table);
+            {
+                var paragraph = new Paragraph();
+                paragraph.Inlines.Add(tableContainer);
+                Editor.Document.Blocks.Add(paragraph);
+            }
             else
             {
-                var tableContainer = new DesignerTableContainer(table);
                 container.Inlines.Add(tableContainer);
-                Editor.IsUndoEnabled = false;
-                Editor.IsUndoEnabled = true;
             }
             
             DesignerTableManager.Instance.AddTable(table);
+        }
+
+        private void OnCut(object sender, RoutedEventArgs routedEventArgs)
+        {
+            Editor.Cut();
+        }
+
+        private void OnCopy(object sender, RoutedEventArgs routedEventArgs)
+        {
+            Editor.Copy();
+        }
+
+        private void OnPaste(object sender, RoutedEventArgs routedEventArgs)
+        {
+            Editor.Paste();
         }
 
         private void OnContextMenuOpened(object sender, RoutedEventArgs routedEventArgs)

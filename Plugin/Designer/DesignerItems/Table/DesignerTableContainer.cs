@@ -1,7 +1,11 @@
 ﻿using Designer.Converters;
+using System;
+using System.Drawing;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Media;
 using FigureLengthConverter = Designer.Converters.FigureLengthConverter;
 
 namespace Designer.DesignerItems
@@ -28,6 +32,8 @@ namespace Designer.DesignerItems
         private void Init()
         {
             Margin = new Thickness(0);
+            BorderThickness = new Thickness(1);
+            //BorderBrush = new SolidColorBrush(Colors.Purple);
             SetBindingProperties();
         }
 
@@ -51,6 +57,30 @@ namespace Designer.DesignerItems
             paddingBinding.Bindings.Add(new Binding("Properties.SpaceRight") { Source = this.Blocks.FirstBlock });
             paddingBinding.Bindings.Add(new Binding("Properties.SpaceBottom") { Source = this.Blocks.FirstBlock });
             SetBinding(PaddingProperty, paddingBinding);
+
+            var borderBrushBinding = new Binding("Properties.IsSelected");
+            borderBrushBinding.Source = this.Blocks.FirstBlock;
+            borderBrushBinding.Converter = new BoolToBorderBrushConverter();
+            SetBinding(BorderBrushProperty, borderBrushBinding);
+        }
+
+        private class BoolToBorderBrushConverter : IValueConverter
+        {
+            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                bool val = System.Convert.ToBoolean(value);
+                if (val)
+                    return new SolidColorBrush(Colors.Orange);
+
+                return new SolidColorBrush(Colors.Purple);
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                throw new NotImplementedException();
+            }
         }
     }
+
+    
 }

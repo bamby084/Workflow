@@ -140,7 +140,6 @@ namespace TestHarness
             }
         }
 
-
         private void InitTables()
         {
             Tables = new ObservableCollection<TableTreeViewItem>();
@@ -185,9 +184,23 @@ namespace TestHarness
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if(e.NewValue is DesignerTable table)
+            if(e.OldValue is ISelectable oldSelectableObject)
             {
-                SelectedControlProperties = table.Properties;
+                oldSelectableObject.IsSelected = false;
+            }
+
+            if(e.NewValue is ISelectable newSelectableObject)
+            {
+                newSelectableObject.IsSelected = true;
+            }
+
+            if(e.NewValue is IControlPropertyProvider propertyProvider)
+            {
+                SelectedControlProperties = propertyProvider.Properties;
+            }
+            else
+            {
+                SelectedControlProperties = null;
             }
         }
     }

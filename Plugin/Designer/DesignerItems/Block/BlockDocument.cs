@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Input;
+
 
 namespace Designer.DesignerItems
 {
@@ -9,6 +9,7 @@ namespace Designer.DesignerItems
     {
         public BlockDocument()
         {
+            IsUndoEnabled = false;
         }
 
         public Paragraph GetCaretContainer(LogicalDirection direction)

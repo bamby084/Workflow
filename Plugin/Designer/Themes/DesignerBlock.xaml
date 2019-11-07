@@ -21,7 +21,11 @@
                                     <Separator/>
                                     <MenuItem Header="Insert">
                                         <MenuItem Header="Flow" IsEnabled="False"/>
-                                        <MenuItem Header="Table" x:Name="cmiInsertTable"/>
+                                        <MenuItem Header="Table" x:Name="cmiInsertTable">
+                                            <MenuItem.Icon>
+                                                <Image Source="/Designer;component/Resources/add_table.png"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
                                         <MenuItem Header="Image" IsEnabled="False"/>
                                     </MenuItem>
                                 </ContextMenu>
