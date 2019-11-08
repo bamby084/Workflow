@@ -5,7 +5,7 @@ namespace Designer.DesignerItems
 {
     public class DesignerTableEventArgs : EventArgs
     {
-        public DesignerTable Table { get; set; }
+        public TableProperties Table { get; set; }
     }
 
     public delegate void DesignerTableEventHandler(object sender, DesignerTableEventArgs e);
@@ -18,22 +18,34 @@ namespace Designer.DesignerItems
         private static object _lockObject = new object();
         private static DesignerTableManager _designerTableManager;
 
-        public ObservableCollection<DesignerTable> Tables { get; set; }
+        public ObservableCollection<TableProperties> Tables { get; set; }
 
         private DesignerTableManager()
         {
-            Tables = new ObservableCollection<DesignerTable>();
+            Tables = new ObservableCollection<TableProperties>();
         }
 
-        public void AddTable(DesignerTable table, bool fireEvent = true)
+        public void AddTable(TableProperties table, bool fireEvent = true)
         {
+            table.OnDeleted += OnTableDeleted;
             Tables.Add(table);
-
+            
             if (TableAdded != null && fireEvent)
                 TableAdded(this, new DesignerTableEventArgs() { Table = table });
         }
 
-        public void NotifyTableRemove(DesignerTable table)
+        private void OnTableDeleted(object sender, EventArgs e)
+        {
+            RemoveTable((TableProperties)sender);
+        }
+
+        public void RemoveTable(TableProperties table)
+        {
+            Tables.Remove(table);
+            NotifyTableRemove(table);
+        }
+
+        public void NotifyTableRemove(TableProperties table)
         {
             TableRemoved?.Invoke(this, new DesignerTableEventArgs() { Table = table });
         }

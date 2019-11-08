@@ -2,14 +2,19 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace Designer.DesignerItems
 {
-    public class TableProperties: ControlPropertiesViewModel
+    public class TableProperties: ControlPropertiesViewModel, ISelectable, IControlPropertyProvider
     {
+        public event EventHandler OnDeleted;
         public TableProperties()
         {
             _columnDefinitions = new ObservableCollection<TableColumnDefinition>();
+            _rowSets = new ObservableCollection<RowSet>();
+
+            DeleteCommand = new RelayCommand(DeleteTable);
         }
 
         #region General
@@ -55,6 +60,20 @@ namespace Designer.DesignerItems
             }
         }
 
+        private ObservableCollection<RowSet> _rowSets;
+        public ObservableCollection<RowSet> RowSets
+        {
+            get => _rowSets;
+            set
+            {
+                if (value != _rowSets)
+                {
+                    _rowSets = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         private DesignerTableAlignment _aligment = DesignerTableAlignment.Left;
         public DesignerTableAlignment Alignment
         {
@@ -83,6 +102,21 @@ namespace Designer.DesignerItems
             }
         }
 
+        private bool _isSelectable;
+        public bool IsSelectable
+        {
+            get => _isSelectable;
+            set
+            {
+                if (value != _isSelectable)
+                {
+                    _isSelectable = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public ControlPropertiesViewModel Properties => this;
         #endregion
 
         #region Spacing
@@ -155,12 +189,56 @@ namespace Designer.DesignerItems
                 }
             }
         }
+
         #endregion
 
+        #region Methods
         public void AddColumnDefition(TableColumnDefinition column)
         {
             column.PropertyChanged += OnColumnPropertyChanged;
             ColumnDefinitions.Add(column);
+        }
+
+        public static TableProperties Build(int columnCount, int headerRowCount, int bodyRowCount, int footerRowCount)
+        {
+            var tableProperties = new TableProperties();
+            double defaultColumnWidthPercentage = 1.0 / columnCount;
+            for (int i = 0; i < columnCount; i++)
+            {
+                var columnDefition = new TableColumnDefinition();
+                columnDefition.Width = defaultColumnWidthPercentage;
+
+                tableProperties.AddColumnDefition(columnDefition);
+            }
+
+            var headerRowSet = CreateRowSet("RowSet Header", columnCount, headerRowCount);
+            tableProperties.RowSets.Add(headerRowSet);
+
+            var bodyRowSet = CreateRowSet("RowSet Body", columnCount, bodyRowCount);
+            tableProperties.RowSets.Add(bodyRowSet);
+
+            var footerRowSet = CreateRowSet("RowSet Footer", columnCount, footerRowCount);
+            tableProperties.RowSets.Add(footerRowSet);
+
+            return tableProperties;
+        }
+
+        private static RowSet CreateRowSet(string name, int columnCount, int rowCount)
+        {
+            var rowSet = new RowSet(name);
+            for (int i = 0; i < rowCount; i++)
+            {
+                var row = new Row($"Row {i + 1}");
+                for (int j = 0; j < columnCount; j++)
+                {
+                    var cell = new Cell($"Cell {j + 1}");
+                    row.Cells.Add(cell);
+                }
+
+                rowSet.Rows.Add(row);
+            }
+
+            return rowSet;
         }
 
         private void OnColumnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -193,6 +271,15 @@ namespace Designer.DesignerItems
                 }
             }
         }
+        #endregion
+
+        #region Commands
+        public ICommand DeleteCommand { get; set; }
+        private void DeleteTable(object param)
+        {
+            OnDeleted?.Invoke(this, new EventArgs());
+        }
+        #endregion
     }
 
     public class TableColumnDefinition:  INotifyPropertyChanged
@@ -231,5 +318,40 @@ namespace Designer.DesignerItems
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+
+    public class Row
+    {
+        public Row(string name)
+        {
+            Name = name;
+            Cells = new ObservableCollection<Cell>();
+        }
+
+        public string Name { get; set; }
+        public ObservableCollection<Cell> Cells { get; set; }
+    }
+
+    public class Cell
+    {
+        public Cell(string name)
+        {
+            Name = name;
+        }
+
+        public string Name { get; set; }
+    }
+
+    public class RowSet: ControlPropertiesViewModel, IControlPropertyProvider
+    {
+        public RowSet(string name)
+        {
+            Name = name;
+            Rows = new ObservableCollection<Row>();
+        }
+
+        public ObservableCollection<Row> Rows { get; set; }
+
+        public ControlPropertiesViewModel Properties => this;
     }
 }

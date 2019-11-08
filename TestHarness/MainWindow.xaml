@@ -25,7 +25,7 @@
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 
-            <HierarchicalDataTemplate DataType="{x:Type local:TableTreeViewItem}" ItemsSource="{Binding Path=RowSets}">
+            <!--<HierarchicalDataTemplate DataType="{x:Type local:TableTreeViewItem}" ItemsSource="{Binding Path=RowSets}">
                 <TextBlock Text="{Binding Path=Name}"/>
             </HierarchicalDataTemplate>
 
@@ -39,7 +39,7 @@
 
             <HierarchicalDataTemplate DataType="{x:Type local:CellTreeViewItem}">
                 <TextBlock Text="{Binding Path=Name}"/>
-            </HierarchicalDataTemplate>
+            </HierarchicalDataTemplate>-->
 
         </ResourceDictionary>
     </Window.Resources>
@@ -82,7 +82,13 @@
                     </TreeViewItem>
                     <TreeViewItem Name="Table" Header="Tables" 
                                   ItemsSource="{Binding Path=Tables, Source={x:Static designerItems:DesignerTableManager.Instance}}">
-                       
+                        <TreeViewItem.Resources>
+                            <ResourceDictionary>
+                                <ResourceDictionary.MergedDictionaries>
+                                    <ResourceDictionary Source="/Designer;component/Themes/TableHierarchicalDataTemplate.xaml"/>
+                                </ResourceDictionary.MergedDictionaries>
+                            </ResourceDictionary>
+                        </TreeViewItem.Resources>
                     </TreeViewItem>
                 </TreeView>
             </Border>

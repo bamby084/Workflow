@@ -8,4 +8,8 @@
     <DataTemplate DataType="{x:Type designerItems:TableProperties}">
         <designerItems:TablePropertiesView/>
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type designerItems:RowSet}">
+        <designerItems:RowSetPropertiesView/>
+    </DataTemplate>
 </ResourceDictionary>

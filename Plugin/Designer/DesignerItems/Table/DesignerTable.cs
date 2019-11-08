@@ -56,91 +56,68 @@ namespace Designer.DesignerItems
         public DesignerTable()
         {
             SelectedCells = new List<DesignerTableCell>();
-            Properties = new TableProperties();
-            Properties.Name = $"Table {GetNextIndex()}";
         }
 
         public List<DesignerTableCell> SelectedCells { get; }
 
         public ControlPropertiesViewModel Properties { get; private set; }
 
-        public ImageSource Image
+        public void Build(TableProperties tableProperties)
         {
-            get => new BitmapImage(new Uri("pack://application:,,,/Designer;component/Resources/table.png"));
-        }
+            tableProperties.Name = $"Table {GetNextIndex()}";
+            this.Properties = tableProperties;
 
-        public void Build(int columnCount, int headerRowCount, int bodyRowCount, int footerRowCount)
-        {
             CreateContextMenus();
             SetCellSpacing();
             BindIsSelected();
-
-            CreateColumns(columnCount);
-            CreateRows(columnCount, headerRowCount, bodyRowCount, footerRowCount);
+            CreateColumns();
+            CreateRows();
         }
 
-        private void CreateColumns(int columnCount)
+        private void CreateColumns()
         {
-            double defaultColumnWidthPercentage = 1.0 / columnCount;
-
-            for (int i = 0; i < columnCount; i++)
+            var tableProperies = (TableProperties)this.Properties;
+            foreach(var columnDef in tableProperies.ColumnDefinitions)
             {
+                var binding = new Binding("Width");
+                binding.Source = columnDef;
+                binding.Converter = new GridLengthConverter();
+                binding.ConverterParameter = GridUnitType.Star;
+
                 var column = new TableColumn();
-                var columnDefition = new TableColumnDefinition();
-                columnDefition.Width = defaultColumnWidthPercentage;
-
-                var widthBinding = new Binding("Width");
-                widthBinding.Source = columnDefition;
-                widthBinding.Converter = new GridLengthConverter();
-                widthBinding.ConverterParameter = GridUnitType.Star;
-                column.SetBinding(TableColumn.WidthProperty, widthBinding);
-
-                ((TableProperties)Properties).AddColumnDefition(columnDefition);
+                column.SetBinding(TableColumn.WidthProperty, binding);
                 this.Columns.Add(column);
             }
         }
 
-        private void CreateRows(int columnCount, int headerRowCount, int bodyRowCount, int footerRowCount)
+        private void CreateRows()
         {
-            var headerGroup = CreateRowGroup(headerRowCount, columnCount);
-            headerGroup.Header = "RowSet Header";
-            this.RowGroups.Add(headerGroup);
-
-            var bodyGroup = CreateRowGroup(bodyRowCount, columnCount);
-            bodyGroup.Header = "RowSet Body";
-            this.RowGroups.Add(bodyGroup);
-
-            var footerGroup = CreateRowGroup(footerRowCount, columnCount);
-            footerGroup.Header = "RowSet Footer";
-            this.RowGroups.Add(footerGroup);
-        }
-
-        private DesignerTableRowGroup CreateRowGroup(int rows, int columns)
-        {
-            var rowGroup = new DesignerTableRowGroup();
-            
-            if (rows == 0)
-                return rowGroup;
-
-            int index = this.GetNewRowGroupIndex();
-            for (int i = 0; i < rows; i++)
+            var tableProperties = (TableProperties)this.Properties;
+            foreach(var rowSet in tableProperties.RowSets)
             {
-                var row = new DesignerTableRow
+                var rowGroup = new TableRowGroup();
+                int index = this.GetNewRowGroupIndex();
+
+                for (int i = 0; i < rowSet.Rows.Count; i++)
                 {
-                    GroupIndex = index,
-                    Index = index + i
-                };
+                    var row = new DesignerTableRow()
+                    {
+                        GroupIndex = index,
+                        Index = index + i
+                    };
 
-                AddCells(row, columns);
-                rowGroup.Rows.Add(row);
+                    AddCells(row);
+                    rowGroup.Rows.Add(row);
+                }
+
+                this.RowGroups.Add(rowGroup);
             }
-
-            return rowGroup;
         }
 
-        private void AddCells(DesignerTableRow row, int columns)
+        private void AddCells(DesignerTableRow row)
         {
-            for (int i = 0; i < columns; i++)
+            int columnCount = ((TableProperties)Properties).ColumnDefinitions.Count;
+            for (int i = 0; i < columnCount; i++)
             {
                 var cell = new DesignerTableCell
                 {
@@ -349,13 +326,6 @@ namespace Designer.DesignerItems
 
         public DesignerTableRow ParentRow { get; set; }
 
-        public ImageSource Image
-        {
-            get => new BitmapImage(new Uri("pack://application:,,,/Designer;component/Resources/table_cell.png"));
-        }
-
-        public string Header => $"Cell {ColumnIndex + 1}";
-
         public DesignerTableCell()
         {
         }
@@ -370,32 +340,9 @@ namespace Designer.DesignerItems
 
     public class DesignerTableRow : TableRow
     {
-        public ImageSource Image
-        {
-            get => new BitmapImage(new Uri("pack://application:,,,/Designer;component/Resources/table_row.png"));
-        }
-
         public int Index { get; set; }
 
         public int GroupIndex { get; set; }
-
-        public string Header => $"Row {Index + 1}";
     }
 
-    public class DesignerTableRowGroup: TableRowGroup
-    {
-        public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
-            "Header",
-            typeof(string),
-            typeof(DesignerTableRowGroup),
-            new PropertyMetadata(string.Empty));
-
-        public string Header
-        {
-            get { return (string)GetValue(HeaderProperty); }
-            set { SetValue(HeaderProperty, value); }
-        }
-
-        public ImageSource Image => new BitmapImage(new Uri("pack://application:,,,/Designer;component/Resources/rowset.png"));
-    }
 }

@@ -31,7 +31,6 @@
 
         <Label Content="{Binding Path=Name}" Grid.Column="0" Grid.Row="0"/>
 
-
         <TabControl Grid.Row="1" SelectedIndex="0" Background="{StaticResource AppBgColor}">
             <TabItem Header="General" x:Name="TabGeneral">
                 <Grid>
