@@ -10,6 +10,9 @@ namespace Designer.DesignerItems
         public BlockDocument()
         {
             IsUndoEnabled = false;
+            Document.IsColumnWidthFlexible = true;
+            Document.IsHyphenationEnabled = true;
+            Document.IsOptimalParagraphEnabled = true;
         }
 
         public Paragraph GetCaretContainer(LogicalDirection direction)

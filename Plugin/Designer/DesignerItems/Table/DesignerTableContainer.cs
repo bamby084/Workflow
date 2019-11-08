@@ -33,7 +33,6 @@ namespace Designer.DesignerItems
         {
             Margin = new Thickness(0);
             BorderThickness = new Thickness(1);
-            //BorderBrush = new SolidColorBrush(Colors.Purple);
             SetBindingProperties();
         }
 

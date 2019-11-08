@@ -63,6 +63,7 @@ namespace Designer.DesignerItems
             else
             {
                 container.Inlines.Add(tableContainer);
+                container.Inlines.Add(new LineBreak());
             }
             
             DesignerTableManager.Instance.AddTable(table);
