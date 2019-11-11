@@ -13,6 +13,7 @@ namespace Designer
         }
 
         private double _left;
+        [Category("Position")]
         public double Left
         {
             get => _left;
@@ -24,6 +25,7 @@ namespace Designer
         }
 
         private double _top;
+        [Category("Position")]
         public double Top
         {
             get => _top;
@@ -35,6 +37,7 @@ namespace Designer
         }
 
         private double _width;
+        [Category("Size")]
         public double Width
         {
             get => _width;
@@ -46,6 +49,7 @@ namespace Designer
         }
 
         private double _height;
+        [Category("Size")]
         public double Height
         {
             get => _height;

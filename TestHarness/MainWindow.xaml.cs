@@ -30,7 +30,6 @@ namespace TestHarness
             Tools.Add(new DrawingBlockTool());
 
             this.Loaded += MainWindow_Loaded;
-            Canvas.SelectedItemsChanged += SelectedItemsChanged;
             Canvas.ItemAdded += OnItemAdded;
             Canvas.ItemsDeleted += OnItemsDeleted;
         }
@@ -53,16 +52,16 @@ namespace TestHarness
             }
         }
 
-        private void SelectedItemsChanged(object sender, ItemsChangedEventArgs e)
-        {
-            if (e.Items.Count != 1)
-            {
-                SelectedControlProperties = null;
-                return;
-            }
+        //private void SelectedItemsChanged(object sender, ItemsChangedEventArgs e)
+        //{
+        //    if (e.Items.Count != 1)
+        //    {
+        //        SelectedControlProperties = null;
+        //        return;
+        //    }
 
-            SelectedControlProperties = e.Items[0].Properties;
-        }
+        //    SelectedControlProperties = e.Items[0].Properties;
+        //}
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -194,9 +193,13 @@ namespace TestHarness
                 newSelectableObject.IsSelected = true;
             }
 
-            if(e.NewValue is IControlPropertyProvider propertyProvider)
+            if (e.NewValue is ControlPropertiesViewModel propertiesViewModel)
             {
-                SelectedControlProperties = propertyProvider.Properties;
+                SelectedControlProperties = propertiesViewModel;
+            }
+            else if(e.NewValue is DesignerTreeViewItem designerItem)
+            {
+                SelectedControlProperties = ((DesignerItem) designerItem.AssociatedItem).Properties;
             }
             else
             {

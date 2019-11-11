@@ -153,6 +153,7 @@
     </Compile>
     <Compile Include="ControlPropertiesViewModel.cs" />
     <Compile Include="Converters\BoolToThicknessConverter.cs" />
+    <Compile Include="Converters\SolidBrushToColorConverter.cs" />
     <Compile Include="Converters\FigureHorizontalAnchorConverter.cs" />
     <Compile Include="Converters\FigureLengthConverter.cs" />
     <Compile Include="Converters\GridLengthConverter.cs" />
@@ -170,10 +171,16 @@
     <Compile Include="Converters\UnitTypeToStringConverter.cs" />
     <Compile Include="DesignerItems\Block\BlockDocument.cs" />
     <Compile Include="DesignerItems\ISelectable.cs" />
+    <Compile Include="DesignerItems\Table\CellPropertiesView.xaml.cs">
+      <DependentUpon>CellPropertiesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DesignerItems\Table\DesignerTable.cs" />
     <Compile Include="DesignerItems\Table\DesignerTableAlignment.cs" />
     <Compile Include="DesignerItems\Table\DesignerTableContainer.cs" />
     <Compile Include="DesignerItems\Table\DesignerTableManager.cs" />
+    <Compile Include="DesignerItems\Table\RowPropertiesView.xaml.cs">
+      <DependentUpon>RowPropertiesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DesignerItems\Table\RowSetPropertiesView.xaml.cs">
       <DependentUpon>RowSetPropertiesView.xaml</DependentUpon>
     </Compile>
@@ -245,7 +252,6 @@
     <Compile Include="InsertTableWindow.xaml.cs">
       <DependentUpon>InsertTableWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IControlPropertyProvider.cs" />
     <Compile Include="LineStyle.cs" />
     <Compile Include="LineStylePropertiesPanel.xaml.cs">
       <DependentUpon>LineStylePropertiesPanel.xaml</DependentUpon>
@@ -310,6 +316,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="DesignerItems\Block\BlockPropertiesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DesignerItems\Table\CellPropertiesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DesignerItems\Table\RowPropertiesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

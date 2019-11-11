@@ -12,7 +12,7 @@ using GridLengthConverter = Designer.Converters.GridLengthConverter;
 
 namespace Designer.DesignerItems
 {
-    public class DesignerTable: Table, ISelectable, IDisposable, IControlPropertyProvider
+    public class DesignerTable: Table, ISelectable, IDisposable
     {
         private static readonly object LockObject = new object();
         private static int CurrentIndex;
@@ -95,8 +95,10 @@ namespace Designer.DesignerItems
             var tableProperties = (TableProperties)this.Properties;
             foreach(var rowSet in tableProperties.RowSets)
             {
-                var rowGroup = new TableRowGroup();
                 int index = this.GetNewRowGroupIndex();
+                var rowGroup = new DesignerTableRowGroup();
+                rowGroup.Id = rowSet.Id;
+                rowGroup.Index = index;
 
                 for (int i = 0; i < rowSet.Rows.Count; i++)
                 {
@@ -105,29 +107,51 @@ namespace Designer.DesignerItems
                         GroupIndex = index,
                         Index = index + i
                     };
-
-                    AddCells(row);
+                    
+                    AddCells(row, rowSet.Rows[i].Cells);
                     rowGroup.Rows.Add(row);
                 }
 
                 this.RowGroups.Add(rowGroup);
+                rowSet.OnAddNewRow += OnAddNewRow;
             }
         }
 
-        private void AddCells(DesignerTableRow row)
+        private void OnAddNewRow(object sender, EventArgs e)
         {
-            int columnCount = ((TableProperties)Properties).ColumnDefinitions.Count;
-            for (int i = 0; i < columnCount; i++)
+            RowSet rowSet = (RowSet)sender;
+            var rowGroup = (DesignerTableRowGroup)this.RowGroups.FirstOrDefault(rg => ((DesignerTableRowGroup)rg).Id == rowSet.Id);
+            if (rowGroup == null)
+                return;
+
+            var row = new DesignerTableRow()
+            {
+                Index = rowGroup.Rows.Count + 1,
+                GroupIndex = rowGroup.Index
+            };
+
+            AddCells(row, rowSet.Rows.Last().Cells);
+            rowGroup.Rows.Add(row);
+        }
+
+        private void AddCells(DesignerTableRow row, IList<Cell> cells)
+        {
+            for (int i = 0; i < cells.Count; i++)
             {
                 var cell = new DesignerTableCell
                 {
                     ParentRow = row,
                     ColumnIndex = i,
-                    RowIndex = row.Index,
+                    RowIndex = row.Index
                 };
 
                 cell.PreviewMouseLeftButtonDown += OnCellLeftMouseDown;
                 cell.PreviewMouseRightButtonDown += OnCellRightMouseDown;
+
+                //var backgroundBinding = new Binding("Background");
+                //backgroundBinding.Source = cells[i];
+                //backgroundBinding.Mode = BindingMode.OneWay;
+                //cell.SetBinding(BackgroundProperty, backgroundBinding);
 
                 row.Cells.Add(cell);
             }
@@ -307,7 +331,7 @@ namespace Designer.DesignerItems
         }
     }
 
-    public class DesignerTableCell : TableCell
+    public class DesignerTableCell : TableCell, ISelectable
     {
         public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(
             "IsSelected", typeof(bool), typeof(DesignerTableCell), new PropertyMetadata(default(bool)));
@@ -326,6 +350,8 @@ namespace Designer.DesignerItems
 
         public DesignerTableRow ParentRow { get; set; }
 
+        public bool IsSelectable { get; set; } = true;
+
         public DesignerTableCell()
         {
         }
@@ -343,6 +369,12 @@ namespace Designer.DesignerItems
         public int Index { get; set; }
 
         public int GroupIndex { get; set; }
+    }
+
+    public class DesignerTableRowGroup: TableRowGroup
+    {
+        public Guid Id { get; set; }
+        public int Index { get; set; }
     }
 
 }

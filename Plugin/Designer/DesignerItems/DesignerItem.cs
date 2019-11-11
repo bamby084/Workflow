@@ -24,7 +24,7 @@ namespace Designer.DesignerItems
 
     public delegate void SelectedChangedEventHandler(object sender, SelectedChangedEventArgs e);
 
-    public abstract class DesignerItem: ContentControl, IControlPropertyProvider, ISelectable, IDisposable
+    public abstract class DesignerItem: ContentControl, ISelectable, IDisposable
     {
         public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(
             "IsSelected",

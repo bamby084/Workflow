@@ -6,6 +6,7 @@
              xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:designer="clr-namespace:Designer"
              xmlns:converters="clr-namespace:Designer.Converters"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="350">
     <UserControl.Resources>
@@ -21,7 +22,7 @@
         </Grid.RowDefinitions>
         
         <Label Content="Block Properties"/>
-        
+
         <TabControl Grid.Row="1" SelectedIndex="0" Background="{StaticResource AppBgColor}">
             <TabItem Header="Position" Name="TabPosition">
                 <Grid>
@@ -158,5 +159,34 @@
                 </Grid>
             </TabItem>
         </TabControl>
+
+        <!--<xceed:PropertyGrid Grid.Row="0" Grid.RowSpan="2" SelectedObject="{Binding}">
+            <xceed:PropertyGrid.EditorDefinitions>
+                <xceed:EditorTemplateDefinition TargetProperties="{x:Type sys:Double}">
+                    <xceed:EditorTemplateDefinition.EditingTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="30"/>
+                                </Grid.ColumnDefinitions>
+
+                                <xceed:PropertyGridEditorDecimalUpDown Minimum="0" FormatString="F2" Increment="0.1" TextAlignment="Left">
+                                    <xceed:PropertyGridEditorDecimalUpDown.Value>
+                                        <MultiBinding Converter="{StaticResource UnitConverter}" Mode="TwoWay">
+                                            <Binding Path="Value"/>
+                                            <Binding Source="{x:Static designer:UnitOfMeasure.Current}" Path="UnitType"/>
+                                        </MultiBinding>
+                                    </xceed:PropertyGridEditorDecimalUpDown.Value>
+                                </xceed:PropertyGridEditorDecimalUpDown>
+
+                                <Label Content="{Binding Source={x:Static designer:UnitOfMeasure.Current}, Path=UnitType, 
+                                    Converter={StaticResource UnitTypeToStringConverter}}" Grid.Column="1"/>
+                            </Grid>
+                        </DataTemplate>
+                    </xceed:EditorTemplateDefinition.EditingTemplate>
+                </xceed:EditorTemplateDefinition>
+            </xceed:PropertyGrid.EditorDefinitions>
+        </xceed:PropertyGrid>-->
     </Grid>
 </UserControl>

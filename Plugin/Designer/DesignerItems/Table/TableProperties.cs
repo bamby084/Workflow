@@ -3,10 +3,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Designer.DesignerItems
 {
-    public class TableProperties: ControlPropertiesViewModel, ISelectable, IControlPropertyProvider
+    public class TableProperties: ControlPropertiesViewModel, ISelectable
     {
         public event EventHandler OnDeleted;
         public TableProperties()
@@ -115,8 +116,6 @@ namespace Designer.DesignerItems
                 }
             }
         }
-
-        public ControlPropertiesViewModel Properties => this;
         #endregion
 
         #region Spacing
@@ -199,6 +198,19 @@ namespace Designer.DesignerItems
             ColumnDefinitions.Add(column);
         }
 
+        public void AddRowSet(string name, int rowCount)
+        {
+            var rowSet = new RowSet(name);
+            rowSet.Parent = this;
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                rowSet.AddNewRow(null);
+            }
+
+            RowSets.Add(rowSet);
+        }
+
         public static TableProperties Build(int columnCount, int headerRowCount, int bodyRowCount, int footerRowCount)
         {
             var tableProperties = new TableProperties();
@@ -211,34 +223,11 @@ namespace Designer.DesignerItems
                 tableProperties.AddColumnDefition(columnDefition);
             }
 
-            var headerRowSet = CreateRowSet("RowSet Header", columnCount, headerRowCount);
-            tableProperties.RowSets.Add(headerRowSet);
-
-            var bodyRowSet = CreateRowSet("RowSet Body", columnCount, bodyRowCount);
-            tableProperties.RowSets.Add(bodyRowSet);
-
-            var footerRowSet = CreateRowSet("RowSet Footer", columnCount, footerRowCount);
-            tableProperties.RowSets.Add(footerRowSet);
+            tableProperties.AddRowSet("RowSet Header", headerRowCount);
+            tableProperties.AddRowSet("RowSet Body", bodyRowCount);
+            tableProperties.AddRowSet("RowSet Footer", footerRowCount);
 
             return tableProperties;
-        }
-
-        private static RowSet CreateRowSet(string name, int columnCount, int rowCount)
-        {
-            var rowSet = new RowSet(name);
-            for (int i = 0; i < rowCount; i++)
-            {
-                var row = new Row($"Row {i + 1}");
-                for (int j = 0; j < columnCount; j++)
-                {
-                    var cell = new Cell($"Cell {j + 1}");
-                    row.Cells.Add(cell);
-                }
-
-                rowSet.Rows.Add(row);
-            }
-
-            return rowSet;
         }
 
         private void OnColumnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -320,38 +309,93 @@ namespace Designer.DesignerItems
         }
     }
 
-    public class Row
+    public class RowSet : ControlPropertiesViewModel
     {
-        public Row(string name)
-        {
-            Name = name;
-            Cells = new ObservableCollection<Cell>();
-        }
+        public event EventHandler OnAddNewRow;
 
-        public string Name { get; set; }
-        public ObservableCollection<Cell> Cells { get; set; }
-    }
+        public TableProperties Parent { get; set; }
 
-    public class Cell
-    {
-        public Cell(string name)
-        {
-            Name = name;
-        }
+        public Guid Id { get; set; }
 
-        public string Name { get; set; }
-    }
-
-    public class RowSet: ControlPropertiesViewModel, IControlPropertyProvider
-    {
         public RowSet(string name)
         {
             Name = name;
             Rows = new ObservableCollection<Row>();
+            Id = Guid.NewGuid();
+            
+            AddNewRowCommand = new RelayCommand(AddNewRow);
         }
 
         public ObservableCollection<Row> Rows { get; set; }
 
-        public ControlPropertiesViewModel Properties => this;
+        public void AddRow(Row row)
+        {
+            row.Parent = this;
+            Rows.Add(row);
+        }
+
+        #region Commands
+        public ICommand AddNewRowCommand { get; set; }
+        public void AddNewRow(object param)
+        {
+            var newRow = new Row($"Row {Rows.Count + 1}", Parent.ColumnDefinitions.Count);
+            AddRow(newRow);
+
+            OnAddNewRow?.Invoke(this, new EventArgs());
+        }
+        #endregion
+    }
+
+    public class Row: ControlPropertiesViewModel
+    {
+        public RowSet Parent { get; set; }
+
+        public Guid Id { get; set; }
+
+        public Row(string name, int columnCount)
+        {
+            Name = name;
+            Cells = new ObservableCollection<Cell>();
+            Id = Guid.NewGuid();
+
+            AddCells(columnCount);
+        }
+
+        public ObservableCollection<Cell> Cells { get; set; }
+
+        private void AddCells(int columnCount)
+        {
+            for (int i = 0; i < columnCount; i++)
+            {
+                var cell = new Cell($"Cell {i + 1}");
+                Cells.Add(cell);
+            }
+        }
+    }
+
+    public class Cell: ControlPropertiesViewModel
+    {
+        public Guid Id { get; set; }
+
+        public Cell(string name)
+        {
+            Name = name;
+            Id = Guid.NewGuid();
+        }
+
+        private Brush _background = Brushes.White;
+        public Brush Background
+        {
+            get => _background;
+            set
+            {
+                if (value != _background)
+                {
+                    _background = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
     }
 }
