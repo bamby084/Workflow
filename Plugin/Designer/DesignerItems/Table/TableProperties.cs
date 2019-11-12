@@ -205,7 +205,7 @@ namespace Designer.DesignerItems
 
             for (int i = 0; i < rowCount; i++)
             {
-                rowSet.AddNewRow(null);
+                rowSet.AddNewRow();
             }
 
             RowSets.Add(rowSet);
@@ -312,6 +312,7 @@ namespace Designer.DesignerItems
     public class RowSet : ControlPropertiesViewModel
     {
         public event EventHandler OnAddNewRow;
+        public event EventHandler OnDeleteRow;
 
         public TableProperties Parent { get; set; }
 
@@ -328,20 +329,32 @@ namespace Designer.DesignerItems
 
         public ObservableCollection<Row> Rows { get; set; }
 
-        public void AddRow(Row row)
+        public void DeleteRow(Row row)
         {
-            row.Parent = this;
-            Rows.Add(row);
+            Rows.Remove(row);
+            OnDeleteRow?.Invoke(row, new EventArgs());
         }
 
         #region Commands
         public ICommand AddNewRowCommand { get; set; }
         public void AddNewRow(object param)
         {
-            var newRow = new Row($"Row {Rows.Count + 1}", Parent.ColumnDefinitions.Count);
-            AddRow(newRow);
+            AddNewRow("New Row");
+        }
 
-            OnAddNewRow?.Invoke(this, new EventArgs());
+        public void AddNewRow()
+        {
+            AddNewRow($"Row {Rows.Count + 1}");
+        }
+
+        public void AddNewRow(string name)
+        {
+            var newRow = new Row(name);
+            newRow.AddCells(Parent.ColumnDefinitions.Count);
+            newRow.Parent = this;
+
+            Rows.Add(newRow);
+            OnAddNewRow?.Invoke(newRow, new EventArgs());
         }
         #endregion
     }
@@ -352,24 +365,29 @@ namespace Designer.DesignerItems
 
         public Guid Id { get; set; }
 
-        public Row(string name, int columnCount)
+        public ObservableCollection<Cell> Cells { get; set; }
+
+        public Row(string name)
         {
             Name = name;
             Cells = new ObservableCollection<Cell>();
             Id = Guid.NewGuid();
-
-            AddCells(columnCount);
+            DeleteCommand = new RelayCommand(Delete);
         }
 
-        public ObservableCollection<Cell> Cells { get; set; }
-
-        private void AddCells(int columnCount)
+        public void AddCells(int columnCount)
         {
             for (int i = 0; i < columnCount; i++)
             {
                 var cell = new Cell($"Cell {i + 1}");
                 Cells.Add(cell);
             }
+        }
+
+        public ICommand DeleteCommand { get; set; }
+        private void Delete(object param)
+        {
+            Parent.DeleteRow(this);
         }
     }
 

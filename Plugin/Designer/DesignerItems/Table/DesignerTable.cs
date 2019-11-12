@@ -6,8 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using GridLengthConverter = Designer.Converters.GridLengthConverter;
 
 namespace Designer.DesignerItems
@@ -60,7 +58,7 @@ namespace Designer.DesignerItems
 
         public List<DesignerTableCell> SelectedCells { get; }
 
-        public ControlPropertiesViewModel Properties { get; private set; }
+        public TableProperties Properties { get; private set; }
 
         public void Build(TableProperties tableProperties)
         {
@@ -76,8 +74,7 @@ namespace Designer.DesignerItems
 
         private void CreateColumns()
         {
-            var tableProperies = (TableProperties)this.Properties;
-            foreach(var columnDef in tableProperies.ColumnDefinitions)
+            foreach(var columnDef in Properties.ColumnDefinitions)
             {
                 var binding = new Binding("Width");
                 binding.Source = columnDef;
@@ -92,105 +89,82 @@ namespace Designer.DesignerItems
 
         private void CreateRows()
         {
-            var tableProperties = (TableProperties)this.Properties;
-            foreach(var rowSet in tableProperties.RowSets)
+            foreach(var rowSet in Properties.RowSets)
             {
-                int index = this.GetNewRowGroupIndex();
                 var rowGroup = new DesignerTableRowGroup();
                 rowGroup.Id = rowSet.Id;
-                rowGroup.Index = index;
+                rowGroup.Index = this.RowGroups.Count;
 
                 for (int i = 0; i < rowSet.Rows.Count; i++)
                 {
-                    var row = new DesignerTableRow()
-                    {
-                        GroupIndex = index,
-                        Index = index + i
-                    };
-                    
-                    AddCells(row, rowSet.Rows[i].Cells);
-                    rowGroup.Rows.Add(row);
+                    var row = rowGroup.AddNewRow(Properties.ColumnDefinitions.Count);
+                    row.Id = rowSet.Rows[i].Id;
+                    row.CellClicked += OnCellClicked;
                 }
 
                 this.RowGroups.Add(rowGroup);
                 rowSet.OnAddNewRow += OnAddNewRow;
+                rowSet.OnDeleteRow += OnDeleteRow;
+            }
+        }
+
+        private void OnDeleteRow(object sender, EventArgs e)
+        {
+            Row row = (Row)sender;
+            var rowGroup = (DesignerTableRowGroup)this.RowGroups.FirstOrDefault(rg => ((DesignerTableRowGroup)rg).Id == row.Parent.Id);
+            if (rowGroup == null)
+                return;
+
+            rowGroup.RemoveRow(row.Id);
+        }
+
+        private void OnCellClicked(object sender, MouseButtonEventArgs e)
+        {
+            DesignerTableCell cell = (DesignerTableCell)sender;
+
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                {
+                    cell.IsSelected = !cell.IsSelected;
+                    if (cell.IsSelected)
+                        SelectedCells.Add(cell);
+                    else
+                        SelectedCells.Remove(cell);
+                }
+                else
+                {
+                    ClearSelectedCells();
+                    cell.IsSelected = true;
+                    SelectedCells.Add(cell);
+                }
+
+                SelectedCellChange?.Invoke(cell, new EventArgs());
+            }
+            else if(e.ChangedButton == MouseButton.Right)
+            {
+                //is right click on selected cells?
+                if (!SelectedCells.Contains(cell))
+                {
+                    ClearSelectedCells();
+                    cell.IsSelected = true;
+                    SelectedCells.Add(cell);
+                }
+
+                CellContextMenu.IsOpen = true;
             }
         }
 
         private void OnAddNewRow(object sender, EventArgs e)
         {
-            RowSet rowSet = (RowSet)sender;
-            var rowGroup = (DesignerTableRowGroup)this.RowGroups.FirstOrDefault(rg => ((DesignerTableRowGroup)rg).Id == rowSet.Id);
+            Row row = (Row)sender;
+            var rowGroup = (DesignerTableRowGroup)this.RowGroups.FirstOrDefault(rg => ((DesignerTableRowGroup)rg).Id == row.Parent.Id);
             if (rowGroup == null)
                 return;
 
-            var row = new DesignerTableRow()
-            {
-                Index = rowGroup.Rows.Count + 1,
-                GroupIndex = rowGroup.Index
-            };
-
-            AddCells(row, rowSet.Rows.Last().Cells);
-            rowGroup.Rows.Add(row);
-        }
-
-        private void AddCells(DesignerTableRow row, IList<Cell> cells)
-        {
-            for (int i = 0; i < cells.Count; i++)
-            {
-                var cell = new DesignerTableCell
-                {
-                    ParentRow = row,
-                    ColumnIndex = i,
-                    RowIndex = row.Index
-                };
-
-                cell.PreviewMouseLeftButtonDown += OnCellLeftMouseDown;
-                cell.PreviewMouseRightButtonDown += OnCellRightMouseDown;
-
-                //var backgroundBinding = new Binding("Background");
-                //backgroundBinding.Source = cells[i];
-                //backgroundBinding.Mode = BindingMode.OneWay;
-                //cell.SetBinding(BackgroundProperty, backgroundBinding);
-
-                row.Cells.Add(cell);
-            }
-        }
-
-        private void OnCellRightMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            DesignerTableCell cell = (DesignerTableCell)sender;
-
-            //is right click on selected cells?
-            if (!SelectedCells.Contains(cell))
-            {
-                ClearSelectedCells();
-                cell.IsSelected = true;
-                SelectedCells.Add(cell);
-            }
-
-            CellContextMenu.IsOpen = true;
-        }
-
-        private void OnCellLeftMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            DesignerTableCell cell = (DesignerTableCell)sender;
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
-            {
-                cell.IsSelected = !cell.IsSelected;
-                if (cell.IsSelected)
-                    SelectedCells.Add(cell);
-                else
-                    SelectedCells.Remove(cell);
-            }
-            else
-            {
-                ClearSelectedCells();
-                cell.IsSelected = true;
-                SelectedCells.Add(cell);
-            }
-
-            SelectedCellChange?.Invoke(cell, new EventArgs());
+            var newRow = rowGroup.AddNewRow(Properties.ColumnDefinitions.Count);
+            newRow.Id = row.Id;
+            newRow.CellClicked += OnCellClicked;
         }
 
         private void ClearSelectedCells()
@@ -222,6 +196,7 @@ namespace Designer.DesignerItems
             MultipleCellsContextMenu = new ContextMenu();
             var mergeCellsMenuItem = new MenuItem();
             mergeCellsMenuItem.Header = "Merge Cells";
+            mergeCellsMenuItem.IsEnabled = false;
             mergeCellsMenuItem.Click += (sender, e) =>
             {
                 MergeCells();
@@ -241,7 +216,7 @@ namespace Designer.DesignerItems
                 return false;
 
             var query = (from cell in SelectedCells
-                group cell by cell.RowIndex
+                group cell by cell.ParentRow.Index
                 into g
                 select new
                 {
@@ -269,7 +244,7 @@ namespace Designer.DesignerItems
         private void MergeCells()
         {
             var query = (from cell in SelectedCells
-                group cell by cell.RowIndex
+                group cell by cell.ParentRow.Index
                 into g
                 select new
                 {
@@ -342,8 +317,6 @@ namespace Designer.DesignerItems
             set => SetValue(IsSelectedProperty, value);
         }
 
-        public int RowIndex { get; set; }
-
         public int ColumnIndex { get; set; }
 
         public bool IsMerged { get; set; }
@@ -366,15 +339,70 @@ namespace Designer.DesignerItems
 
     public class DesignerTableRow : TableRow
     {
+        public event MouseButtonEventHandler CellClicked;
+        public Guid Id { get; set; }
         public int Index { get; set; }
-
         public int GroupIndex { get; set; }
+
+        public void AddCells(int columnCount)
+        {
+            for (int i = 0; i < columnCount; i++)
+            {
+                var cell = new DesignerTableCell()
+                {
+                    ParentRow = this,
+                    ColumnIndex = i
+                };
+
+                cell.PreviewMouseLeftButtonDown += OnCellClicked;
+                cell.PreviewMouseRightButtonDown += OnCellClicked;
+
+                this.Cells.Add(cell);
+            }
+        }
+
+        private void OnCellClicked(object sender, MouseButtonEventArgs e)
+        {
+            CellClicked?.Invoke(sender, e);
+        }
     }
 
     public class DesignerTableRowGroup: TableRowGroup
     {
         public Guid Id { get; set; }
         public int Index { get; set; }
-    }
 
+        public DesignerTableRow AddNewRow(int columnCount)
+        {
+            var row = new DesignerTableRow();
+            row.GroupIndex = this.Index;
+            row.Index = this.Rows.Count;
+            row.AddCells(columnCount);
+
+            Rows.Add(row);
+
+            return row;
+        }
+
+        public void RemoveRow(DesignerTableRow row)
+        {
+            Rows.Remove(row);
+            Invalidate();
+        }
+
+        public void RemoveRow(Guid id)
+        {
+            var row = (DesignerTableRow)Rows.FirstOrDefault(r => ((DesignerTableRow)r).Id == id);
+            if (row != null)
+                RemoveRow(row);
+        }
+
+        public void Invalidate()
+        {
+            for (int i = 0; i < Rows.Count; i++)
+            {
+                ((DesignerTableRow)Rows[i]).Index = i;
+            }
+        }
+    }
 }

@@ -15,10 +15,7 @@
 
             <Grid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Refresh">
-                        <MenuItem.Icon>
-                            <Image Source="/Designer;component/Resources/refresh_table.png"/>
-                        </MenuItem.Icon>
+                    <MenuItem Header="Add New RowSet">
                     </MenuItem>
                     <MenuItem Header="Delete" Command="{Binding Path=DeleteCommand}">
                         <MenuItem.Icon>
@@ -44,6 +41,7 @@
             <Grid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Add New Row" Command="{Binding Path=AddNewRowCommand}"/>
+                    <MenuItem Header="Delete"/>
                 </ContextMenu>
             </Grid.ContextMenu>
         </Grid>
@@ -62,9 +60,7 @@
 
             <Grid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Delete Row"/>
-                    <MenuItem Header="Insert Row Above"/>
-                    <MenuItem Header="Insert Row Below"/>
+                    <MenuItem Header="Delete" Command="{Binding Path=DeleteCommand}"/>
                 </ContextMenu>
             </Grid.ContextMenu>
         </Grid>
