@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -10,12 +11,16 @@ namespace Designer.DesignerItems
     public class TableProperties: ControlPropertiesViewModel, ISelectable
     {
         public event EventHandler OnDeleted;
+        public event EventHandler OnRowSetAdded;
+        public event EventHandler OnRowSetDeleted;
+
         public TableProperties()
         {
             _columnDefinitions = new ObservableCollection<TableColumnDefinition>();
             _rowSets = new ObservableCollection<RowSet>();
 
             DeleteCommand = new RelayCommand(DeleteTable);
+            AddNewRowSetCommand = new RelayCommand(AddNewRowSet);
         }
 
         #region General
@@ -198,10 +203,11 @@ namespace Designer.DesignerItems
             ColumnDefinitions.Add(column);
         }
 
-        public void AddRowSet(string name, int rowCount)
+        public RowSet AddRowSet(string name, int rowCount)
         {
             var rowSet = new RowSet(name);
             rowSet.Parent = this;
+            rowSet.OnDeleted += DeleteRowSet;
 
             for (int i = 0; i < rowCount; i++)
             {
@@ -209,6 +215,7 @@ namespace Designer.DesignerItems
             }
 
             RowSets.Add(rowSet);
+            return rowSet;
         }
 
         public static TableProperties Build(int columnCount, int headerRowCount, int bodyRowCount, int footerRowCount)
@@ -264,9 +271,24 @@ namespace Designer.DesignerItems
 
         #region Commands
         public ICommand DeleteCommand { get; set; }
+        public ICommand AddNewRowSetCommand { get; set; }
+
         private void DeleteTable(object param)
         {
             OnDeleted?.Invoke(this, new EventArgs());
+        }
+
+        public void AddNewRowSet(object param)
+        {
+            var rowSet = AddRowSet("New RowSet", 0);
+            OnRowSetAdded?.Invoke(rowSet, new EventArgs());
+        }
+
+        private void DeleteRowSet(object sender, EventArgs e)
+        {
+            RowSet rowSet = (RowSet)sender;
+            RowSets.Remove(rowSet);
+            OnRowSetDeleted?.Invoke(rowSet, new EventArgs());
         }
         #endregion
     }
@@ -313,10 +335,13 @@ namespace Designer.DesignerItems
     {
         public event EventHandler OnAddNewRow;
         public event EventHandler OnDeleteRow;
+        public event EventHandler OnDeleted;
 
         public TableProperties Parent { get; set; }
 
         public Guid Id { get; set; }
+
+        public ObservableCollection<Row> Rows { get; set; }
 
         public RowSet(string name)
         {
@@ -325,9 +350,8 @@ namespace Designer.DesignerItems
             Id = Guid.NewGuid();
             
             AddNewRowCommand = new RelayCommand(AddNewRow);
+            DeleteCommand = new RelayCommand(Delete);
         }
-
-        public ObservableCollection<Row> Rows { get; set; }
 
         public void DeleteRow(Row row)
         {
@@ -337,6 +361,8 @@ namespace Designer.DesignerItems
 
         #region Commands
         public ICommand AddNewRowCommand { get; set; }
+        public ICommand DeleteCommand { get; set; }
+
         public void AddNewRow(object param)
         {
             AddNewRow("New Row");
@@ -355,6 +381,11 @@ namespace Designer.DesignerItems
 
             Rows.Add(newRow);
             OnAddNewRow?.Invoke(newRow, new EventArgs());
+        }
+
+        private void Delete(object param)
+        {
+            OnDeleted?.Invoke(this, new EventArgs());
         }
         #endregion
     }
@@ -381,6 +412,17 @@ namespace Designer.DesignerItems
             {
                 var cell = new Cell($"Cell {i + 1}");
                 Cells.Add(cell);
+            }
+        }
+
+        public void RemoveCell(Guid id)
+        {
+            var cell = Cells.FirstOrDefault(c => c.Id == id);
+            if(cell != null)
+            {
+                Cells.Remove(cell);
+                if (Cells.Count == 0)
+                    this.Parent.Rows.Remove(this);
             }
         }
 

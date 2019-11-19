@@ -70,6 +70,7 @@ namespace Designer.DesignerItems
             BindIsSelected();
             CreateColumns();
             CreateRows();
+            RegisterEvents();
         }
 
         private void CreateColumns()
@@ -91,31 +92,59 @@ namespace Designer.DesignerItems
         {
             foreach(var rowSet in Properties.RowSets)
             {
-                var rowGroup = new DesignerTableRowGroup();
-                rowGroup.Id = rowSet.Id;
-                rowGroup.Index = this.RowGroups.Count;
-
-                for (int i = 0; i < rowSet.Rows.Count; i++)
-                {
-                    var row = rowGroup.AddNewRow(Properties.ColumnDefinitions.Count);
-                    row.Id = rowSet.Rows[i].Id;
-                    row.CellClicked += OnCellClicked;
-                }
-
-                this.RowGroups.Add(rowGroup);
-                rowSet.OnAddNewRow += OnAddNewRow;
-                rowSet.OnDeleteRow += OnDeleteRow;
+                AddNewRowGroup(rowSet);
             }
         }
 
-        private void OnDeleteRow(object sender, EventArgs e)
+        private void RegisterEvents()
         {
-            Row row = (Row)sender;
-            var rowGroup = (DesignerTableRowGroup)this.RowGroups.FirstOrDefault(rg => ((DesignerTableRowGroup)rg).Id == row.Parent.Id);
+            this.Properties.OnRowSetAdded += OnAddNewRowSet;
+            this.Properties.OnRowSetDeleted += OnRowSetDeleted;
+        }
+
+        private void OnRowSetDeleted(object sender, EventArgs e)
+        {
+            var rowSet = (RowSet)sender;
+            var rowGroup = this.RowGroups.FirstOrDefault(rg => ((DesignerTableRowGroup)rg).Id == rowSet.Id);
             if (rowGroup == null)
                 return;
 
-            rowGroup.RemoveRow(row.Id);
+            this.RowGroups.Remove(rowGroup);
+        }
+
+        private void OnAddNewRowSet(object sender, EventArgs e)
+        {
+            var rowSet = (RowSet)sender;
+            AddNewRowGroup(rowSet);
+        }
+
+        private void AddNewRowGroup(RowSet rowSet)
+        {
+            var rowGroup = new DesignerTableRowGroup();
+            rowGroup.Id = rowSet.Id;
+            
+            for (int i = 0; i < rowSet.Rows.Count; i++)
+            {
+                AddNewRow(rowGroup, rowSet.Rows[i]);
+            }
+
+            this.RowGroups.Add(rowGroup);
+            rowSet.OnAddNewRow += OnAddNewRow;
+            rowSet.OnDeleteRow += OnDeleteRow;
+        }
+
+        private void OnCellRemoved(object sender, EventArgs e)
+        {
+            var removedCell = (DesignerTableCell)sender;
+            var rowSet = Properties.RowSets.FirstOrDefault(rs => rs.Id == removedCell.ParentRow.GroupId);
+            if (rowSet == null)
+                return;
+
+            var row = rowSet.Rows.FirstOrDefault(r => r.Id == removedCell.ParentRow.Id);
+            if (row == null)
+                return;
+
+            row.RemoveCell(removedCell.Id);   
         }
 
         private void OnCellClicked(object sender, MouseButtonEventArgs e)
@@ -155,6 +184,16 @@ namespace Designer.DesignerItems
             }
         }
 
+        private void OnDeleteRow(object sender, EventArgs e)
+        {
+            Row row = (Row)sender;
+            var rowGroup = (DesignerTableRowGroup)this.RowGroups.FirstOrDefault(rg => ((DesignerTableRowGroup)rg).Id == row.Parent.Id);
+            if (rowGroup == null)
+                return;
+
+            rowGroup.RemoveRow(row.Id);
+        }
+
         private void OnAddNewRow(object sender, EventArgs e)
         {
             Row row = (Row)sender;
@@ -162,9 +201,15 @@ namespace Designer.DesignerItems
             if (rowGroup == null)
                 return;
 
-            var newRow = rowGroup.AddNewRow(Properties.ColumnDefinitions.Count);
+            AddNewRow(rowGroup, row);
+        }
+
+        private void AddNewRow(DesignerTableRowGroup rowGroup, Row row)
+        {
+            var newRow = rowGroup.AddNewRow(row.Cells);
             newRow.Id = row.Id;
-            newRow.CellClicked += OnCellClicked;
+            newRow.OnCellClicked += OnCellClicked;
+            newRow.OnCellRemoved += OnCellRemoved;
         }
 
         private void ClearSelectedCells()
@@ -212,7 +257,7 @@ namespace Designer.DesignerItems
         private bool CanMergeCells()
         {
             if (SelectedCells.Count < 2 || SelectedCells.Any(cell => cell.IsMerged)
-                || SelectedCells.GroupBy(c => c.ParentRow.GroupIndex).Count() > 1)
+                || SelectedCells.GroupBy(c => c.ParentRow.GroupId).Count() > 1)
                 return false;
 
             var query = (from cell in SelectedCells
@@ -244,22 +289,23 @@ namespace Designer.DesignerItems
         private void MergeCells()
         {
             var query = (from cell in SelectedCells
-                group cell by cell.ParentRow.Index
+                         group cell by cell.ParentRow.Index
                 into g
-                select new
-                {
-                    Row = g.Key,
-                    Cells = g.OrderBy(c => c.ColumnIndex).ToList()
-                }).OrderBy(g => g.Row).ToList();
+                         select new
+                         {
+                             Row = g.Key,
+                             Cells = g.OrderBy(c => c.ColumnIndex).ToList()
+                         }).OrderBy(g => g.Row).ToList();
 
             var mergedCell = query[0].Cells[0];
             mergedCell.ColumnSpan = query[0].Cells.Count;
             mergedCell.RowSpan = query.Count;
             mergedCell.IsMerged = true;
+
             SelectedCells.Remove(mergedCell);
             foreach (var cell in SelectedCells)
             {
-                cell.ParentRow.Cells.Remove(cell);
+                cell.ParentRow.RemoveCell(cell);
             }
 
             SelectedCells.Clear();
@@ -317,6 +363,8 @@ namespace Designer.DesignerItems
             set => SetValue(IsSelectedProperty, value);
         }
 
+        public Guid Id { get; set; }
+
         public int ColumnIndex { get; set; }
 
         public bool IsMerged { get; set; }
@@ -339,48 +387,55 @@ namespace Designer.DesignerItems
 
     public class DesignerTableRow : TableRow
     {
-        public event MouseButtonEventHandler CellClicked;
-        public Guid Id { get; set; }
-        public int Index { get; set; }
-        public int GroupIndex { get; set; }
+        public event MouseButtonEventHandler OnCellClicked;
+        public event EventHandler OnCellRemoved;
 
-        public void AddCells(int columnCount)
+        public Guid Id { get; set; }
+        public Guid GroupId { get; set; }
+        public int Index { get; set; }
+
+        public void AddCells(IList<Cell> cells)
         {
-            for (int i = 0; i < columnCount; i++)
+            for (int i = 0; i < cells.Count; i++)
             {
                 var cell = new DesignerTableCell()
                 {
                     ParentRow = this,
-                    ColumnIndex = i
+                    ColumnIndex = i,
+                    Id = cells[i].Id
                 };
 
-                cell.PreviewMouseLeftButtonDown += OnCellClicked;
-                cell.PreviewMouseRightButtonDown += OnCellClicked;
+                cell.PreviewMouseLeftButtonDown += CellClicked;
+                cell.PreviewMouseRightButtonDown += CellClicked;
 
                 this.Cells.Add(cell);
             }
         }
 
-        private void OnCellClicked(object sender, MouseButtonEventArgs e)
+        public void RemoveCell(DesignerTableCell cell)
         {
-            CellClicked?.Invoke(sender, e);
+            this.Cells.Remove(cell);
+            OnCellRemoved?.Invoke(cell, new EventArgs());
+        }
+
+        private void CellClicked(object sender, MouseButtonEventArgs e)
+        {
+            OnCellClicked?.Invoke(sender, e);
         }
     }
 
     public class DesignerTableRowGroup: TableRowGroup
     {
         public Guid Id { get; set; }
-        public int Index { get; set; }
-
-        public DesignerTableRow AddNewRow(int columnCount)
+        
+        public DesignerTableRow AddNewRow(IList<Cell> cells)
         {
             var row = new DesignerTableRow();
-            row.GroupIndex = this.Index;
+            row.GroupId = this.Id;
             row.Index = this.Rows.Count;
-            row.AddCells(columnCount);
+            row.AddCells(cells);
 
             Rows.Add(row);
-
             return row;
         }
 

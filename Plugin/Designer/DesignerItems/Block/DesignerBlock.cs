@@ -61,7 +61,7 @@ namespace Designer.DesignerItems
 
             var tableProperties = TableProperties.Build(tableDialog.Columns, tableDialog.HeaderRows, tableDialog.BodyRows, tableDialog.FooterRows);
             tableProperties.OnDeleted += OnDeleteTable;
-
+            
             var table = new DesignerTable();
             table.Build(tableProperties);
             var tableContainer = new DesignerTableContainer(table);

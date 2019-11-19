@@ -24,23 +24,6 @@
                     <x:Type TypeName="designer:UnitType"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
-
-            <!--<HierarchicalDataTemplate DataType="{x:Type local:TableTreeViewItem}" ItemsSource="{Binding Path=RowSets}">
-                <TextBlock Text="{Binding Path=Name}"/>
-            </HierarchicalDataTemplate>
-
-            <HierarchicalDataTemplate DataType="{x:Type local:RowSetTreeViewItem}" ItemsSource="{Binding Path=Rows}">
-                <TextBlock Text="{Binding Path=Name}"/>
-            </HierarchicalDataTemplate>
-
-            <HierarchicalDataTemplate DataType="{x:Type local:RowTreeViewItem}" ItemsSource="{Binding Path=Cells}">
-                <TextBlock Text="{Binding Path=Name}"/>
-            </HierarchicalDataTemplate>
-
-            <HierarchicalDataTemplate DataType="{x:Type local:CellTreeViewItem}">
-                <TextBlock Text="{Binding Path=Name}"/>
-            </HierarchicalDataTemplate>-->
-
         </ResourceDictionary>
     </Window.Resources>
 

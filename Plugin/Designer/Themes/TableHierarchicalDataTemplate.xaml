@@ -15,7 +15,7 @@
 
             <Grid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Add New RowSet">
+                    <MenuItem Header="Add New RowSet" Command="{Binding Path=AddNewRowSetCommand}">
                     </MenuItem>
                     <MenuItem Header="Delete" Command="{Binding Path=DeleteCommand}">
                         <MenuItem.Icon>
@@ -41,7 +41,7 @@
             <Grid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Add New Row" Command="{Binding Path=AddNewRowCommand}"/>
-                    <MenuItem Header="Delete"/>
+                    <MenuItem Header="Delete" Command="{Binding Path=DeleteCommand}"/>
                 </ContextMenu>
             </Grid.ContextMenu>
         </Grid>
