@@ -9,32 +9,7 @@
              SizeChanged="UserControl_SizeChanged"
              Loaded="UserControl_Loaded">
     <UserControl.Resources>
-        <Style TargetType="{x:Type local:FlowTableCell}">
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush">
-                <Setter.Value>
-                    <DrawingBrush Viewport="0,0,4,4" ViewportUnits="Absolute" TileMode="Tile">
-                        <DrawingBrush.Drawing>
-                            <DrawingGroup>
-                                <GeometryDrawing Brush="Black">
-                                    <GeometryDrawing.Geometry>
-                                        <GeometryGroup>
-                                            <RectangleGeometry Rect="0,0,50,50" />
-                                            <RectangleGeometry Rect="50,50,50,50" />
-                                        </GeometryGroup>
-                                    </GeometryDrawing.Geometry>
-                                </GeometryDrawing>
-                            </DrawingGroup>
-                        </DrawingBrush.Drawing>
-                    </DrawingBrush>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="{x:Static SystemColors.GradientInactiveCaptionBrush}"></Setter>
-                </Trigger>
-            </Style.Triggers>
-        </Style>  
+        
     </UserControl.Resources>
     
     <Grid>

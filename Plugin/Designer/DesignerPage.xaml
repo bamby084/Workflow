@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Designer"
 			 xmlns:Designer="clr-namespace:Designer"
              xmlns:designerTools="clr-namespace:Designer.DesignerTools"
+             xmlns:designerItems="clr-namespace:Designer.DesignerItems;assembly=Designer"
              mc:Ignorable="d"
              d:DesignHeight="1080" d:DesignWidth="1920">
     <UserControl.Resources>
@@ -1742,7 +1743,7 @@
             <Border Grid.Row="1" Style="{StaticResource DefaultBorder}">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                     <StackPanel Background="{StaticResource AppBgColor}">
-						<TreeView Name="TreeViewRoot" Background="{StaticResource AppBgColor}">
+						<TreeView Name="TreeViewRoot" Background="{StaticResource AppBgColor}" SelectedItemChanged="TreeViewRoot_SelectedItemChanged">
 							<TreeViewItem Name="TreeViewVariables" Margin="0,2">
 								<TreeViewItem.Header>
 									<StackPanel Orientation="Horizontal">
@@ -1889,8 +1890,15 @@
                             </TreeViewItem>
                             -->
                             <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewTables" Style="{DynamicResource treeLibraryTables}" FontSize="12" 
-                                          Header="Tables" IsExpanded="True" Expanded="TreeViewPS_Expanded" Collapsed="TreeViewPS_Collapsed" KeyUp="TreeViewPS_KeyUp"
-                                          ItemsSource="{Binding Path=Desi}">
+                                          Header="Tables" IsExpanded="True" 
+                                          ItemsSource="{Binding Path=Tables, Source={x:Static designerItems:DesignerTableManager.Instance}}">
+                                <TreeViewItem.Resources>
+                                    <ResourceDictionary>
+                                        <ResourceDictionary.MergedDictionaries>
+                                            <ResourceDictionary Source="/Designer;component/Themes/TableHierarchicalDataTemplate.xaml"/>
+                                        </ResourceDictionary.MergedDictionaries>
+                                    </ResourceDictionary>
+                                </TreeViewItem.Resources>
                             </TreeViewItem>
                             <!--
                             <TreeViewItem Name="TreeViewTables">

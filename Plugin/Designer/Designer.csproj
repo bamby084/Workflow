@@ -240,7 +240,6 @@
       <DependentUpon>FlowPropertiesPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="FlowStyle.cs" />
-    <Compile Include="FlowTableManager.cs" />
     <Compile Include="FontPropertiesPanel.xaml.cs">
       <DependentUpon>FontPropertiesPanel.xaml</DependentUpon>
     </Compile>
@@ -264,7 +263,6 @@
     <Compile Include="SheetNameDataGrid.xaml.cs">
       <DependentUpon>SheetNameDataGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FlowTable.cs" />
     <Compile Include="TablePropertiesPanel.xaml.cs">
       <DependentUpon>TablePropertiesPanel.xaml</DependentUpon>
     </Compile>

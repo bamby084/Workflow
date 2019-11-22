@@ -105,14 +105,7 @@ namespace Designer
             InitFont();
             InitColorComboBox();
             InitDesignerTools();
-            FlowTableManager.Instance().TableAdded += OnFlowTableAdded;
-            DesignerTableManager.Instance.TableAdded += OnDesignerTableAdded;
             this.DataContext = this;
-        }
-
-        private void OnDesignerTableAdded(object sender, DesignerTableEventArgs e)
-        {
-            AddNewTableStyle(new Guid());
         }
 
         public ObservableCollection<DesignerTool> DesignerTools { get; private set; }
@@ -142,11 +135,6 @@ namespace Designer
                 NotifyPropertyChanged();
             }
 
-        }
-
-        private void OnFlowTableAdded(object sender, TableEventEventArgs e)
-        {
-            AddNewTableStyle(e.Table.Id);
         }
 
         public Page AddNewPage()
@@ -320,9 +308,7 @@ namespace Designer
                 var ts = item.TreeViewItem.Resources["TableStyleRef"] as TableStyle;
                 if (ts != null)
                 {
-                    var table = FlowTableManager.Instance().GetById(ts.TableId);
-                    var tablePresenter = table.NewPresenter();
-                    flowEx.Flow.AddTablePresenter(tablePresenter, table.Settings, e.GetPosition(ActivePage.Canvas));
+                    
                 }
             }
         }
@@ -662,7 +648,6 @@ namespace Designer
                 page.Canvas.MouseLeftButtonUp -= Canvas_MouseLeftButtonUp;
                 page.Canvas.Drop -= Canvas_Drop;
                 page.CanvasControls.CollectionChanged -= CanvasControls_CollectionChanged;
-                page.Canvas.SelectedItemsChanged -= OnPageCanvasSelectedItemsChanged;
                 page.Canvas.ItemAdded -= OnPageCanvasItemAdded;
                 page.Canvas.ItemsDeleted -= OnPageCanvasItemsDeleted;
             }
@@ -673,7 +658,6 @@ namespace Designer
             page.Canvas.SizeChanged += Canvas_Loaded;
             page.Canvas.PreviewMouseMove += Canvas_PreviewMouseMove;
             page.Canvas.Drop += Canvas_Drop;
-            page.Canvas.SelectedItemsChanged += OnPageCanvasSelectedItemsChanged;
             page.Canvas.ItemAdded += OnPageCanvasItemAdded;
             page.Canvas.ItemsDeleted += OnPageCanvasItemsDeleted;
 
@@ -699,17 +683,6 @@ namespace Designer
                 this
             );
             RefreshLayoutTree();
-        }
-
-        private void OnPageCanvasSelectedItemsChanged(object sender, ItemsChangedEventArgs e)
-        {
-            if (e.Items.Count != 1)
-            {
-                SelectedControlProperties = null;
-                return;
-            }
-
-            SelectedControlProperties = e.Items[0].Properties;
         }
 
         private void OnPageCanvasItemAdded(object sender, ItemAddedEventArgs e)
@@ -1393,7 +1366,6 @@ namespace Designer
             if (pg != null)
             {
                 TableStyles.Remove(pg);
-                FlowTableManager.Instance().Remove(pg.TableId);
             }
 
             if (item != null)
@@ -1406,10 +1378,7 @@ namespace Designer
 
         private void CtxMenuTable_Click(object sender, RoutedEventArgs e)
         {
-            var table = FlowTable.Default();
-            AddNewTableStyle(table.Id);
 
-            FlowTableManager.Instance().Add(table, false);
         }
 
         public FontStyles FontStyles = new FontStyles();
@@ -2548,6 +2517,32 @@ namespace Designer
             {
                 _selectedControlProperties = value;
                 NotifyPropertyChanged();
+            }
+        }
+
+        private void TreeViewRoot_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (e.OldValue is ISelectable oldSelectableObject)
+            {
+                oldSelectableObject.IsSelected = false;
+            }
+
+            if (e.NewValue is ISelectable newSelectableObject)
+            {
+                newSelectableObject.IsSelected = true;
+            }
+
+            if (e.NewValue is ControlPropertiesViewModel propertiesViewModel)
+            {
+                SelectedControlProperties = propertiesViewModel;
+            }
+            else if (e.NewValue is DesignerTreeViewItem designerItem)
+            {
+                SelectedControlProperties = ((DesignerItem)designerItem.AssociatedItem).Properties;
+            }
+            else
+            {
+                SelectedControlProperties = null;
             }
         }
     }

@@ -98,41 +98,9 @@ namespace Designer
             this.TextEditor.SelectionRightIndent = 0;
             this.TextEditor.SelectionHangingIndent = 0;
             this.TextEditor.ScrollBars = RichTextBoxScrollBars.None;
-
-            FlowTableManager.Instance().TableRemoved += OnTableRemoved;
         }
 
-        public void AddTablePresenter(FlowTablePresenter presenter, FlowTableSettings tableSettings, Point position)
-        {
-            var widthBinding = new System.Windows.Data.Binding("ActualWidth");
-            widthBinding.Source = Container;
-            widthBinding.Converter = new PercentageConverter();
-            widthBinding.ConverterParameter = tableSettings.WidthPercentage;
-            presenter.SetBinding(WidthProperty, widthBinding);
-            
-            Canvas.SetLeft(presenter, tableSettings.Alignment == FlowTableAlignment.Left
-                ? 0
-                : Container.ActualWidth - presenter.Width);
-            Canvas.SetTop(presenter, position.Y);
-            Container.Children.Add(presenter);
-        }
-
-        private void OnTableRemoved(object sender, TableEventEventArgs e)
-        {
-            List<UIElement> itemsToRemove = new List<UIElement>();
-
-            foreach (UIElement child in Container.Children)
-            {
-                if (child is FlowTablePresenter table && table.ParentId == e.Table.Id)
-                {
-                    itemsToRemove.Add(child);
-                }
-            }
-
-            foreach (var item in itemsToRemove)
-                Container.Children.Remove(item);
-
-        }
+             
 
         private void TextEditor_ContentsResized(object sender, ContentsResizedEventArgs e)
         {
@@ -453,16 +421,6 @@ namespace Designer
             var result = tableDialog.ShowDialog();
             if (result == null || result.Value == false)
                 return;
-
-            var table = new FlowTable();
-            table.Settings.Columns = tableDialog.Columns;
-            table.Settings.HeaderRows = tableDialog.HeaderRows;
-            table.Settings.BodyRows = tableDialog.BodyRows;
-            table.Settings.FooterRows = tableDialog.FooterRows;
-
-            var presenter = table.NewPresenter();
-            AddTablePresenter(presenter, table.Settings, _mousePos);
-            FlowTableManager.Instance().Add(table);
         }
 
         private Point _mousePos;

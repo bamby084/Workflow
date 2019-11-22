@@ -10,8 +10,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Image Source="/Designer;component/Resources/table.png" Grid.Column="0" Width="16" Height="16"/>
-            <Label Content="{Binding Path=Name}" Grid.Column="2" Padding="0 1"/>
+            <Image Source="/Designer;component/Resources/table.png" Grid.Column="0" Width="20" Height="20"/>
+            <Label Content="{Binding Path=Name}" Grid.Column="2" Padding="0 1" VerticalAlignment="Center"/>
 
             <Grid.ContextMenu>
                 <ContextMenu>
@@ -35,8 +35,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Image Source="/Designer;component/Resources/rowset.png" Grid.Column="0" Width="16" Height="16"/>
-            <Label Content="{Binding Path=Name}" Grid.Column="2" Padding="0 1"/>
+            <Image Source="/Designer;component/Resources/rowset.png" Grid.Column="0" Width="20" Height="20"/>
+            <Label Content="{Binding Path=Name}" Grid.Column="2" Padding="0 1" VerticalAlignment="Center"/>
 
             <Grid.ContextMenu>
                 <ContextMenu>
@@ -55,8 +55,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Image Source="/Designer;component/Resources/table_row.png" Grid.Column="0" Width="16" Height="16"/>
-            <Label Content="{Binding Path=Name}" Grid.Column="2" Padding="0 1"/>
+            <Image Source="/Designer;component/Resources/table_row.png" Grid.Column="0" Width="20" Height="20"/>
+            <Label Content="{Binding Path=Name}" Grid.Column="2" Padding="0 1" VerticalAlignment="Center"/>
 
             <Grid.ContextMenu>
                 <ContextMenu>
@@ -74,8 +74,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Image Source="/Designer;component/Resources/table_cell.png" Grid.Column="0" Width="16" Height="16"/>
-            <Label Content="{Binding Path=Name}" Grid.Column="2" Padding="0 1"/>
+            <Image Source="/Designer;component/Resources/table_cell.png" Grid.Column="0" Width="20" Height="20"/>
+            <Label Content="{Binding Path=Name}" Grid.Column="2" Padding="0 1" VerticalAlignment="Center"/>
         </Grid>
     </HierarchicalDataTemplate>
 </ResourceDictionary>
