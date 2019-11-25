@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using System.Windows.Documents;
 
-
 namespace Designer.DesignerItems
 {
     public class BlockDocument: RichTextBox
@@ -13,6 +12,7 @@ namespace Designer.DesignerItems
             Document.IsColumnWidthFlexible = true;
             Document.IsHyphenationEnabled = true;
             Document.IsOptimalParagraphEnabled = true;
+            VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
         }
 
         public Paragraph GetCaretContainer(LogicalDirection direction)

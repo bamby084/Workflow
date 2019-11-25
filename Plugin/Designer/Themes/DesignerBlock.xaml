@@ -1,6 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:designer="clr-namespace:Designer"
                     xmlns:designerItems="clr-namespace:Designer.DesignerItems">
     <Style TargetType="{x:Type designerItems:DesignerBlock}">
         <Setter Property="Template">
@@ -30,12 +29,21 @@
                                     </MenuItem>
                                 </ContextMenu>
                             </designerItems:BlockDocument.ContextMenu>
+
+                            <designerItems:BlockDocument.Resources>
+                                <ResourceDictionary>
+                                    <ResourceDictionary.MergedDictionaries>
+                                        <ResourceDictionary Source="/Designer;component/Themes/ScrollBarStyle.xaml"/>
+                                    </ResourceDictionary.MergedDictionaries>
+                                </ResourceDictionary>
+                            </designerItems:BlockDocument.Resources>
+                            
                         </designerItems:BlockDocument>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
         <Setter Property="Canvas.Left" Value="{Binding Path=Left, Mode=TwoWay}"/>
         <Setter Property="Canvas.Top" Value="{Binding Path=Top, Mode=TwoWay}"/>
         <Setter Property="Width" Value="{Binding Path=Width, Mode=TwoWay}"/>
