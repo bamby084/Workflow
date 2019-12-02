@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Designer.ExtensionMethods;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -17,11 +18,15 @@ namespace Designer.Adorners
 
         protected override void OnDrag(object sender, DragDeltaEventArgs e)
         {
-            var oldLeft = Canvas.GetLeft(AdornedElement);
-            Canvas.SetLeft(AdornedElement, oldLeft + e.HorizontalChange);
+            double oldLeft = Canvas.GetLeft(AdornedElement);
+            double newLeft = oldLeft + e.HorizontalChange;
+            newLeft = newLeft.Clamp(0, double.MaxValue);
+            Canvas.SetLeft(AdornedElement, newLeft);
 
-            var oldTop = Canvas.GetTop(AdornedElement);
-            Canvas.SetTop(AdornedElement, oldTop + e.VerticalChange);
+            double oldTop = Canvas.GetTop(AdornedElement);
+            double newTop = oldTop + e.VerticalChange;
+            newTop = newTop.Clamp(0, double.MaxValue);
+            Canvas.SetTop(AdornedElement, newTop);
         }
 
         protected override void OnDragStarted(object sender, DragStartedEventArgs e)

@@ -192,6 +192,7 @@
     <Compile Include="DesignerTreeViewItems\DesignerTreeViewItem.cs" />
     <Compile Include="ExtensionMethods\ContextMenuExtensions.cs" />
     <Compile Include="ExtensionMethods\EnumExtensions.cs" />
+    <Compile Include="ExtensionMethods\NumberExtensions.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="UnitOfMeasure\UnitOfMeasure.cs" />
     <Compile Include="Converters\PixelConverter.cs" />

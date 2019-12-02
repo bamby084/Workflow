@@ -67,8 +67,8 @@ namespace Designer.DesignerTools
                 var block = new DesignerBlock();
                 block.Properties.Width = Math.Abs(_mouseDownPos.X - mouseUpPos.X);
                 block.Properties.Height = Math.Abs(_mouseDownPos.Y - mouseUpPos.Y);
-                block.Properties.Left = left;
-                block.Properties.Top = top;
+                block.Properties.Left = Math.Max(0, left);
+                block.Properties.Top = Math.Max(0, top);
 
                 Canvas.AddItem(block);
                 Canvas.NotifyItemAdded(block);
@@ -83,7 +83,12 @@ namespace Designer.DesignerTools
                 return;
 
             Point mousePos = e.GetPosition(Canvas);
-            DrawingAdorner.Update(Math.Min(_mouseDownPos.X, mousePos.X), Math.Min(_mouseDownPos.Y, mousePos.Y),
+            double left = Math.Min(_mouseDownPos.X, mousePos.X);
+            left = Math.Max(0, left);
+            double top = Math.Min(_mouseDownPos.Y, mousePos.Y);
+            top = Math.Max(0, top);
+
+            DrawingAdorner.Update(left, top,
                 Math.Abs(_mouseDownPos.X - mousePos.X), Math.Abs(_mouseDownPos.Y - mousePos.Y));
             _isDragging = true;
         }

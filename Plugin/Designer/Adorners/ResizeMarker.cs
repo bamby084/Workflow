@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Designer.ExtensionMethods;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -21,21 +22,24 @@ namespace Designer.Adorners
 
         protected virtual void ExpandToLeft(double delta)
         {
-            double newWidth = Math.Max(AdornedElement.DesiredSize.Width - delta, MinWidth);
-            AdornedElement.SetValue(WidthProperty, newWidth);
-
-            var oldLeft = Canvas.GetLeft(AdornedElement);
-            var newLeft = oldLeft - newWidth + AdornedElement.DesiredSize.Width;
+            double oldLeft = Canvas.GetLeft(AdornedElement);
+            double right = oldLeft + AdornedElement.DesiredSize.Width;
+            double newLeft = (oldLeft + delta).Clamp(0, right - MinWidth);
             Canvas.SetLeft(AdornedElement, newLeft);
+
+            double newWidth = Math.Max(MinWidth, AdornedElement.DesiredSize.Width - (newLeft - oldLeft));
+            AdornedElement.SetValue(WidthProperty, newWidth);
         }
 
         protected virtual void ExpandToTop(double delta)
         {
-            var newHeight = Math.Max(AdornedElement.DesiredSize.Height - delta, MinHeight);
-            AdornedElement.SetValue(HeightProperty, newHeight);
+            double oldTop = Canvas.GetTop(AdornedElement);
+            double bottom = oldTop + AdornedElement.DesiredSize.Height;
+            double newTop = (oldTop + delta).Clamp(0, bottom - MinHeight);
+            Canvas.SetTop(AdornedElement, newTop);
 
-            var oldTop = Canvas.GetTop(AdornedElement);
-            Canvas.SetTop(AdornedElement, oldTop - (newHeight - AdornedElement.DesiredSize.Height));
+            double newHeight = Math.Max(MinHeight, AdornedElement.DesiredSize.Height - (newTop - oldTop));
+            AdornedElement.SetValue(HeightProperty, newHeight);
         }
 
         protected virtual void ExpandToRight(double delta)
@@ -49,6 +53,7 @@ namespace Designer.Adorners
             var newHeight = Math.Max(AdornedElement.DesiredSize.Height + delta, MinHeight);
             AdornedElement.SetValue(HeightProperty, newHeight);
         }
+        
     }
 
     public class TopLeftResizeMarker : ResizeMarker
