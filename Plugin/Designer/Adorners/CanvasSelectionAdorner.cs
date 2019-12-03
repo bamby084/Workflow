@@ -51,5 +51,10 @@ namespace Designer.Adorners
 
             this.InvalidateArrange();
         }
+
+        public void Update(Rect rect)
+        {
+            Update(rect.Left, rect.Top, rect.Width, rect.Height);
+        }
     }
 }

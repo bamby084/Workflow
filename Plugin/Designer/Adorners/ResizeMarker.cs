@@ -1,4 +1,5 @@
-﻿using Designer.ExtensionMethods;
+﻿using Designer.DesignerItems;
+using Designer.ExtensionMethods;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -44,16 +45,19 @@ namespace Designer.Adorners
 
         protected virtual void ExpandToRight(double delta)
         {
-            double newWidth = Math.Max(AdornedElement.DesiredSize.Width + delta, MinWidth);
+            double newWidth = AdornedElement.DesiredSize.Width + delta;
+            double maxWidth = ContainerRect.Width - Canvas.GetLeft(AdornedElement);
+            newWidth = newWidth.Clamp(MinWidth, maxWidth);
             AdornedElement.SetValue(WidthProperty, newWidth);
         }
 
         protected virtual void ExpandToBottom(double delta)
         {
-            var newHeight = Math.Max(AdornedElement.DesiredSize.Height + delta, MinHeight);
+            double newHeight = AdornedElement.DesiredSize.Height + delta;
+            double maxHeight = ContainerRect.Height - Canvas.GetTop(AdornedElement);
+            newHeight = newHeight.Clamp(MinHeight, maxHeight);
             AdornedElement.SetValue(HeightProperty, newHeight);
         }
-        
     }
 
     public class TopLeftResizeMarker : ResizeMarker
@@ -78,6 +82,8 @@ namespace Designer.Adorners
 
             adornerLayer.Add(new TopSizeAdorner(AdornedElement));
             adornerLayer.Add(new RightSizeAdorner(AdornedElement));
+
+            base.OnDragStarted(sender, e);
         }
 
         public override Rect GetSize()
@@ -111,6 +117,8 @@ namespace Designer.Adorners
 
             adornerLayer.Add(new TopSizeAdorner(AdornedElement));
             adornerLayer.Add(new LeftSizeAdorner(AdornedElement));
+
+            base.OnDragStarted(sender, e);
         }
 
         public override Rect GetSize()
@@ -144,6 +152,8 @@ namespace Designer.Adorners
 
             adornerLayer.Add(new RightSizeAdorner(AdornedElement));
             adornerLayer.Add(new BottomSizeAdorner(AdornedElement));
+
+            base.OnDragStarted(sender, e);
         }
 
         public override Rect GetSize()
@@ -177,6 +187,8 @@ namespace Designer.Adorners
 
             adornerLayer.Add(new LeftSizeAdorner(AdornedElement));
             adornerLayer.Add(new BottomSizeAdorner(AdornedElement));
+
+            base.OnDragStarted(sender, e);
         }
 
         public override Rect GetSize()
@@ -208,6 +220,7 @@ namespace Designer.Adorners
                 return;
 
             adornerLayer.Add(new BottomSizeAdorner(AdornedElement));
+            base.OnDragStarted(sender, e);
         }
 
         public override Rect GetSize()
@@ -239,6 +252,7 @@ namespace Designer.Adorners
                 return;
 
             adornerLayer.Add(new BottomSizeAdorner(AdornedElement));
+            base.OnDragStarted(sender, e);
         }
 
         public override Rect GetSize()
@@ -278,6 +292,7 @@ namespace Designer.Adorners
                 return;
 
             adornerLayer.Add(new RightSizeAdorner(AdornedElement));
+            base.OnDragStarted(sender, e);
         }
     }
 
@@ -301,6 +316,7 @@ namespace Designer.Adorners
                 return;
 
             adornerLayer.Add(new RightSizeAdorner(AdornedElement));
+            base.OnDragStarted(sender, e);
         }
 
         public override Rect GetSize()

@@ -8,6 +8,7 @@ namespace Designer.Adorners
     public abstract class Marker : Thumb
     {
         private const double MarkerSize = 8;
+        protected Rect ContainerRect;
 
         protected UIElement AdornedElement { get; }
 
@@ -32,6 +33,11 @@ namespace Designer.Adorners
 
         protected virtual void OnDragStarted(object sender, DragStartedEventArgs e)
         {
+            var parent = (AdornedElement as FrameworkElement).Parent as FrameworkElement;
+            if (parent == null)
+                return;
+
+            ContainerRect = new Rect(0, 0, parent.ActualWidth, parent.ActualHeight);
         }
 
         protected virtual void OnDrag(object sender, DragDeltaEventArgs e)

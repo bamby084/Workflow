@@ -20,12 +20,12 @@ namespace Designer.Adorners
         {
             double oldLeft = Canvas.GetLeft(AdornedElement);
             double newLeft = oldLeft + e.HorizontalChange;
-            newLeft = newLeft.Clamp(0, double.MaxValue);
+            newLeft = newLeft.Clamp(0, ContainerRect.Width - AdornedElement.DesiredSize.Width);
             Canvas.SetLeft(AdornedElement, newLeft);
 
             double oldTop = Canvas.GetTop(AdornedElement);
             double newTop = oldTop + e.VerticalChange;
-            newTop = newTop.Clamp(0, double.MaxValue);
+            newTop = newTop.Clamp(0, ContainerRect.Height - AdornedElement.DesiredSize.Height);
             Canvas.SetTop(AdornedElement, newTop);
         }
 
@@ -36,6 +36,7 @@ namespace Designer.Adorners
                 return;
 
             adornerLayer.Add(new PositionAdorner(AdornedElement));
+            base.OnDragStarted(sender, e);
         }
 
         protected override void OnDragCompleted(object sender, DragCompletedEventArgs e)

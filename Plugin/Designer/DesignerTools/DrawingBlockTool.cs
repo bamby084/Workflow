@@ -1,5 +1,6 @@
 ﻿using Designer.Adorners;
 using Designer.DesignerItems;
+using Designer.ExtensionMethods;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -15,7 +16,7 @@ namespace Designer.DesignerTools
         private bool _isMouseDown;
         private Point _mouseDownPos;
         private bool _isDragging;
-        private bool _escape;
+        private Rect _desizedRect;
 
         private DrawingBlockAdorner _drawingAdorner;
         private DrawingBlockAdorner DrawingAdorner
@@ -60,15 +61,11 @@ namespace Designer.DesignerTools
 
             if (_isDragging)
             {
-                var mouseUpPos = e.GetPosition(Canvas);
-                var left = Math.Min(_mouseDownPos.X, mouseUpPos.X);
-                var top = Math.Min(_mouseDownPos.Y, mouseUpPos.Y);
-
                 var block = new DesignerBlock();
-                block.Properties.Width = Math.Abs(_mouseDownPos.X - mouseUpPos.X);
-                block.Properties.Height = Math.Abs(_mouseDownPos.Y - mouseUpPos.Y);
-                block.Properties.Left = Math.Max(0, left);
-                block.Properties.Top = Math.Max(0, top);
+                block.Properties.Left = _desizedRect.Left;
+                block.Properties.Top = _desizedRect.Top;
+                block.Properties.Width = _desizedRect.Width;
+                block.Properties.Height = _desizedRect.Height;
 
                 Canvas.AddItem(block);
                 Canvas.NotifyItemAdded(block);
@@ -83,13 +80,19 @@ namespace Designer.DesignerTools
                 return;
 
             Point mousePos = e.GetPosition(Canvas);
-            double left = Math.Min(_mouseDownPos.X, mousePos.X);
-            left = Math.Max(0, left);
-            double top = Math.Min(_mouseDownPos.Y, mousePos.Y);
-            top = Math.Max(0, top);
+            double desizedLeft = Math.Max(0, mousePos.X);
+            double desizedTop = Math.Max(0, mousePos.Y);
 
-            DrawingAdorner.Update(left, top,
-                Math.Abs(_mouseDownPos.X - mousePos.X), Math.Abs(_mouseDownPos.Y - mousePos.Y));
+            double left = Math.Min(_mouseDownPos.X, desizedLeft);
+            double top = Math.Min(_mouseDownPos.Y, desizedTop);
+            double maxWidth = Canvas.ActualWidth - left;
+            double maxHeight = Canvas.ActualHeight - top;
+            double width = Math.Abs(_mouseDownPos.X - desizedLeft).Clamp(0, maxWidth);
+            double height = Math.Abs(_mouseDownPos.Y - desizedTop).Clamp(0, maxHeight);
+
+            _desizedRect = new Rect(left, top, width, height);
+            DrawingAdorner.Update(_desizedRect);
+
             _isDragging = true;
         }
 
