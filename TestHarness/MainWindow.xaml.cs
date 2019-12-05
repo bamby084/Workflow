@@ -95,6 +95,9 @@ namespace TestHarness
             var block = new BlockTreeViewItem();
             block.AssociatedItem = e.Item;
             block.OnDeleted += OnBlockDeleted;
+            e.Item.OnDisposed += delegate {
+                firstPage.Items.Remove(block);
+            };
             firstPage.Items.Add(block);
         }
 
@@ -103,7 +106,7 @@ namespace TestHarness
             var block = sender as BlockTreeViewItem;
             var firstPage = Pages.Items[0] as TreeViewItem;
 
-            Canvas.RemoveItem((DesignerItem)block.AssociatedItem);
+            Canvas.RemoveItem(block.AssociatedItem);
             firstPage.Items.Remove(block);
         }
 
@@ -156,7 +159,7 @@ namespace TestHarness
             }
             else if(e.NewValue is DesignerTreeViewItem designerItem)
             {
-                SelectedControlProperties = ((DesignerItem) designerItem.AssociatedItem).Properties;
+                SelectedControlProperties = (designerItem.AssociatedItem).Properties;
             }
             else
             {

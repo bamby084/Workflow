@@ -91,8 +91,17 @@ namespace Designer.DesignerTools
                 return;
 
             Point mousePos = e.GetPosition(Canvas);
-            SelectionAdorner.Update(Math.Min(_mouseDownPos.X, mousePos.X), Math.Min(_mouseDownPos.Y, mousePos.Y),
-                Math.Abs(_mouseDownPos.X - mousePos.X), Math.Abs(_mouseDownPos.Y - mousePos.Y));
+            double desizedLeft = Math.Max(0, mousePos.X);
+            double desizedTop = Math.Max(0, mousePos.Y);
+
+            double left = Math.Min(_mouseDownPos.X, desizedLeft);
+            double top = Math.Min(_mouseDownPos.Y, desizedTop);
+            double maxWidth = Canvas.ActualWidth - left;
+            double maxHeight = Canvas.ActualHeight - top;
+            double width = Math.Abs(_mouseDownPos.X - desizedLeft).Clamp(0, maxWidth);
+            double height = Math.Abs(_mouseDownPos.Y - desizedTop).Clamp(0, maxHeight);
+
+            SelectionAdorner.Update(left, top, width, height);
             _isDragging = true;
         }
 

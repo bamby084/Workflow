@@ -13,9 +13,9 @@ namespace Designer.DesignerTools
 {
     public class DrawingBlockTool : DesignerTool
     {
-        private bool _isMouseDown;
         private Point _mouseDownPos;
         private bool _isDragging;
+        private bool _cancel;
         private Rect _desizedRect;
 
         private DrawingBlockAdorner _drawingAdorner;
@@ -46,20 +46,18 @@ namespace Designer.DesignerTools
 
         public override void HandleMouseLeftButtonDown(MouseButtonEventArgs e)
         {
-            _isMouseDown = true;
+            _cancel = false;
             _mouseDownPos = e.GetPosition(Canvas);
             Canvas.CaptureMouse();
-
             DrawingAdorner.Update(_mouseDownPos.X, _mouseDownPos.Y, 0, 0);
         }
 
         public override void HandleMouseLeftButtonUp(MouseButtonEventArgs e)
         {
-            _isMouseDown = false;
             Canvas.ReleaseMouseCapture();
             DrawingAdorner.Update(0, 0, 0, 0);
 
-            if (_isDragging)
+            if (_isDragging && _desizedRect.Width != 0 && _desizedRect.Height != 0)
             {
                 var block = new DesignerBlock();
                 block.Properties.Left = _desizedRect.Left;
@@ -72,11 +70,12 @@ namespace Designer.DesignerTools
             }
 
             _isDragging = false;
+            _cancel = true;
         }
 
         public override void HandleMouseMove(MouseEventArgs e)
         {
-            if (!_isMouseDown)
+            if (e.LeftButton != MouseButtonState.Pressed || _cancel)
                 return;
 
             Point mousePos = e.GetPosition(Canvas);
@@ -92,7 +91,6 @@ namespace Designer.DesignerTools
 
             _desizedRect = new Rect(left, top, width, height);
             DrawingAdorner.Update(_desizedRect);
-
             _isDragging = true;
         }
 
@@ -100,9 +98,9 @@ namespace Designer.DesignerTools
         {
             if (e.Key == Key.Escape && _isDragging)
             {
-                DrawingAdorner.Update(0, 0, 0, 0);
-                _isMouseDown = false;
                 _isDragging = false;
+                _cancel = true;
+                DrawingAdorner.Update(0, 0, 0, 0);
                 Canvas.ReleaseMouseCapture();
             }
         }

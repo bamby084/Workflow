@@ -9,7 +9,8 @@ namespace Designer.DesignerTreeViewItems
     public abstract class DesignerTreeViewItem: TreeViewItem
     {
         public abstract ImageSource Image { get; }
-        public object AssociatedItem { get; set; }
+
+        public virtual DesignerItem AssociatedItem { get; set; }
 
         public event EventHandler OnDeleted;
 
@@ -17,7 +18,7 @@ namespace Designer.DesignerTreeViewItems
         {
             if(e.Key == Key.Delete)
             {
-                ((ISelectable) AssociatedItem).IsSelected = false;
+                AssociatedItem.IsSelected = false;
 
                 if (OnDeleted != null)
                     OnDeleted(this, new EventArgs());

@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace Designer.DesignerItems
 {
-    public class TableProperties: ControlPropertiesViewModel, ISelectable
+    public class TableProperties: ControlPropertiesViewModel, ISelectable, IBlockChild
     {
         public event EventHandler OnDeleted;
         public event EventHandler OnRowSetAdded;

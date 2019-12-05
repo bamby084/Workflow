@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using Designer.ExtensionMethods;
 using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace Designer.DesignerItems
 {
@@ -13,6 +14,20 @@ namespace Designer.DesignerItems
         private static int CurrentIndex;
         private ControlPropertiesViewModel _properties;
         private List<DesignerTableContainer> _tableContainers;
+
+        private ObservableCollection<IBlockChild> _children;
+        public ObservableCollection<IBlockChild> Children
+        {
+            get => _children;
+            set
+            {
+                if (value != _children)
+                {
+                    _children = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public BlockDocument Editor { get; set; }
 
@@ -27,6 +42,7 @@ namespace Designer.DesignerItems
             _properties = new BlockProperties();
             _properties.Name = $"Block {GetNextIndex()}";
             _tableContainers = new List<DesignerTableContainer>();
+            _children = new ObservableCollection<IBlockChild>();
 
             this.DataContext = _properties;
         }
@@ -80,6 +96,7 @@ namespace Designer.DesignerItems
             }
 
             _tableContainers.Add(tableContainer);
+            Children.Add(tableProperties);
             DesignerTableManager.Instance.AddTable(tableProperties);
         }
 
@@ -93,6 +110,8 @@ namespace Designer.DesignerItems
                 (container.Parent as Paragraph).Inlines.Remove(container);
                 _tableContainers.Remove(container);
             }
+
+            Children.Remove(tableProperties);
         }
 
         private void OnCut(object sender, RoutedEventArgs routedEventArgs)

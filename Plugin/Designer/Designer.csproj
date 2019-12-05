@@ -170,6 +170,7 @@
     <Compile Include="Converters\UnitToStringConverter.cs" />
     <Compile Include="Converters\UnitTypeToStringConverter.cs" />
     <Compile Include="DesignerItems\Block\BlockDocument.cs" />
+    <Compile Include="DesignerItems\Block\IBlockChild.cs" />
     <Compile Include="DesignerItems\ISelectable.cs" />
     <Compile Include="DesignerItems\Table\CellPropertiesView.xaml.cs">
       <DependentUpon>CellPropertiesView.xaml</DependentUpon>
