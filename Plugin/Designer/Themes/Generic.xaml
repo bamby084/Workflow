@@ -4,6 +4,5 @@
         <ResourceDictionary Source="/Designer;component/Themes/Thumb.xaml"/>
         <ResourceDictionary Source="/Designer;component/Themes/DesignerBlock.xaml"/>
         <ResourceDictionary Source="/Designer;component/Themes/DesignerToolbar.xaml"/>
-        <ResourceDictionary Source="/Designer;component/Themes/TreeViewItems.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

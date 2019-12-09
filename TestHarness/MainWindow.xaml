@@ -9,6 +9,7 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:designerItems="clr-namespace:Designer.DesignerItems;assembly=Designer"
         mc:Ignorable="d"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         WindowStartupLocation="CenterScreen"
         Title="MainWindow" Height="550" Width="825">
     <Window.Resources>
@@ -56,7 +57,21 @@
                       ItemsSource="{Binding Source={StaticResource UnitTypeEnum}}"/>
             <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" Margin="0 5 0 0">
                 <TreeView SelectedItemChanged="TreeView_SelectedItemChanged">
+                    <TreeView.Resources>
+                        <ResourceDictionary>
+                            <ResourceDictionary.MergedDictionaries>
+                                <ResourceDictionary Source="/Designer;component/Themes/BlockHierarchicalDataTemplate.xaml"/>
+                                <ResourceDictionary Source="/Designer;component/Themes/TableHierarchicalDataTemplate.xaml"/>
+                            </ResourceDictionary.MergedDictionaries>
+
+                            <Style TargetType="TreeViewItem">
+                                <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
+                            </Style>
+                        </ResourceDictionary>
+                    </TreeView.Resources>
+                                        
                     <TreeViewItem Name="Pages" Header="Pages">
+                        
                         <TreeViewItem Header="Page1"/>
                         <TreeViewItem Header="Page2">
                             <TreeViewItem Header="Page2.1"/>
@@ -65,13 +80,6 @@
                     </TreeViewItem>
                     <TreeViewItem Name="Table" Header="Tables" 
                                   ItemsSource="{Binding Path=Tables, Source={x:Static designerItems:DesignerTableManager.Instance}}">
-                        <TreeViewItem.Resources>
-                            <ResourceDictionary>
-                                <ResourceDictionary.MergedDictionaries>
-                                    <ResourceDictionary Source="/Designer;component/Themes/TableHierarchicalDataTemplate.xaml"/>
-                                </ResourceDictionary.MergedDictionaries>
-                            </ResourceDictionary>
-                        </TreeViewItem.Resources>
                     </TreeViewItem>
                 </TreeView>
             </Border>

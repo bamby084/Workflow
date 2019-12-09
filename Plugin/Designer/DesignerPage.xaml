@@ -1744,6 +1744,19 @@
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                     <StackPanel Background="{StaticResource AppBgColor}">
 						<TreeView Name="TreeViewRoot" Background="{StaticResource AppBgColor}" SelectedItemChanged="TreeViewRoot_SelectedItemChanged">
+                            <TreeView.Resources>
+                                <ResourceDictionary>
+                                    <ResourceDictionary.MergedDictionaries>
+                                        <ResourceDictionary Source="/Designer;component/Themes/TableHierarchicalDataTemplate.xaml"/>
+                                        <ResourceDictionary Source="/Designer;component/Themes/BlockHierarchicalDataTemplate.xaml"/>
+                                    </ResourceDictionary.MergedDictionaries>
+
+                                    <Style TargetType="TreeViewItem">
+                                        <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
+                                    </Style>
+                                </ResourceDictionary>
+                            </TreeView.Resources>
+                            
 							<TreeViewItem Name="TreeViewVariables" Margin="0,2">
 								<TreeViewItem.Header>
 									<StackPanel Orientation="Horizontal">
@@ -1754,8 +1767,12 @@
 								<TreeViewItem Name="TreeViewSystemVars" Header="System"/>
 								<TreeViewItem Name="TreeViewData" Header="Data"/>
 							</TreeViewItem>
-                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPages_RequestBringIntoView" x:Name="TreeViewPages" Style="{DynamicResource treeLibraryPages}" FontSize="12" Header="Pages" IsExpanded="True" Expanded="TreeViewPages_Expanded" Collapsed="TreeViewPages_Collapsed" KeyUp="TreeViewPages_KeyUp" MouseDoubleClick="TreeViewPages_MouseDoubleClick">
+                            <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPages_RequestBringIntoView" x:Name="TreeViewPages" 
+                                          Style="{DynamicResource treeLibraryPages}" FontSize="12" Header="Pages" IsExpanded="True" 
+                                          Expanded="TreeViewPages_Expanded" Collapsed="TreeViewPages_Collapsed" KeyUp="TreeViewPages_KeyUp" 
+                                          MouseDoubleClick="TreeViewPages_MouseDoubleClick">
                             </TreeViewItem>
+                            
                             <!--
                             <TreeViewItem Name="TreeViewPages" MouseDoubleClick="TreeViewPages_MouseDoubleClick">
 								<TreeViewItem.Header>
@@ -1892,13 +1909,6 @@
                             <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewTables" Style="{DynamicResource treeLibraryTables}" FontSize="12" 
                                           Header="Tables" IsExpanded="True" 
                                           ItemsSource="{Binding Path=Tables, Source={x:Static designerItems:DesignerTableManager.Instance}}">
-                                <TreeViewItem.Resources>
-                                    <ResourceDictionary>
-                                        <ResourceDictionary.MergedDictionaries>
-                                            <ResourceDictionary Source="/Designer;component/Themes/TableHierarchicalDataTemplate.xaml"/>
-                                        </ResourceDictionary.MergedDictionaries>
-                                    </ResourceDictionary>
-                                </TreeViewItem.Resources>
                             </TreeViewItem>
                             <!--
                             <TreeViewItem Name="TreeViewTables">

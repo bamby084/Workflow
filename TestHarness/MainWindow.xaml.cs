@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using Designer;
-using Designer.Adorners;
 using Designer.DesignerItems;
 using Designer.DesignerTools;
-using Designer.DesignerTreeViewItems;
 
 namespace TestHarness
 {
@@ -30,7 +25,7 @@ namespace TestHarness
 
             this.Loaded += MainWindow_Loaded;
             Canvas.ItemAdded += OnItemAdded;
-            Canvas.ItemsDeleted += OnItemsDeleted;
+            //Canvas.ItemsDeleted += OnItemsDeleted;
         }
 
         private DesignerTool _selectedTool;
@@ -67,47 +62,23 @@ namespace TestHarness
             Tools[0].IsSelected = true;
         }
 
-        private void OnItemsDeleted(object sender, ItemsChangedEventArgs e)
-        {
-            var firstPage = Pages.Items[0] as TreeViewItem;
-            List<BlockTreeViewItem> itemsToRemove = new List<BlockTreeViewItem>();
-
-            foreach(DesignerItem item in e.Items)
-            {
-                foreach(BlockTreeViewItem block in firstPage.Items)
-                {
-                    if(block.AssociatedItem.Equals(item))
-                    {
-                        itemsToRemove.Add(block);
-                    }
-                }
-            }
-
-            foreach(var item in itemsToRemove)
-            {
-                firstPage.Items.Remove(item);
-            }
-        }
-
         private void OnItemAdded(object sender, ItemAddedEventArgs e)
         {
             var firstPage = Pages.Items[0] as TreeViewItem;
-            var block = new BlockTreeViewItem();
-            block.AssociatedItem = e.Item;
-            block.OnDeleted += OnBlockDeleted;
-            e.Item.OnDisposed += delegate {
-                firstPage.Items.Remove(block);
+            var blockProperties = (BlockProperties)e.Item.Properties;
+            blockProperties.OnDelete += delegate
+            {
+                firstPage.Items.Remove(blockProperties);
+                e.Item.Dispose();
             };
-            firstPage.Items.Add(block);
-        }
 
-        private void OnBlockDeleted(object sender, EventArgs e)
-        {
-            var block = sender as BlockTreeViewItem;
-            var firstPage = Pages.Items[0] as TreeViewItem;
+            e.Item.OnDisposed += delegate
+            {
+                firstPage.Items.Remove(blockProperties);
+            };
 
-            Canvas.RemoveItem(block.AssociatedItem);
-            firstPage.Items.Remove(block);
+            firstPage.Items.Add(blockProperties);
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -156,10 +127,6 @@ namespace TestHarness
             if (e.NewValue is ControlPropertiesViewModel propertiesViewModel)
             {
                 SelectedControlProperties = propertiesViewModel;
-            }
-            else if(e.NewValue is DesignerTreeViewItem designerItem)
-            {
-                SelectedControlProperties = (designerItem.AssociatedItem).Properties;
             }
             else
             {

@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using Designer.ExtensionMethods;
 using System.Linq;
-using System.Collections.ObjectModel;
+using System.Windows.Data;
 
 namespace Designer.DesignerItems
 {
@@ -14,20 +14,6 @@ namespace Designer.DesignerItems
         private static int CurrentIndex;
         private ControlPropertiesViewModel _properties;
         private List<DesignerTableContainer> _tableContainers;
-
-        private ObservableCollection<IBlockChild> _children;
-        public ObservableCollection<IBlockChild> Children
-        {
-            get => _children;
-            set
-            {
-                if (value != _children)
-                {
-                    _children = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
 
         public BlockDocument Editor { get; set; }
 
@@ -42,8 +28,8 @@ namespace Designer.DesignerItems
             _properties = new BlockProperties();
             _properties.Name = $"Block {GetNextIndex()}";
             _tableContainers = new List<DesignerTableContainer>();
-            _children = new ObservableCollection<IBlockChild>();
 
+            BindProperties();
             this.DataContext = _properties;
         }
 
@@ -96,7 +82,7 @@ namespace Designer.DesignerItems
             }
 
             _tableContainers.Add(tableContainer);
-            Children.Add(tableProperties);
+            ((BlockProperties)Properties).Children.Add(tableProperties);
             DesignerTableManager.Instance.AddTable(tableProperties);
         }
 
@@ -111,7 +97,7 @@ namespace Designer.DesignerItems
                 _tableContainers.Remove(container);
             }
 
-            Children.Remove(tableProperties);
+            ((BlockProperties)Properties).Children.Remove(tableProperties);
         }
 
         private void OnCut(object sender, RoutedEventArgs routedEventArgs)
@@ -144,6 +130,14 @@ namespace Designer.DesignerItems
                 CurrentIndex++;
                 return CurrentIndex;
             }
+        }
+
+        private void BindProperties()
+        {
+            var isSelectedBinding = new Binding("IsSelected");
+            isSelectedBinding.Source = Properties;
+            isSelectedBinding.Mode = BindingMode.TwoWay;
+            SetBinding(IsSelectedProperty, isSelectedBinding);
         }
     }
 }

@@ -25,7 +25,6 @@ using System.Collections.ObjectModel;
 using Designer.DesignerTools;
 using System.Runtime.CompilerServices;
 using Designer.DesignerItems;
-using Designer.DesignerTreeViewItems;
 
 namespace Designer
 {
@@ -691,40 +690,37 @@ namespace Designer
             if (page == null)
                 return;
 
-            foreach(TreeViewItem treeItem in TreeViewPages.Items)
+            if (e.Item is DesignerBlock block)
             {
-                if(treeItem is TvItemElement<Page> pageTreeItem)
+                foreach (TreeViewItem treeItem in TreeViewPages.Items)
                 {
-                    var p = pageTreeItem.Resources["PageRef"] as Page;
-                    if (page.Equals(p))
+                    if (treeItem is TvItemElement<Page> pageTreeItem)
                     {
-                        var block = new BlockTreeViewItem();
-                        block.AssociatedItem = e.Item;
-                        block.OnDeleted += OnBlockDeleted;
-                        e.Item.OnDisposed += delegate
+                        var pageRef = pageTreeItem.Resources["PageRef"] as Page;
+                        if (page.Equals(pageRef))
                         {
-                            treeItem.Items.Remove(block);
-                        };
+                            var blockProperties = (BlockProperties)block.Properties;
 
-                        treeItem.Items.Add(block);
-                        treeItem.IsExpanded = true;
-                        return;
+                            //delete by right clicking on treeview
+                            blockProperties.OnDelete += delegate
+                            {
+                                treeItem.Items.Remove(blockProperties);
+                                e.Item.Dispose();
+                            };
+
+                            //delete by canvas
+                            e.Item.OnDisposed += delegate
+                            {
+                                treeItem.Items.Remove(blockProperties);
+                            };
+
+                            treeItem.Items.Add(blockProperties);
+                            treeItem.IsExpanded = true;
+                            return;
+                        }
                     }
                 }
             }
-        }
-
-        private void OnBlockDeleted(object sender, EventArgs e)
-        {
-            var block = sender as BlockTreeViewItem;
-            if (block == null)
-                return;
-            var page = block.Parent as TreeViewItem;
-            if (page == null)
-                return;
-
-            page.Items.Remove(block);
-            block.AssociatedItem.Dispose();
         }
 
         private void OnPageCanvasItemsDeleted(object sender, ItemsChangedEventArgs e)
@@ -2535,10 +2531,6 @@ namespace Designer
             if (e.NewValue is ControlPropertiesViewModel propertiesViewModel)
             {
                 SelectedControlProperties = propertiesViewModel;
-            }
-            else if (e.NewValue is DesignerTreeViewItem designerItem)
-            {
-                SelectedControlProperties = ((DesignerItem)designerItem.AssociatedItem).Properties;
             }
             else
             {
