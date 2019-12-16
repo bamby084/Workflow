@@ -1,6 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:Designer.Converters"
+                    xmlns:local="clr-namespace:Designer"
                     xmlns:designerItems="clr-namespace:Designer.DesignerItems">
+
+    <CollectionViewSource x:Key="TableSource" Source="{Binding Path=Tables, Source={x:Static designerItems:DesignerTableManager.Instance}}"/>
+    <converters:RevertBoolToVisibilityConverter x:Key="RevertBool2VisibilityConverter"/>
+    <converters:CountToVisibilityConverter x:Key="Count2VisibilityConverter"/>
+        
     <Style TargetType="{x:Type designerItems:DesignerBlock}">
         <Setter Property="Template">
             <Setter.Value>
@@ -12,6 +19,16 @@
                              FontStyle="{Binding Path=FontStyle, RelativeSource={RelativeSource TemplatedParent}}"
                              FontFamily="{Binding Path=FontFamily, RelativeSource={RelativeSource TemplatedParent}}">
 
+                            <designerItems:BlockDocument.Resources>
+                                <ResourceDictionary>
+                                    <ResourceDictionary.MergedDictionaries>
+                                        <ResourceDictionary Source="/Designer;component/Themes/ScrollBarStyle.xaml"/>
+                                    </ResourceDictionary.MergedDictionaries>
+                                    
+                                    <local:BindingProxy Data="{Binding}" x:Key="Data"/>
+                                </ResourceDictionary>
+                            </designerItems:BlockDocument.Resources>
+                            
                             <designerItems:BlockDocument.ContextMenu>
                                 <ContextMenu x:Name="PART_ContextMenu">
                                     <MenuItem Header="Cut" x:Name="cmiCut"/>
@@ -20,24 +37,35 @@
                                     <Separator/>
                                     <MenuItem Header="Insert">
                                         <MenuItem Header="Flow" IsEnabled="False"/>
-                                        <MenuItem Header="Table" x:Name="cmiInsertTable">
+                                        <MenuItem Header="Table">
+                                            <MenuItem.Resources>
+                                                <DataTemplate DataType="{x:Type designerItems:TableProperties}">
+                                                    <Label Content="{Binding Path=Name}"/>
+                                                </DataTemplate>
+
+                                                <Style TargetType="{x:Type MenuItem}">
+                                                    <Setter Property="Command" Value="{Binding Source={StaticResource Data}, Path=Data.InsertExistingTableCommand}" />
+                                                    <Setter Property="CommandParameter" Value="{Binding}"/>
+                                                </Style>
+                                            </MenuItem.Resources>
                                             <MenuItem.Icon>
                                                 <Image Source="/Designer;component/Resources/add_table.png"/>
                                             </MenuItem.Icon>
+
+                                            <MenuItem.ItemsSource>
+                                                <CompositeCollection>
+                                                    <MenuItem Header="New Table..." x:Name="cmiInsertTable"/>
+                                                    <Separator Visibility="{Binding Path=Tables.Count, Source={x:Static designerItems:DesignerTableManager.Instance},
+                                                        Converter={StaticResource Count2VisibilityConverter}}"/>
+                                                    <CollectionContainer Collection="{Binding Source={StaticResource TableSource}}"/>
+                                                </CompositeCollection>
+                                            </MenuItem.ItemsSource>
+
                                         </MenuItem>
                                         <MenuItem Header="Image" IsEnabled="False"/>
                                     </MenuItem>
                                 </ContextMenu>
                             </designerItems:BlockDocument.ContextMenu>
-
-                            <designerItems:BlockDocument.Resources>
-                                <ResourceDictionary>
-                                    <ResourceDictionary.MergedDictionaries>
-                                        <ResourceDictionary Source="/Designer;component/Themes/ScrollBarStyle.xaml"/>
-                                    </ResourceDictionary.MergedDictionaries>
-                                </ResourceDictionary>
-                            </designerItems:BlockDocument.Resources>
-                            
                         </designerItems:BlockDocument>
                     </Border>
                 </ControlTemplate>
@@ -49,4 +77,5 @@
         <Setter Property="Width" Value="{Binding Path=Width, Mode=TwoWay}"/>
         <Setter Property="Height" Value="{Binding Path=Height, Mode=TwoWay}"/>
     </Style>
+    
 </ResourceDictionary>

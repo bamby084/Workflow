@@ -80,6 +80,11 @@
                     </TreeViewItem>
                     <TreeViewItem Name="Table" Header="Tables" 
                                   ItemsSource="{Binding Path=Tables, Source={x:Static designerItems:DesignerTableManager.Instance}}">
+                        <TreeViewItem.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Add New Table..." Command="{Binding Path=AddNewTableCommand}"/>
+                            </ContextMenu>
+                        </TreeViewItem.ContextMenu>
                     </TreeViewItem>
                 </TreeView>
             </Border>

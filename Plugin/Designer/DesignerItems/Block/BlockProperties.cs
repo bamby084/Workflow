@@ -10,6 +10,7 @@ namespace Designer.DesignerItems
     public class BlockProperties : ControlPropertiesViewModel, ISelectable
     {
         public event EventHandler OnDelete;
+        public event EventHandler OnInsertExistingTable;
 
         private bool _isSelected;
         public bool IsSelected
@@ -57,12 +58,22 @@ namespace Designer.DesignerItems
         {
             Children = new ObservableCollection<IBlockChild>();
             DeleteCommand = new RelayCommand(Delete);
+            InsertExistingTableCommand = new RelayCommand(InsertExistingTable);
         }
 
         public ICommand DeleteCommand { get; set; }
         public void Delete(object param)
         {
             OnDelete?.Invoke(this, new EventArgs());
+        }
+
+        public ICommand InsertExistingTableCommand { get; set; }
+        public void InsertExistingTable(object param)
+        {
+            if (param is TableProperties)
+            {
+                OnInsertExistingTable?.Invoke(param, new EventArgs());
+            }
         }
     }
 }

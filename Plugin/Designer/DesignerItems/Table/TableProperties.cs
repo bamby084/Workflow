@@ -13,12 +13,15 @@ namespace Designer.DesignerItems
         public event EventHandler OnDeleted;
         public event EventHandler OnRowSetAdded;
         public event EventHandler OnRowSetDeleted;
+        private static int CurrentIndex;
+        private static readonly object LockObject = new object();
 
-        public TableProperties()
+        private TableProperties()
         {
             _columnDefinitions = new ObservableCollection<TableColumnDefinition>();
             _rowSets = new ObservableCollection<RowSet>();
 
+            Name = GetDefaultName();
             DeleteCommand = new RelayCommand(DeleteTable);
             AddNewRowSetCommand = new RelayCommand(AddNewRowSet);
         }
@@ -265,6 +268,21 @@ namespace Designer.DesignerItems
                 {
                     _columnDefinitions[i].Width = desizedWidth;
                 }
+            }
+        }
+
+        private string GetDefaultName()
+        {
+            lock (LockObject)
+            {
+                string tableName = "";
+                do
+                {
+                    CurrentIndex++;
+                    tableName = $"Table {CurrentIndex}";
+                } while (DesignerTableManager.Instance.TableExists(tableName));
+
+                return tableName;
             }
         }
         #endregion

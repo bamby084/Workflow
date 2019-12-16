@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Designer;
 using Designer.DesignerItems;
 using Designer.DesignerTools;
@@ -17,8 +18,7 @@ namespace TestHarness
         {
             InitializeComponent();
             UnitOfMeasure.Current.UnitType = UnitType.Centimeter;
-            this.DataContext = this;
-
+            
             Tools = new ObservableCollection<DesignerTool>();
             Tools.Add(new SelectionTool());
             Tools.Add(new DrawingBlockTool());
@@ -26,6 +26,9 @@ namespace TestHarness
             this.Loaded += MainWindow_Loaded;
             Canvas.ItemAdded += OnItemAdded;
             //Canvas.ItemsDeleted += OnItemsDeleted;
+
+            AddNewTableCommand = new RelayCommand(AddNewTable);
+            this.DataContext = this;
         }
 
         private DesignerTool _selectedTool;
@@ -132,6 +135,18 @@ namespace TestHarness
             {
                 SelectedControlProperties = null;
             }
+        }
+
+        public ICommand AddNewTableCommand { get; set; }
+        public void AddNewTable(object param)
+        {
+            var tableDialog = new InsertTableWindow();
+            var result = tableDialog.ShowDialog();
+            if (result == null || result.Value == false)
+                return;
+
+            var tableProperties = TableProperties.Build(tableDialog.Columns, tableDialog.HeaderRows, tableDialog.BodyRows, tableDialog.FooterRows);
+            DesignerTableManager.Instance.AddTable(tableProperties);
         }
     }
 

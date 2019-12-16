@@ -149,6 +149,7 @@
     <Compile Include="Adorners\PositionAdorner.cs" />
     <Compile Include="Adorners\ResizeMarker.cs" />
     <Compile Include="Adorners\SizeAdorner.cs" />
+    <Compile Include="BindingProxy.cs" />
     <Compile Include="BlockStyle.cs" />
     <Compile Include="BlockStylePropertiesPanel.xaml.cs">
       <DependentUpon>BlockStylePropertiesPanel.xaml</DependentUpon>
@@ -159,6 +160,8 @@
     </Compile>
     <Compile Include="ControlPropertiesViewModel.cs" />
     <Compile Include="Converters\BoolToThicknessConverter.cs" />
+    <Compile Include="Converters\CountToVisibilityConverter.cs" />
+    <Compile Include="Converters\RevertBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\SolidBrushToColorConverter.cs" />
     <Compile Include="Converters\FigureHorizontalAnchorConverter.cs" />
     <Compile Include="Converters\FigureLengthConverter.cs" />
@@ -198,6 +201,7 @@
     <Compile Include="ExtensionMethods\ContextMenuExtensions.cs" />
     <Compile Include="ExtensionMethods\EnumExtensions.cs" />
     <Compile Include="ExtensionMethods\NumberExtensions.cs" />
+    <Compile Include="ExtensionMethods\StringExtensions.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="UnitOfMeasure\UnitOfMeasure.cs" />
     <Compile Include="Converters\PixelConverter.cs" />

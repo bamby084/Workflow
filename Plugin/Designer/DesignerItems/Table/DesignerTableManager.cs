@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.ObjectModel;
+using Designer.ExtensionMethods;
 
 namespace Designer.DesignerItems
 {
@@ -50,6 +52,11 @@ namespace Designer.DesignerItems
             TableRemoved?.Invoke(this, new DesignerTableEventArgs() { Table = table });
         }
 
+        public bool TableExists(string tableName)
+        {
+            return Tables.Any(t => t.Name.EqualsIgnoreCase(tableName));
+        }
+        
         public static DesignerTableManager Instance
         {
             get

@@ -5,6 +5,8 @@ using System.Windows.Documents;
 using Designer.ExtensionMethods;
 using System.Linq;
 using System.Windows.Data;
+using System.Windows.Input;
+using System;
 
 namespace Designer.DesignerItems
 {
@@ -26,6 +28,7 @@ namespace Designer.DesignerItems
         {
             FontSize = 14;
             _properties = new BlockProperties();
+            ((BlockProperties)_properties).OnInsertExistingTable += OnInsertExistingTable;
             _properties.Name = $"Block {GetNextIndex()}";
             _tableContainers = new List<DesignerTableContainer>();
 
@@ -62,12 +65,23 @@ namespace Designer.DesignerItems
                 return;
 
             var tableProperties = TableProperties.Build(tableDialog.Columns, tableDialog.HeaderRows, tableDialog.BodyRows, tableDialog.FooterRows);
+            InsertTable(tableProperties, true);
+        }
+
+        private void OnInsertExistingTable(object sender, EventArgs e)
+        {
+            var tableProperties = (TableProperties)sender;
+            InsertTable(tableProperties, false);
+        }
+
+        private void InsertTable(TableProperties tableProperties, bool addToTableManager)
+        {
             tableProperties.OnDeleted += OnDeleteTable;
-            
+
             var table = new DesignerTable();
             table.Build(tableProperties);
             var tableContainer = new DesignerTableContainer(table);
-            
+
             var container = Editor.GetCaretContainer(LogicalDirection.Forward);
             if (container == null)
             {
@@ -83,7 +97,9 @@ namespace Designer.DesignerItems
 
             _tableContainers.Add(tableContainer);
             ((BlockProperties)Properties).Children.Add(tableProperties);
-            DesignerTableManager.Instance.AddTable(tableProperties);
+
+            if (addToTableManager)
+                DesignerTableManager.Instance.AddTable(tableProperties);
         }
 
         private void OnDeleteTable(object sender, System.EventArgs e)
@@ -93,7 +109,9 @@ namespace Designer.DesignerItems
 
             if (container != null)
             {
-                (container.Parent as Paragraph).Inlines.Remove(container);
+                if (container.Parent != null)
+                    (container.Parent as Paragraph).Inlines.Remove(container);
+
                 _tableContainers.Remove(container);
             }
 

@@ -12,9 +12,6 @@ namespace Designer.DesignerItems
 {
     public class DesignerTable: Table, ISelectable, IDisposable
     {
-        private static readonly object LockObject = new object();
-        private static int CurrentIndex;
-
         public event EventHandler SelectedCellChange;
         private ContextMenu SingleCellContextMenu { get; set; }
         private ContextMenu MultipleCellsContextMenu { get; set; }
@@ -62,7 +59,6 @@ namespace Designer.DesignerItems
 
         public void Build(TableProperties tableProperties)
         {
-            tableProperties.Name = $"Table {GetNextIndex()}";
             this.Properties = tableProperties;
 
             CreateContextMenus();
@@ -324,15 +320,6 @@ namespace Designer.DesignerItems
             }
 
             return true;
-        }
-
-        private int GetNextIndex()
-        {
-            lock (LockObject)
-            {
-                CurrentIndex++;
-                return CurrentIndex;
-            }
         }
 
         private void SetCellSpacing()
