@@ -1909,6 +1909,11 @@
                             <TreeViewItem Margin="0,2" RequestBringIntoView="TreeViewPS_RequestBringIntoView" x:Name="TreeViewTables" Style="{DynamicResource treeLibraryTables}" FontSize="12" 
                                           Header="Tables" IsExpanded="True" 
                                           ItemsSource="{Binding Path=Tables, Source={x:Static designerItems:DesignerTableManager.Instance}}">
+                                <TreeViewItem.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Add New Table..." Command="{Binding Path=AddNewTableCommand}"/>
+                                    </ContextMenu>
+                                </TreeViewItem.ContextMenu>
                             </TreeViewItem>
                             <!--
                             <TreeViewItem Name="TreeViewTables">

@@ -104,7 +104,26 @@ namespace Designer
             InitFont();
             InitColorComboBox();
             InitDesignerTools();
+            InitCommands();
+
             this.DataContext = this;
+        }
+
+        private void InitCommands()
+        {
+            AddNewTableCommand = new RelayCommand(AddNewTable);
+        }
+
+        public ICommand AddNewTableCommand { get; set; }
+        public void AddNewTable(object param)
+        {
+            var tableDialog = new InsertTableWindow();
+            var result = tableDialog.ShowDialog();
+            if (result == null || result.Value == false)
+                return;
+
+            var tableProperties = TableProperties.Build(tableDialog.Columns, tableDialog.HeaderRows, tableDialog.BodyRows, tableDialog.FooterRows);
+            DesignerTableManager.Instance.AddTable(tableProperties);
         }
 
         public ObservableCollection<DesignerTool> DesignerTools { get; private set; }
