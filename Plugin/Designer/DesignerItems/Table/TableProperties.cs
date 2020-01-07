@@ -8,7 +8,8 @@ using System.Windows.Media;
 
 namespace Designer.DesignerItems
 {
-    public class TableProperties: ControlPropertiesViewModel, ISelectable, IBlockChild
+    [XmlOut(Name ="Table")]
+    public class TableProperties: ControlPropertiesViewModel, ISelectable, IBlockChild, IXmlSerializeable
     {
         public event EventHandler OnDeleted;
         public event EventHandler OnRowSetAdded;
@@ -28,6 +29,7 @@ namespace Designer.DesignerItems
 
         #region General
         private double _widthPercentage = 100.0;
+        [XmlOut]
         public double WidthPercentage
         {
             get => _widthPercentage;
@@ -42,6 +44,7 @@ namespace Designer.DesignerItems
         }
 
         private double _minWidth = 1.0;
+        [XmlOut]
         public double MinWidth
         {
             get => _minWidth;
@@ -56,6 +59,7 @@ namespace Designer.DesignerItems
         }
 
         private ObservableCollection<TableColumnDefinition> _columnDefinitions;
+        [XmlOut(Name="Columns")]
         public ObservableCollection<TableColumnDefinition> ColumnDefinitions
         {
             get => _columnDefinitions;
@@ -70,6 +74,7 @@ namespace Designer.DesignerItems
         }
 
         private ObservableCollection<RowSet> _rowSets;
+        [XmlOut(Name="RowSets")]
         public ObservableCollection<RowSet> RowSets
         {
             get => _rowSets;
@@ -84,6 +89,7 @@ namespace Designer.DesignerItems
         }
 
         private DesignerTableAlignment _aligment = DesignerTableAlignment.Left;
+        [XmlOut]
         public DesignerTableAlignment Alignment
         {
             get => _aligment;
@@ -128,6 +134,7 @@ namespace Designer.DesignerItems
 
         #region Spacing
         private double _cellSpacing = 2;
+        [XmlOut]
         public double CellSpacing
         {
             get => _cellSpacing;
@@ -142,6 +149,7 @@ namespace Designer.DesignerItems
         }
         
         private double _spaceLeft;
+        [XmlOut]
         public double SpaceLeft
         {
             get => _spaceLeft;
@@ -156,6 +164,7 @@ namespace Designer.DesignerItems
         }
 
         private double _spaceTop;
+        [XmlOut]
         public double SpaceTop
         {
             get => _spaceTop;
@@ -170,6 +179,7 @@ namespace Designer.DesignerItems
         }
 
         private double _spaceRight;
+        [XmlOut]
         public double SpaceRight
         {
             get => _spaceRight;
@@ -184,6 +194,7 @@ namespace Designer.DesignerItems
         }
 
         private double _spaceBottom;
+        [XmlOut]
         public double SpaceBottom
         {
             get => _spaceBottom;
@@ -311,9 +322,11 @@ namespace Designer.DesignerItems
         #endregion
     }
 
-    public class TableColumnDefinition:  INotifyPropertyChanged
+    [XmlOut(Name="Column")]
+    public class TableColumnDefinition:  INotifyPropertyChanged, IXmlSerializeable
     {
         private double _width;
+        [XmlOut]
         public double Width
         {
             get => _width;
@@ -328,6 +341,7 @@ namespace Designer.DesignerItems
         }
 
         private double _minWidth = 1.0;
+        [XmlOut]
         public double MinWidth
         {
             get => _minWidth;
@@ -349,6 +363,7 @@ namespace Designer.DesignerItems
         }
     }
 
+    [XmlOut(Name ="RowSet")]
     public class RowSet : ControlPropertiesViewModel
     {
         public event EventHandler OnAddNewRow;
@@ -408,6 +423,7 @@ namespace Designer.DesignerItems
         #endregion
     }
 
+    [XmlOut(Name ="Row")]
     public class Row: ControlPropertiesViewModel
     {
         public RowSet Parent { get; set; }
@@ -451,6 +467,7 @@ namespace Designer.DesignerItems
         }
     }
 
+    [XmlOut(Name = "Cell")]
     public class Cell: ControlPropertiesViewModel
     {
         public Guid Id { get; set; }

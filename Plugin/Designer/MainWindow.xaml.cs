@@ -1,4 +1,5 @@
-﻿using JdSuite.Common;
+﻿using Designer.DesignerItems;
+using JdSuite.Common;
 using JdSuite.Common.Logging;
 using JdSuite.Common.Logging.Enums;
 using JdSuite.Common.Module;
@@ -148,6 +149,7 @@ namespace Designer
                 DesignerControl.LineStyles.WriteXml(writer);
                 DesignerControl.BorderStyles.WriteXml(writer);
                 DesignerControl.BlockStyles.WriteXml(writer);
+                DesignerTableManager.Instance.WriteXml(writer);
             }
             writer.WriteEndElement();
             writer.WriteEndElement();
@@ -190,22 +192,23 @@ namespace Designer
 			}
 		}
 
-		public void CacheWorkflow()
-		{
-			using (var stream = new MemoryStream()) {
-				using (var writer = new XmlTextWriter(stream, System.Text.Encoding.Default)) {
-					this.WriteXml(writer);
-
-                    
-
+        public void CacheWorkflow()
+        {
+            using (var stream = new MemoryStream())
+            {
+                using (var writer = new XmlTextWriter(stream, System.Text.Encoding.Default))
+                {
+                    this.WriteXml(writer);
                     writer.Flush();
-					stream.Position = 0;
-					using (XmlReader reader = XmlReader.Create(stream)) {
-						Workflow.SetAppState(APP_NAME, XElement.Load(reader), ModuleGuid);
-					}
-				}
-			}
-		}
+                    stream.Position = 0;
+
+                    using (XmlReader reader = XmlReader.Create(stream))
+                    {
+                        Workflow.SetAppState(APP_NAME, XElement.Load(reader), ModuleGuid);
+                    }
+                }
+            }
+        }
 
 		public XElement SerializeState()
 		{

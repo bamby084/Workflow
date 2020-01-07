@@ -181,6 +181,7 @@
     <Compile Include="DesignerItems\Block\BlockDocument.cs" />
     <Compile Include="DesignerItems\Block\IBlockChild.cs" />
     <Compile Include="DesignerItems\ISelectable.cs" />
+    <Compile Include="DesignerItems\IXmlSerializeable.cs" />
     <Compile Include="DesignerItems\Table\CellPropertiesView.xaml.cs">
       <DependentUpon>CellPropertiesView.xaml</DependentUpon>
     </Compile>
@@ -198,10 +199,12 @@
     <Compile Include="DesignerItems\Table\TablePropertiesView.xaml.cs">
       <DependentUpon>TablePropertiesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DesignerItems\XmlOutAttribute.cs" />
     <Compile Include="ExtensionMethods\ContextMenuExtensions.cs" />
     <Compile Include="ExtensionMethods\EnumExtensions.cs" />
     <Compile Include="ExtensionMethods\NumberExtensions.cs" />
     <Compile Include="ExtensionMethods\StringExtensions.cs" />
+    <Compile Include="ExtensionMethods\TypeExtensions.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="UnitOfMeasure\UnitOfMeasure.cs" />
     <Compile Include="Converters\PixelConverter.cs" />

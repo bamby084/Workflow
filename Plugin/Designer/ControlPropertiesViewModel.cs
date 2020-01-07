@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Designer.DesignerItems;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace Designer
@@ -61,6 +62,7 @@ namespace Designer
         }
 
         private string _name;
+        [XmlOut]
         public string Name
         {
             get => _name;
