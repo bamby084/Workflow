@@ -322,7 +322,7 @@ namespace Designer.DesignerItems
         #endregion
     }
 
-    [XmlOut(Name="Column")]
+    [XmlOut("Column")]
     public class TableColumnDefinition:  INotifyPropertyChanged, IXmlSerializeable
     {
         private double _width;
@@ -363,7 +363,7 @@ namespace Designer.DesignerItems
         }
     }
 
-    [XmlOut(Name ="RowSet")]
+    [XmlOut("RowSet")]
     public class RowSet : ControlPropertiesViewModel
     {
         public event EventHandler OnAddNewRow;
@@ -374,6 +374,7 @@ namespace Designer.DesignerItems
 
         public Guid Id { get; set; }
 
+        [XmlOut]
         public ObservableCollection<Row> Rows { get; set; }
 
         public RowSet(string name)
@@ -423,13 +424,14 @@ namespace Designer.DesignerItems
         #endregion
     }
 
-    [XmlOut(Name ="Row")]
+    [XmlOut("Row")]
     public class Row: ControlPropertiesViewModel
     {
         public RowSet Parent { get; set; }
 
         public Guid Id { get; set; }
 
+        [XmlOut(Name ="Cells")]
         public ObservableCollection<Cell> Cells { get; set; }
 
         public Row(string name)
@@ -467,10 +469,40 @@ namespace Designer.DesignerItems
         }
     }
 
-    [XmlOut(Name = "Cell")]
+    [XmlOut("Cell")]
     public class Cell: ControlPropertiesViewModel
     {
         public Guid Id { get; set; }
+
+        private int _columnSpan = 1;
+        [XmlOut("ColSpan")]
+        public int ColumnSpan
+        {
+            get => _columnSpan;
+            set
+            {
+                if (value != _columnSpan)
+                {
+                    _columnSpan = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private int _rowSpan = 1;
+        [XmlOut("RowSpan")]
+        public int RowSpan
+        {
+            get => _rowSpan;
+            set
+            {
+                if (value != _rowSpan)
+                {
+                    _rowSpan = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public Cell(string name)
         {

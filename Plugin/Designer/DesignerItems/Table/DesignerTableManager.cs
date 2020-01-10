@@ -101,8 +101,8 @@ namespace Designer.DesignerItems
             writer.WriteStartElement(elementName);
 
             var outProperties = obj.GetType().GetProperties().Where(prop => prop.GetCustomAttribute<XmlOutAttribute>() != null);
-            var primitiveProperties = outProperties.Where(prop => !prop.PropertyType.IsEnumrable());
-            var collectionProperties = outProperties.Where(prop => prop.PropertyType.IsEnumrable());
+            var primitiveProperties = outProperties.Where(prop => !prop.PropertyType.IsEnumrable()).OrderBy(prop => prop.Name);
+            var collectionProperties = outProperties.Where(prop => prop.PropertyType.IsEnumrable()).OrderBy(prop => prop.Name);
 
             foreach(var property in primitiveProperties)
             {
@@ -115,37 +115,19 @@ namespace Designer.DesignerItems
 
             foreach(var property in collectionProperties)
             {
-                writer.WriteStartElement(property.GetCustomAttribute<XmlOutAttribute>().Name);
+                string collectionName = property.GetCustomAttribute<XmlOutAttribute>().Name;
+                if (!string.IsNullOrEmpty(collectionName))
+                    writer.WriteStartElement(collectionName);
+
                 var value = (IEnumerable)property.GetValue(obj);
                 foreach (var child in value)
                 {
                     WriteXml(writer, child);
                 }
-                writer.WriteEndElement();
+
+                if (!string.IsNullOrEmpty(collectionName))
+                    writer.WriteEndElement();
             }
-
-            //foreach (var property in outProperties)
-            //{
-
-            //    //Type propertyType = property.GetType();
-            //    //if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType) && property.PropertyType != typeof(string))
-            //    //{
-            //    //    //var value = (IEnumerable)property.GetValue(obj);
-            //    //    //foreach(var child in value)
-            //    //    //{
-            //    //    //    if (child is IXmlSerializeable serializeableChild)
-            //    //    //        WriteXml(writer, serializeableChild);
-            //    //    //}
-            //    //}
-            //    //else
-            //    //{
-            //    //    string value = property.GetValue(obj)?.ToString();
-            //    //    var outAttribute = property.GetCustomAttribute<XmlOutAttribute>();
-            //    //    string propertyName = outAttribute.Name ?? property.Name;
-
-            //    //    writer.WriteAttributeString(propertyName, value);
-            //    //}
-            //}
 
             writer.WriteEndElement();
         }

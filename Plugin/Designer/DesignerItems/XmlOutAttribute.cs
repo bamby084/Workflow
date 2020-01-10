@@ -6,5 +6,15 @@ namespace Designer.DesignerItems
     public class XmlOutAttribute: Attribute
     {
         public string Name { get; set; }
+
+        public XmlOutAttribute()
+        {
+
+        }
+
+        public XmlOutAttribute(string name)
+        {
+            Name = name;
+        }
     }
 }

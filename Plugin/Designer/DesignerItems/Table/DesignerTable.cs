@@ -395,6 +395,16 @@ namespace Designer.DesignerItems
                 cell.PreviewMouseLeftButtonDown += CellClicked;
                 cell.PreviewMouseRightButtonDown += CellClicked;
 
+                var colSpanBinding = new Binding("ColumnSpan");
+                colSpanBinding.Source = cells[i];
+                colSpanBinding.Mode = BindingMode.TwoWay;
+                cell.SetBinding(TableCell.ColumnSpanProperty, colSpanBinding);
+
+                var rowSpanBinding = new Binding("RowSpan");
+                rowSpanBinding.Source = cells[i];
+                rowSpanBinding.Mode = BindingMode.TwoWay;
+                cell.SetBinding(TableCell.RowSpanProperty, rowSpanBinding);
+
                 this.Cells.Add(cell);
             }
         }
