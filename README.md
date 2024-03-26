@@ -1,1 +1,1 @@
-# Workflow
+# Plugin for custom Workflow app
